@@ -1,0 +1,2 @@
+# dakochite-gimmick
+みんなでつかめるだこちてギミック
