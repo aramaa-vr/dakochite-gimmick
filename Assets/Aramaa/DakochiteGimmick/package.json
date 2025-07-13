@@ -1,0 +1,38 @@
+{
+    "name": "jp.aramaa.dakochite-gimmick",
+    "version": "1.0.0",
+    "url": "https://github.com/aramaa-vr/dakochite-gimmick/releases/download/1.0.0/jp.aramaa.dakochite-gimmick-1.0.0.zip?",
+    "displayName": "dakochite-gimmick - みんなでつかめるだこちてギミック",
+    "description": "VRChatアバター向けの抱っこされることができるギミックです。",
+    "unity": "2022.3",
+    "unityRelease": "22f1",
+    "documentationUrl": "https://docs.google.com/document/d/141h1qxOo8ZeFPDXLFmx2fjn6jsYxf7dL6XJkSFxztec/edit?usp=sharing",
+    "changelogUrl": "https://github.com/aramaa-vr/dakochite-gimmick/blob/master/CHANGELOG.md",
+    "licensesUrl": "https://github.com/aramaa-vr/dakochite-gimmick/blob/master/LICENSE",
+    "license": "Custom",
+    "conflicts": [
+        "jp.aramaa.holdgimick"
+    ],
+    "legacyFolders": {
+        "Assets\\Aramaa\\HoldGimick": "68e9b3fe244621a4b9e799b1ff081200"
+    },
+    "vpmDependencies": {
+        "com.vrchat.avatars": ">=3.8.2",
+        "com.vrchat.base": ">=3.8.2",
+        "nadena.dev.modular-avatar": ">=1.12.5"
+    },
+    "type": "avatar",
+    "keywords": [
+        "VRChat",
+        "アバター",
+        "ギミック",
+        "抱っこ",
+        "ホールド",
+        "バトル",
+        "飛行",
+        "インタラクション",
+        "だこちて",
+        "holdgimick",
+        "dakochite"
+    ]
+}
