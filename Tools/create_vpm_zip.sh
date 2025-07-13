@@ -1,58 +1,51 @@
 #!/bin/bash
 
+# === VPM ZIP作成スクリプト (Git Bash用) ===
+
 set -euo pipefail
 
-readonly SEVEN_ZIP_PATH="/c/Program Files/7-Zip/7z.exe"
+# --- 定数 ---
 readonly DEFAULT_VERSION="1.0.0"
+readonly ZIP_NAME_PREFIX="jp.aramaa.dakochite-gimmick"
 readonly SOURCE_DIR="./Assets/Aramaa/DakochiteGimmick"
-readonly TEMP_DIR_PREFIX="VPM_TEMP_"
-readonly PACKAGE_BASE_NAME="jp.aramaa.dakochite-gimmick"
+readonly TEMP_DIR="./VPM_TEMP"
+readonly BUILD_DIR="./Build"
+readonly SEVEN_ZIP_PATH="/c/Program Files/7-Zip/7z.exe"
 
-VPM_TEMP_DIR=""
+# --- バージョン取得 ---
+VERSION="${1:-$DEFAULT_VERSION}"
+readonly ZIP_FILE_NAME="${ZIP_NAME_PREFIX}-${VERSION}.zip"
+readonly ZIP_FILE_PATH="${BUILD_DIR}/${ZIP_FILE_NAME}"
 
-cleanup() {
-    if [[ -n "${VPM_TEMP_DIR}" && -d "${VPM_TEMP_DIR}" ]]; then
-        rm -rf "${VPM_TEMP_DIR}"
-    fi
-    if [[ "$?" -ne 0 && "$_CLEANUP_CALLED" != "true" ]]; then
-        echo "エラー発生。終了。" >&2
-    fi
-    _CLEANUP_CALLED="true"
+# --- help表示 ---
+if [[ "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
+  echo "Usage: ./Tools/create_vpm_zip.sh [version]"
+  exit 0
+fi
+
+# --- 不要ファイル削除 ---
+[ -f "$ZIP_FILE_PATH" ] && echo "削除: $ZIP_FILE_PATH" && rm -f "$ZIP_FILE_PATH"
+[ -d "$TEMP_DIR" ] && echo "削除: $TEMP_DIR" && rm -rf "$TEMP_DIR"
+
+# --- ディレクトリ準備 ---
+mkdir -p "$BUILD_DIR"
+mkdir -p "$TEMP_DIR"
+
+# --- ギミック中身コピー ---
+cp -r "$SOURCE_DIR/." "$TEMP_DIR/"
+
+# --- zip作成 ---
+cd "$TEMP_DIR" || { echo "cd失敗: $TEMP_DIR" >&2; exit 1; }
+
+"$SEVEN_ZIP_PATH" a -tzip "../$ZIP_FILE_PATH" * || {
+  echo "7z圧縮失敗: $SEVEN_ZIP_PATH" >&2
+  exit 1
 }
 
-trap cleanup EXIT ERR SIGINT SIGTERM
+cd - > /dev/null
 
-show_help() {
-    echo "使用法: $(basename "$0") [バージョン]"
-    echo "  例: ./Tools/create_vpm_zip.sh ${DEFAULT_VERSION}"
-    echo "  例: ./Tools/create_vpm_zip.sh"
-    exit 0
-}
+# --- TEMP削除 ---
+rm -rf "$TEMP_DIR"
 
-validate_7zip_path() {
-    if [[ ! -f "${SEVEN_ZIP_PATH}" ]]; then
-        echo "エラー: 7-Zip見つからず: ${SEVEN_ZIP_PATH}" >&2
-        echo "7-Zipパス確認・修正。" >&2
-        exit 1
-    fi
-}
-
-main() {
-    validate_7zip_path
-
-    local version="${1:-${DEFAULT_VERSION}}"
-    local zip_file_name="${PACKAGE_BASE_NAME}-${version}.zip"
-
-    VPM_TEMP_DIR=$(mktemp -d -t "${TEMP_DIR_PREFIX}XXXXXXXX")
-    
-    if [[ -f "${zip_file_name}" ]]; then
-        rm -f "${zip_file_name}" || { echo "エラー: 既存ZIP削除失敗。" >&2; exit 1; }
-    fi
-
-    cp -r "${SOURCE_DIR}/." "${VPM_TEMP_DIR}/" || { echo "エラー: ファイルコピー失敗。" >&2; exit 1; }
-
-    (cd "${VPM_TEMP_DIR}" && "${SEVEN_ZIP_PATH}" a -tzip "../${zip_file_name}" ./*) || { echo "エラー: ZIP作成失敗。" >&2; exit 1; }
-    echo "${zip_file_name} 作成完了。"
-}
-
-main "$@"
+# --- 完了表示 ---
+echo "ZIP作成完了: $ZIP_FILE_PATH"

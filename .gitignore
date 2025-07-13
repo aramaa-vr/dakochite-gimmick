@@ -59,7 +59,5 @@ crashlytics-build.properties
 [Aa]ssets/[Rr]uruku's avatar folder.meta
 [Aa]ssets/[Aa]ramaa/[Gg]eneratedAssets/
 [Aa]ssets/[Aa]ramaa/[Gg]eneratedAssets.meta
-[Aa]ssets/[Tt]est/
-[Aa]ssets/[Tt]est.meta
-*.unity
-*.unity.meta
+[Aa]ssets/[Tt]ests/
+[Aa]ssets/[Tt]ests.meta
