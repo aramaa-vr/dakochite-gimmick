@@ -1,11 +1,10 @@
-using Aramaa.GrabAndLiftUpHigh.Utility;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
 using VRC.SDK3.Dynamics.Constraint.Components;
 
-namespace Aramaa.GrabAndLiftUpHigh.Editor
+namespace Aramaa.DakochiteGimmick.Editor
 {
     /// <summary>
     /// VRChatアバターに特定のプレハブを生成し、そのプレハブ内のVRCParentConstraintのTarget Transformを
@@ -19,7 +18,7 @@ namespace Aramaa.GrabAndLiftUpHigh.Editor
         // フィールド (EditorWindow UIおよび内部状態)
         // ====================================================================================================
         private const float WINDOW_WIDTH = 700f; // ウィンドウの幅は共通
-        private static readonly Vector2 NORMAL_WINDOW_SIZE = new Vector2(WINDOW_WIDTH, 350f); // 通常モードのサイズ
+        private static readonly Vector2 NORMAL_WINDOW_SIZE = new Vector2(WINDOW_WIDTH, 250f); // 通常モードのサイズ
         private static readonly Vector2 DEVELOPER_WINDOW_SIZE = new Vector2(WINDOW_WIDTH, 700f); // 開発者モードのサイズ
 
         /// <summary>
@@ -52,7 +51,7 @@ namespace Aramaa.GrabAndLiftUpHigh.Editor
         /// <summary>
         /// Unity Editor のメニューバーにウィンドウを表示するための項目を追加します。
         /// </summary>
-        [MenuItem(GimmickConstants.MENU_PATH)]
+        [MenuItem("Tools/" + GimmickConstants.MENU_PATH, false, 10)]
         public static void ShowToolWindow()
         {
             // GetWindowを使用してウィンドウのインスタンスを取得または作成
@@ -71,7 +70,7 @@ namespace Aramaa.GrabAndLiftUpHigh.Editor
         /// 選択中のGameObjectをアバターとして自動設定します。
         /// </summary>
         /// <param name="command">メニューコマンドデータ。</param>
-        [MenuItem("GameObject/" + GimmickConstants.MENU_PATH, false, 49)]
+        [MenuItem("GameObject/" + GimmickConstants.MENU_PATH, false, 10)]
         private static void OpenWindowWithSelectedAvatar(MenuCommand command)
         {
             var selectedGameObject = command.context as GameObject;
@@ -157,18 +156,6 @@ namespace Aramaa.GrabAndLiftUpHigh.Editor
                 Repaint(); // UI情報を更新し、DeveloperInfoに最新情報を表示
             }
 
-            EditorGUILayout.Space();
-
-            EditorGUILayout.HelpBox(
-                "このVCCでインストールできるツールは**お試し版**です。\n" +
-                "製品版への移行に伴い、提供を終了する可能性があります。（製品版も無料で提供されます。）\n" +
-                "最新情報は あらまあ素敵なショップ X (旧Twitter) をご確認ください。",
-                MessageType.Info
-            );
-            if (GUILayout.Button("X (旧Twitter)へ", EditorStyles.linkLabel)) // リンクの文章を短縮
-            {
-                Application.OpenURL("https://x.com/aramaa_shop");
-            }
             EditorGUILayout.Space();
 
             // 開発者モードのトグル

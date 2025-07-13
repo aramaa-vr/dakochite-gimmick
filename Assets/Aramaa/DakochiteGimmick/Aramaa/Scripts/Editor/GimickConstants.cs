@@ -1,11 +1,11 @@
-namespace Aramaa.GrabAndLiftUpHigh
+namespace Aramaa.DakochiteGimmick
 {
     /// <summary>
     /// ギミック設定ツールで使用される各種定数を定義する静的クラス。
     /// </summary>
     public static class GimmickConstants
     {
-        public const string VER = "ver 0.6.3";
+        public const string VER = "ver 1.0.0";
 
         // 説明書
         public const string DOCUMENTATION_URL = "https://docs.google.com/document/d/141h1qxOo8ZeFPDXLFmx2fjn6jsYxf7dL6XJkSFxztec/edit?usp=sharing";
@@ -14,8 +14,8 @@ namespace Aramaa.GrabAndLiftUpHigh
         // ====================================================================================================
         // UI / メニュー
         // ====================================================================================================
-        public static readonly string WINDOW_TITLE = $"VCCお試し版_みんなでつかめるだこちてギミック {VER}";
-        public const string MENU_PATH = "Aramaa/VCCお試し版_みんなでつかめるだこちてギミック";
+        public static readonly string WINDOW_TITLE = $"{VER} dakochite gimmick みんなでつかめるだこちてギミック";
+        public const string MENU_PATH = "Aramaa/dakochite gimmick みんなでつかめるだこちてギミック";
         public const string BUTTON_GENERATE_OR_REGENERATE_TEXT = "ギミックを生成 / 削除";
         public const string BUTTON_GENERATE_OR_REGENERATE_TOOLTIP = "選択したアバターにギミックを生成します。既にギミックがある場合は削除されます。";
         public const string DIALOG_SUCCESS_TITLE = "完了";

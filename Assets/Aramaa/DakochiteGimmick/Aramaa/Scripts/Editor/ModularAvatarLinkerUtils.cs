@@ -4,7 +4,7 @@ using UnityEditor.Animations;
 using VRC.SDK3.Avatars.Components;
 using nadena.dev.modular_avatar.core;
 
-namespace Aramaa.GrabAndLiftUpHigh.Utility
+namespace Aramaa.DakochiteGimmick.Editor
 {
     /// <summary>
     /// Modular Avatar関連のユーティリティメソッドを提供します。

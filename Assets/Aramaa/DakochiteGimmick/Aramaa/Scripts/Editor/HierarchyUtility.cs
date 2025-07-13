@@ -1,7 +1,7 @@
 using UnityEngine;
-using VRC.SDK3.Dynamics.Constraint.Components; // VRCParentConstraint に必要
+using VRC.SDK3.Dynamics.Constraint.Components;
 
-namespace Aramaa.GrabAndLiftUpHigh.Utility
+namespace Aramaa.DakochiteGimmick.Editor
 {
     /// <summary>
     /// UnityのGameObject階層内を検索するためのユーティリティメソッドを提供します。

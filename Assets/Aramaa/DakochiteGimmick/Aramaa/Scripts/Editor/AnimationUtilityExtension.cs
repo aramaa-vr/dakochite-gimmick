@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Aramaa.GrabAndLiftUpHigh.Utility
+namespace Aramaa.DakochiteGimmick.Editor
 {
     /// <summary>
     /// アニメーション関連のユーティリティメソッドを提供します。

@@ -1,12 +1,9 @@
 using UnityEditor;
 using UnityEngine;
 using VRC.SDK3.Dynamics.Constraint.Components;
-using System.IO;
 using VRC.SDK3.Avatars.Components;
-using Aramaa.GrabAndLiftUpHigh.Utility; // 新規追加 (おそらくHierarchyUtilityやAvatarUtilityなど)
-using Aramaa.GrabAndLiftUpHigh.Editor; // PhysBoneGimmickAutomation を呼び出すため (名前空間が同じなので実質不要)
 
-namespace Aramaa.GrabAndLiftUpHigh.Editor
+namespace Aramaa.DakochiteGimmick.Editor
 {
     /// <summary>
     /// VRChatアバターへのギミックのセットアップ処理をカプセル化するサービス。

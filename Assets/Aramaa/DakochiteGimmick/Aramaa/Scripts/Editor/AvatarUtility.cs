@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Aramaa.GrabAndLiftUpHigh.Utility
+namespace Aramaa.DakochiteGimmick.Editor
 {
     /// <summary>
     /// VRChatアバターのHumanoidボーン関連のユーティリティメソッドを提供します。

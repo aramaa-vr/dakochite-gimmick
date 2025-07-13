@@ -7,9 +7,8 @@ using VRC.SDK3.Avatars.Components;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
-using Aramaa.GrabAndLiftUpHigh.Utility;
 
-namespace Aramaa.GrabAndLiftUpHigh.Editor
+namespace Aramaa.DakochiteGimmick.Editor
 {
     /// <summary>
     /// PhysBoneの「掴み」に関するアニメーション、Animator Controller、およびVRCExpressionParametersの自動設定を処理します。
