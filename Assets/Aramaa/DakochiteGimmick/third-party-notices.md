@@ -22,6 +22,11 @@ Material Symbols and Iconsの著作権は、Google LLCに帰属します。
 
 ---
 
+**改変について:**
+本プロジェクトで使用しているMaterial Symbols and Iconsの一部は、元のデザインに対して**改変**が加えられています。
+
+---
+
 **詳細情報:**
 Material Symbols and Iconsに関する詳細情報は、以下の公式ページで確認できます。
 
