@@ -1,0 +1,93 @@
+root = true
+
+# C# ソースコードファイル（.cs）をUTF-8 without BOMで保存
+[*.cs]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# テキストファイル（.txt）をUTF-8 without BOMで保存
+[*.txt]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# JSONファイル（.json）をUTF-8 without BOMで保存
+[*.json]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# XMLファイル（.xml）をUTF-8 without BOMで保存
+[*.xml]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# YAMLファイル（.yml, .yaml）をUTF-8 without BOMで保存
+[*.yml]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+[*.yaml]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# HTMLファイル（.html）をUTF-8 without BOMで保存
+[*.html]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# CSSファイル（.css）をUTF-8 without BOMで保存
+[*.css]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# JavaScriptファイル（.js）をUTF-8 without BOMで保存
+[*.js]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Markdownファイル（.md）をUTF-8 without BOMで保存
+[*.md]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# その他、設定ファイル（.ini, .config, .tsv, .csv など）もUTF-8 without BOMで保存
+[*.ini]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+[*.config]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+[*.tsv]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+[*.csv]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
