@@ -1,12 +1,10 @@
-namespace Aramaa.DakochiteGimmick
+namespace Aramaa.DakochiteGimmick.Editor
 {
     /// <summary>
     /// ギミック設定ツールで使用される各種定数を定義する静的クラス。
     /// </summary>
     public static class GimmickConstants
     {
-        public const string VER = "ver 1.0.0";
-
         // 説明書
         public const string DOCUMENTATION_URL = "https://docs.google.com/document/d/141h1qxOo8ZeFPDXLFmx2fjn6jsYxf7dL6XJkSFxztec/edit?usp=sharing";
         public const string DOCUMENTATION_TEXT = "説明書";
@@ -14,7 +12,7 @@ namespace Aramaa.DakochiteGimmick
         // ====================================================================================================
         // UI / メニュー
         // ====================================================================================================
-        public static readonly string WINDOW_TITLE = $"{VER} dakochite gimmick みんなでつかめるだこちてギミック";
+        public static readonly string WINDOW_TITLE = $"{PackageUpdater.LOCAL_INSTALLED_VERSION} dakochite gimmick みんなでつかめるだこちてギミック";
         public const string MENU_PATH = "Aramaa/dakochite gimmick みんなでつかめるだこちてギミック";
         public const string BUTTON_GENERATE_OR_REGENERATE_TEXT = "ギミックを生成 / 削除";
         public const string BUTTON_GENERATE_OR_REGENERATE_TOOLTIP = "選択したアバターにギミックを生成します。既にギミックがある場合は削除されます。";
