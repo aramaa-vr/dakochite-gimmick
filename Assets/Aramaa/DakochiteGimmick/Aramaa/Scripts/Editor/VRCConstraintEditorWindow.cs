@@ -3,6 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
 using VRC.SDK3.Dynamics.Constraint.Components;
+using System.Threading.Tasks;
 
 namespace Aramaa.DakochiteGimmick.Editor
 {
@@ -18,8 +19,8 @@ namespace Aramaa.DakochiteGimmick.Editor
         // フィールド (EditorWindow UIおよび内部状態)
         // ====================================================================================================
         private const float WINDOW_WIDTH = 700f; // ウィンドウの幅は共通
-        private static readonly Vector2 NORMAL_WINDOW_SIZE = new Vector2(WINDOW_WIDTH, 250f); // 通常モードのサイズ
-        private static readonly Vector2 DEVELOPER_WINDOW_SIZE = new Vector2(WINDOW_WIDTH, 700f); // 開発者モードのサイズ
+        private static readonly Vector2 NORMAL_WINDOW_SIZE = new Vector2(WINDOW_WIDTH, 300f); // 通常モードのサイズ
+        private static readonly Vector2 DEVELOPER_WINDOW_SIZE = new Vector2(WINDOW_WIDTH, 800f); // 開発者モードのサイズ
 
         /// <summary>
         /// 操作対象となるVRChatアバターのルートGameObject。
@@ -43,6 +44,9 @@ namespace Aramaa.DakochiteGimmick.Editor
         /// 例: Assets/Resources/Images/dako_gimmick_icon.png に配置した場合、"Images/dako_gimmick_icon"
         /// </summary>
         private const string LOGO_RESOURCES_PATH = "Aramaa/HoldGimick/Images/dako_gimmick_icon"; // Resources.Load用にパスを修正
+
+        private PackageUpdater.PackageUpdateState _currentUpdateState = PackageUpdater.PackageUpdateState.Unknown;
+        private string _updateMessage = "バージョン情報を確認中...";
 
         // ====================================================================================================
         // Unity Editor メニュー項目
@@ -93,7 +97,7 @@ namespace Aramaa.DakochiteGimmick.Editor
         /// <summary>
         /// ウィンドウが有効になったときに呼び出される関数。ロゴ画像をロードします。
         /// </summary>
-        private void OnEnable()
+        private async void OnEnable() // async キーワードを追加
         {
             // titleContentを設定（ウィンドウタブやタイトルバーの表示）
             titleContent = new GUIContent(GimmickConstants.WINDOW_TITLE);
@@ -104,6 +108,24 @@ namespace Aramaa.DakochiteGimmick.Editor
             {
                 Debug.LogWarning($"だこちてギミック設定ツールのロゴ画像が見つかりません。Resourcesフォルダ内（例: Assets/Resources/{LOGO_RESOURCES_PATH}.png）に配置してください。");
             }
+
+            await CheckPackageUpdateStatus(); // 非同期で更新チェックを実行
+        }
+
+        /// <summary>
+        /// PackageUpdaterを使用してパッケージの更新状態を確認し、結果をフィールドに格納します。
+        /// </summary>
+        private async Task CheckPackageUpdateStatus()
+        {
+            _currentUpdateState = PackageUpdater.PackageUpdateState.Unknown;
+            _updateMessage = "バージョン情報を確認中...";
+            Repaint(); // UIを即座に更新して「確認中...」を表示
+
+            var (state, message) = await PackageUpdater.CheckForUpdateAsync();
+
+            _currentUpdateState = state;
+            _updateMessage = message;
+            Repaint(); // UIを更新して最新の状態を表示
         }
 
         /// <summary>
@@ -130,10 +152,15 @@ namespace Aramaa.DakochiteGimmick.Editor
             DrawLogoSection();
 
             // 青文字のリンクボタンのように見せるために LinkButton を使用
-            if (GUILayout.Button("説明書", EditorStyles.linkLabel))
-            {
-                Application.OpenURL("https://docs.google.com/document/d/141h1qxOo8ZeFPDXLFmx2fjn6jsYxf7dL6XJkSFxztec/edit?usp=sharing");
-            }
+            EditorGUILayout.BeginHorizontal();
+            if (GUILayout.Button("説明書", EditorStyles.linkLabel)) {Application.OpenURL("https://docs.google.com/document/d/141h1qxOo8ZeFPDXLFmx2fjn6jsYxf7dL6XJkSFxztec/edit?usp=sharing");}
+            if (GUILayout.Button("Booth", EditorStyles.linkLabel)) { Application.OpenURL("https://aramaa.booth.pm/items/7016968"); }
+            if (GUILayout.Button("GitHub", EditorStyles.linkLabel)) { Application.OpenURL("https://github.com/aramaa-vr/dakochite-gimmick"); }
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUILayout.Space();
+
+            DrawUpdateStatusSection();
 
             EditorGUILayout.Space();
 
@@ -238,6 +265,45 @@ namespace Aramaa.DakochiteGimmick.Editor
                 // Resources.Loadにしたので、パスのヒントをResourcesフォルダ内である旨に変更
                 EditorGUILayout.HelpBox($"ロゴ画像が見つかりません (Resources/{LOGO_RESOURCES_PATH}.png など)。", MessageType.Warning);
             }
+        }
+
+        /// <summary>
+        /// パッケージの更新状態をシンプルにテキストと色分けで表示するヘルパーメソッド。
+        /// </summary>
+        private void DrawUpdateStatusSection()
+        {
+            Color originalColor = GUI.contentColor; // 元の色を保存
+
+            string displayMessage;
+            // 明るい色を定義
+            Color lightGreen = new Color(0.6f, 1.0f, 0.6f);  // 明るい緑
+            Color lightOrange = new Color(1.0f, 0.8f, 0.4f); // 明るいオレンジ
+            Color lightRed = new Color(1.0f, 0.6f, 0.6f);    // 明るい赤
+            Color lightGray = new Color(0.8f, 0.8f, 0.8f);   // 明るい灰色
+
+            switch (_currentUpdateState)
+            {
+                case PackageUpdater.PackageUpdateState.UpToDate:
+                    GUI.contentColor = lightGreen;
+                    displayMessage = _updateMessage;
+                    break;
+                case PackageUpdater.PackageUpdateState.UpdateAvailable:
+                    GUI.contentColor = lightOrange;
+                    displayMessage = _updateMessage;
+                    break;
+                case PackageUpdater.PackageUpdateState.Error:
+                    GUI.contentColor = lightRed;
+                    displayMessage = $"更新チェック中にエラーが発生しました: {_updateMessage}";
+                    break;
+                case PackageUpdater.PackageUpdateState.Unknown:
+                default:
+                    GUI.contentColor = lightGray;
+                    displayMessage = _updateMessage; // 「バージョン情報を確認中...」など
+                    break;
+            }
+
+            EditorGUILayout.LabelField(displayMessage, EditorStyles.boldLabel); // 太字で表示
+            GUI.contentColor = originalColor; // 色を元に戻す
         }
 
         /// <summary>

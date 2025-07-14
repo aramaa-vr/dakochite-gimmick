@@ -10,7 +10,7 @@
     "changelogUrl": "https://github.com/aramaa-vr/dakochite-gimmick/blob/master/CHANGELOG.md",
     "licensesUrl": "https://github.com/aramaa-vr/dakochite-gimmick/blob/master/LICENSE",
     "license": "Custom",
-    "conflicts": [
+    "legacyPackages": [
         "jp.aramaa.holdgimick"
     ],
     "legacyFolders": {
