@@ -39,8 +39,8 @@ namespace Aramaa.DakochiteGimmick.Editor
 
             if (existingGimmickInstance != null)
             {
-                Debug.Log($"既存のギミック '{existingGimmickInstance.name}' を削除しました。");
-                GameObject.DestroyImmediate(existingGimmickInstance.gameObject); // 既存ギミックを即座に削除
+                SafeDestroyUtility.SafeDestroyGameObject(existingGimmickInstance.gameObject);
+
                 EditorUtility.DisplayDialog("削除完了", GimmickConstants.MSG_EXISTING_GIMMICK_DELETED, "OK");
                 // ここで処理を終了し、再実行を促す、または削除と生成の間に間隔を設けるべきかの検討が必要
                 return false; // 通常、既存削除後はメッセージを出して終了させるのが親切
