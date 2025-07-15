@@ -217,19 +217,19 @@ namespace Aramaa.DakochiteGimmick.Editor
                 {
                     // Grab_Defaultクリップの場合、PhysBoneの現在のallowGrabbing状態を取得し、その値を使用
                     keyValue = (pb.allowGrabbing == VRCPhysBone.AdvancedBool.True) ? GimmickConstants.ADVANCED_BOOL_TRUE_VALUE : GimmickConstants.ADVANCED_BOOL_FALSE_VALUE;
-                    Debug.Log($"[Animation Curve Setup] For '{clip.name}', PhysBone '{pb.gameObject.name}' initial allowGrabbing: {pb.allowGrabbing}, setting to: {keyValue}");
+                    // Debug.Log($"[Animation Curve Setup] For '{clip.name}', PhysBone '{pb.gameObject.name}' initial allowGrabbing: {pb.allowGrabbing}, setting to: {keyValue}");
                 }
                 else
                 {
                     // Grab_Offクリップの場合、allowGrabbingを常にfalseに設定
                     keyValue = GimmickConstants.ADVANCED_BOOL_FALSE_VALUE;
-                    Debug.Log($"[Animation Curve Setup] For '{clip.name}', PhysBone '{pb.gameObject.name}' setting to: {keyValue} (False)");
+                    // Debug.Log($"[Animation Curve Setup] For '{clip.name}', PhysBone '{pb.gameObject.name}' setting to: {keyValue} (False)");
                 }
 
                 curve.AddKey(new Keyframe(0f, keyValue, 0f, 0f, 0f, 0f));
                 AnimationUtility.SetEditorCurve(clip, EditorCurveBinding.FloatCurve(physBonePath, typeof(VRCPhysBone), GimmickConstants.PHYSBONE_PROPERTY_NAME), curve);
 
-                Debug.Log($"[Animation Curve Setup] Clip: '{clip.name}', GameObject Path: '{physBonePath}', Property: '{GimmickConstants.PHYSBONE_PROPERTY_NAME}', Set Value: {keyValue} (Expected Bool State: {(isDefaultStateClip ? (pb.allowGrabbing == VRCPhysBone.AdvancedBool.True ? "True" : "False") : "False")})");
+                // Debug.Log($"[Animation Curve Setup] Clip: '{clip.name}', GameObject Path: '{physBonePath}', Property: '{GimmickConstants.PHYSBONE_PROPERTY_NAME}', Set Value: {keyValue} (Expected Bool State: {(isDefaultStateClip ? (pb.allowGrabbing == VRCPhysBone.AdvancedBool.True ? "True" : "False") : "False")})");
             }
 
             string fullPath = Path.Combine(outputPath, $"{clip.name}.anim");
