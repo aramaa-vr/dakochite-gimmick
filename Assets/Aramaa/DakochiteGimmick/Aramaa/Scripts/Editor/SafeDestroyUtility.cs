@@ -1,6 +1,82 @@
-using UnityEditor;
 using UnityEngine;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
 using VRC.Dynamics;
+
+namespace Aramaa.DakochiteGimmick.Editor
+{
+    public static class SafeDestroyUtility
+    {
+        public static void SafeDestroyGameObject(GameObject objectToDestroy)
+        {
+            if (objectToDestroy == null)
+            {
+                Debug.LogWarning("SafeDestroyUtility: 削除対象のGameObjectがnullです。");
+                return;
+            }
+
+            // GameObjectを即時削除
+            GameObject.DestroyImmediate(objectToDestroy);
+
+            Debug.Log("SafeDestroyUtility: オブジェクトの削除が完了しました。");
+        }
+    }
+}
+
+/*
+
+namespace Aramaa.DakochiteGimmick.Editor
+{
+    /// <summary>
+    /// VRChat SDK公式APIを使って、安全にGameObjectを削除し、SDKの状態も更新するユーティリティ。
+    /// </summary>
+    public static class SafeDestroyUtility
+    {
+        /// <summary>
+        /// 指定されたGameObjectをDestroyImmediateで削除する前に、VRChat SDKのキャッシュを正しく更新します。
+        /// </summary>
+        /// <param name="objectToDestroy">削除対象のGameObject</param>
+        public static void SafeDestroyGameObject(GameObject objectToDestroy)
+        {
+            if (objectToDestroy == null)
+            {
+                Debug.LogWarning("SafeDestroyUtility: 削除対象のGameObjectがnullです。");
+                return;
+            }
+
+            // PrefabインスタンスであればUnpack
+            if (PrefabUtility.IsPartOfPrefabInstance(objectToDestroy))
+            {
+                Debug.Log($"SafeDestroyUtility: '{objectToDestroy.name}' はPrefabインスタンスです。Unpackします。");
+                PrefabUtility.UnpackPrefabInstance(
+                    PrefabUtility.GetOutermostPrefabInstanceRoot(objectToDestroy),
+                    PrefabUnpackMode.Completely,
+                    InteractionMode.AutomatedAction);
+            }
+
+            // VRCConstraintBase を収集してキャッシュを更新
+            var constraints = objectToDestroy.GetComponentsInChildren<VRCConstraintBase>(true);
+            if (constraints != null && constraints.Length > 0)
+            {
+                Debug.Log($"SafeDestroyUtility: {constraints.Length} 個のVRCConstraintBaseをリフレッシュします。");
+                VRCConstraintManager.Sdk_ManuallyRefreshGroups(constraints);
+            }
+
+            // GameObjectを即時削除
+            GameObject.DestroyImmediate(objectToDestroy);
+
+            // Unityに変更を通知（保存対象としてマーク）
+            EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
+
+            Debug.Log("SafeDestroyUtility: オブジェクトの削除とSDK更新が完了しました。");
+        }
+    }
+}
+
+*/
+
+/*
 
 namespace Aramaa.DakochiteGimmick.Editor
 {
@@ -20,74 +96,73 @@ namespace Aramaa.DakochiteGimmick.Editor
                 return;
             }
 
-            // MissingReferenceExceptionの対処をしたが、改善しないためDestroyImmediateのみ行う
-            GameObject.DestroyImmediate(objectToDestroy.gameObject);
-
-            // // Prefabインスタンスなら完全にアンパックしてPrefab依存を解除
-            // if (PrefabUtility.IsPartOfPrefabInstance(objectToDestroy))
-            // {
-            //     Debug.Log($"SafeDestroyUtility: '{objectToDestroy.name}' はPrefabインスタンスです。Unpackします。");
-            //     PrefabUtility.UnpackPrefabInstance(
-            //         PrefabUtility.GetOutermostPrefabInstanceRoot(objectToDestroy),
-            //         PrefabUnpackMode.Completely,
-            //         InteractionMode.AutomatedAction);
-            // }
-            // 
-            // Debug.Log($"SafeDestroyUtility: オブジェクト '{objectToDestroy.name}' の削除処理を開始します。");
-            // 
-            // // VRCConstraintBaseコンポーネントを取得しSDKの内部参照をリフレッシュ
-            // var constraints = objectToDestroy.GetComponentsInChildren<VRCConstraintBase>(true);
-            // 
-            // if (constraints != null && constraints.Length > 0)
-            // {
-            //     Debug.Log($"SafeDestroyUtility: {constraints.Length} 個のVRCConstraintBaseをSDKにリフレッシュ要求します。");
-            //     VRCConstraintManager.Sdk_ManuallyRefreshGroups(constraints);
-            // }
-            // 
-            // Debug.Log($"SafeDestroyUtility: オブジェクト '{objectToDestroy.name}' の削除が完了しました。");
-            // 
-            // // 親子関係を解除（子オブジェクトも個別に削除が必要なため）
-            // Transform[] allTransforms = objectToDestroy.GetComponentsInChildren<Transform>(true);
-            // VRCConstraintBase[] allConstraints = objectToDestroy.GetComponentsInChildren<VRCConstraintBase>(true);
-            // VRCPhysBoneBase[] allBones = objectToDestroy.GetComponentsInChildren<VRCPhysBoneBase>(true);
-            // 
-            // foreach (var tf in allTransforms)
-            // {
-            //     if (tf.parent != null)
-            //     {
-            //         tf.SetParent(null);
-            //     }
-            // }
-            // 
-            // // VRCConstraintBaseを全て即時削除
-            // foreach (var tf in allConstraints)
-            // {
-            //     if (tf != null)
-            //     {
-            //         GameObject.DestroyImmediate(tf);
-            //     }
-            // }
-            // 
-            // // VRCPhysBoneBaseを全て即時削除
-            // foreach (var tf in allBones)
-            // {
-            //     if (tf != null)
-            //     {
-            //         GameObject.DestroyImmediate(tf);
-            //     }
-            // }
-            // 
-            // // 解除した全てのTransformのGameObjectを個別に削除
-            // foreach (var tf in allTransforms)
-            // {
-            //     if (tf != null)
-            //     {
-            //         GameObject.DestroyImmediate(tf.gameObject);
-            //     }
-            // }
+            // Prefabインスタンスなら完全にアンパックしてPrefab依存を解除
+            if (PrefabUtility.IsPartOfPrefabInstance(objectToDestroy))
+            {
+                Debug.Log($"SafeDestroyUtility: '{objectToDestroy.name}' はPrefabインスタンスです。Unpackします。");
+                PrefabUtility.UnpackPrefabInstance(
+                    PrefabUtility.GetOutermostPrefabInstanceRoot(objectToDestroy),
+                    PrefabUnpackMode.Completely,
+                    InteractionMode.AutomatedAction);
+            }
+            
+            Debug.Log($"SafeDestroyUtility: オブジェクト '{objectToDestroy.name}' の削除処理を開始します。");
+            
+            // VRCConstraintBaseコンポーネントを取得しSDKの内部参照をリフレッシュ
+            var constraints = objectToDestroy.GetComponentsInChildren<VRCConstraintBase>(true);
+            
+            if (constraints != null && constraints.Length > 0)
+            {
+                Debug.Log($"SafeDestroyUtility: {constraints.Length} 個のVRCConstraintBaseをSDKにリフレッシュ要求します。");
+                VRCConstraintManager.Sdk_ManuallyRefreshGroups(constraints);
+            }
+            
+            Debug.Log($"SafeDestroyUtility: オブジェクト '{objectToDestroy.name}' の削除が完了しました。");
+            
+            // 親子関係を解除（子オブジェクトも個別に削除が必要なため）
+            Transform[] allTransforms = objectToDestroy.GetComponentsInChildren<Transform>(true);
+            VRCConstraintBase[] allConstraints = objectToDestroy.GetComponentsInChildren<VRCConstraintBase>(true);
+            VRCPhysBoneBase[] allBones = objectToDestroy.GetComponentsInChildren<VRCPhysBoneBase>(true);
+            
+            foreach (var tf in allTransforms)
+            {
+                if (tf.parent != null)
+                {
+                    tf.SetParent(null);
+                }
+            }
+            
+            // VRCConstraintBaseを全て即時削除
+            foreach (var tf in allConstraints)
+            {
+                if (tf != null)
+                {
+                    GameObject.DestroyImmediate(tf);
+                }
+            }
+            
+            // VRCPhysBoneBaseを全て即時削除
+            foreach (var tf in allBones)
+            {
+                if (tf != null)
+                {
+                    GameObject.DestroyImmediate(tf);
+                }
+            }
+            
+            // 解除した全てのTransformのGameObjectを個別に削除
+            foreach (var tf in allTransforms)
+            {
+                if (tf != null)
+                {
+                    GameObject.DestroyImmediate(tf.gameObject);
+                }
+            }
         }
     }
 }
+
+*/
 
 /*
 
