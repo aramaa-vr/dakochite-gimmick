@@ -40,7 +40,7 @@ namespace Aramaa.DakochiteGimmick.Editor
             if (existingGimmickInstance != null)
             {
                 Debug.Log($"既存のギミック '{existingGimmickInstance.name}' を削除しました。");
-                Undo.DestroyObjectImmediate(existingGimmickInstance.gameObject); // 既存ギミックを即座に削除
+                GameObject.DestroyImmediate(existingGimmickInstance.gameObject); // 既存ギミックを即座に削除
                 EditorUtility.DisplayDialog("削除完了", GimmickConstants.MSG_EXISTING_GIMMICK_DELETED, "OK");
                 // ここで処理を終了し、再実行を促す、または削除と生成の間に間隔を設けるべきかの検討が必要
                 return false; // 通常、既存削除後はメッセージを出して終了させるのが親切
@@ -90,7 +90,6 @@ namespace Aramaa.DakochiteGimmick.Editor
             gimmickPrefabInstance.transform.localRotation = Quaternion.identity;
             gimmickPrefabInstance.transform.localScale = Vector3.one;
 
-            Undo.RegisterCreatedObjectUndo(gimmickPrefabInstance, $"Generate {gimmickPrefabName} Prefab");
             EditorUtility.SetDirty(gimmickPrefabInstance);
 
             // VRCParentConstraintの設定
@@ -103,7 +102,6 @@ namespace Aramaa.DakochiteGimmick.Editor
                 return false;
             }
 
-            Undo.RecordObject(parentConstraint, "Set VRC Parent Constraint Target Transform to Animator Hips");
             parentConstraint.TargetTransform = hipsBone; // Hipsボーンをターゲットに設定
             EditorUtility.SetDirty(parentConstraint);
 
@@ -196,8 +194,6 @@ namespace Aramaa.DakochiteGimmick.Editor
                         EditorUtility.DisplayDialog("エラー", GimmickConstants.MSG_CONSTRAINT_UPDATE_FAILED_PARENT_POS_ZERO, "OK");
                         return false;
                     }
-
-                    Undo.RecordObject(eyeOffsetTransform, "Adjust EyeOffset Transform to VRC View Position");
 
                     // ViewPositionはアバターローカル座標なので、Constraintの親のローカル座標に変換して設定
                     Vector3 viewPositionInConstraintParentLocal = constraintParentTransform.InverseTransformPoint(avatarDescriptor.ViewPosition);
