@@ -50,11 +50,11 @@ namespace Aramaa.DakochiteGimmick.Editor
                 if (maMergeAnimator == null)
                 {
                     maMergeAnimator = maTargetGo.AddComponent<ModularAvatarMergeAnimator>();
-                    Debug.Log($"[ModularAvatarLinkerUtility] Added new ModularAvatarMergeAnimator to '{maTargetGo.name}'.", maTargetGo);
+                    // Debug.Log($"[ModularAvatarLinkerUtility] Added new ModularAvatarMergeAnimator to '{maTargetGo.name}'.", maTargetGo);
                 }
                 else
                 {
-                    Debug.Log($"[ModularAvatarLinkerUtility] Found existing ModularAvatarMergeAnimator on '{maTargetGo.name}'. Updating it.", maTargetGo);
+                    // Debug.Log($"[ModularAvatarLinkerUtility] Found existing ModularAvatarMergeAnimator on '{maTargetGo.name}'. Updating it.", maTargetGo);
                 }
 
                 // 生成した AnimatorController を割り当てる
@@ -67,7 +67,7 @@ namespace Aramaa.DakochiteGimmick.Editor
                 EditorUtility.SetDirty(maMergeAnimator);
                 EditorUtility.SetDirty(maTargetGo); // GameObject自体が変更されたことをマーク
 
-                Debug.Log($"[ModularAvatarLinkerUtility] Assigned generated Animator Controller '{controllerToLink.name}' to ModularAvatarMergeAnimator on '{maTargetGo.name}'.", maTargetGo);
+                // Debug.Log($"[ModularAvatarLinkerUtility] Assigned generated Animator Controller '{controllerToLink.name}' to ModularAvatarMergeAnimator on '{maTargetGo.name}'.", maTargetGo);
                 return true;
             }
             else
