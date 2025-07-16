@@ -39,7 +39,10 @@ namespace Aramaa.DakochiteGimmick.Editor
 
             if (existingGimmickInstance != null)
             {
-                SafeDestroyUtility.SafeDestroyGameObject(existingGimmickInstance.gameObject);
+                // MissingReferenceExceptionの調査をしたが、不明点が多く解決しないので一旦保留
+                // SafeDestroyUtility.SafeDestroyGameObject(existingGimmickInstance.gameObject);
+
+                GameObject.DestroyImmediate(existingGimmickInstance.gameObject);
 
                 EditorUtility.DisplayDialog("削除完了", GimmickConstants.MSG_EXISTING_GIMMICK_DELETED, "OK");
                 // ここで処理を終了し、再実行を促す、または削除と生成の間に間隔を設けるべきかの検討が必要

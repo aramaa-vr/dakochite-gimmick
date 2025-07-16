@@ -1,30 +1,10 @@
+/*
+
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
 using VRC.Dynamics;
-
-namespace Aramaa.DakochiteGimmick.Editor
-{
-    public static class SafeDestroyUtility
-    {
-        public static void SafeDestroyGameObject(GameObject objectToDestroy)
-        {
-            if (objectToDestroy == null)
-            {
-                Debug.LogWarning("SafeDestroyUtility: 削除対象のGameObjectがnullです。");
-                return;
-            }
-
-            // GameObjectを即時削除
-            GameObject.DestroyImmediate(objectToDestroy);
-
-            Debug.Log("SafeDestroyUtility: オブジェクトの削除が完了しました。");
-        }
-    }
-}
-
-/*
 
 namespace Aramaa.DakochiteGimmick.Editor
 {
@@ -77,6 +57,12 @@ namespace Aramaa.DakochiteGimmick.Editor
 */
 
 /*
+
+using UnityEngine;
+using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
+using VRC.Dynamics;
 
 namespace Aramaa.DakochiteGimmick.Editor
 {
