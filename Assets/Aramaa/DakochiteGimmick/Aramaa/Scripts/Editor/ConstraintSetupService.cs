@@ -49,6 +49,13 @@ namespace Aramaa.DakochiteGimmick.Editor
                 return false; // 通常、既存削除後はメッセージを出して終了させるのが親切
             }
 
+            // 疑似ビューポイントがずれるため、アバターのルートの座標が (0,0,0) からわずかでも離れている場合にエラーとする
+            if (Vector3.Distance(avatarRootObject.transform.position, Vector3.zero) > GimmickConstants.AVATAR_ROOT_POSITION_TOLERANCE)
+            {
+                EditorUtility.DisplayDialog("エラー", GimmickConstants.AVATAR_ROOT_POSITION_ERROR, "OK");
+                return false;
+            }
+
             // Hipsボーンの取得
             Transform hipsBone = AvatarUtility.GetAnimatorHipsBone(avatarRootObject);
             if (hipsBone == null)

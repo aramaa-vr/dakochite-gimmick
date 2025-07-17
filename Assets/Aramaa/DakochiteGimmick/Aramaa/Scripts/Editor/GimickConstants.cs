@@ -66,11 +66,13 @@ namespace Aramaa.DakochiteGimmick.Editor
         public const string PHYSBONE_PROPERTY_NAME = "allowGrabbing";
         public const float ADVANCED_BOOL_FALSE_VALUE = 0.0f;
         public const float ADVANCED_BOOL_TRUE_VALUE = 1e-45f; // VRCPhysBoneのAdvancedBool.Trueに相当
+        public const float AVATAR_ROOT_POSITION_TOLERANCE = 0.0001f;
 
         // ====================================================================================================
         // メッセージ (ユーザー向け)
         // ====================================================================================================
         public const string MSG_AVATAR_NOT_SELECTED = "アバターが選択されていません。";
+        public const string AVATAR_ROOT_POSITION_ERROR = "アバターのルートの座標を（0, 0, 0）にしてください";
         public const string MSG_HIPS_NOT_FOUND = "アバターのHipsボーンが見つかりません。Animatorの設定を確認してください。";
         public const string MSG_PREFAB_NOT_FOUND = "ギミックの元となるプレハブが見つかりません。ツールが正しくインポートされているか確認してください。";
         public const string MSG_PREFAB_INSTANTIATION_FAILED = "プレハブの生成に失敗しました。";
