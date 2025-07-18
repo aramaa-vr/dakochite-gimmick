@@ -71,15 +71,6 @@ namespace Aramaa.DakochiteGimmick.Editor
         // ====================================================================================================
         // メッセージ (ユーザー向け)
         // ====================================================================================================
-        public const string MSG_AVATAR_NOT_SELECTED = "アバターが選択されていません。";
-        public const string AVATAR_ROOT_POSITION_ERROR = "アバターのルートの座標を（0, 0, 0）にしてください";
-        public const string MSG_HIPS_NOT_FOUND = "アバターのHipsボーンが見つかりません。Animatorの設定を確認してください。";
-        public const string MSG_PREFAB_NOT_FOUND = "ギミックの元となるプレハブが見つかりません。ツールが正しくインポートされているか確認してください。";
-        public const string MSG_PREFAB_INSTANTIATION_FAILED = "プレハブの生成に失敗しました。";
-        public const string MSG_CONSTRAINT_NOT_FOUND = "生成されたギミック内で必要なコンポーネントが見つかりません。プレハブが破損している可能性があります。";
-        public const string MSG_AVATARDESCRIPTOR_NOT_FOUND = "アバターにVRCAvatarDescriptorが見つかりません。EyeOffsetの設定をスキップしました。";
-        public const string MSG_EYEOFFSET_NOT_FOUND = "EyeOffsetオブジェクトが見つかりませんでした。EyeOffsetの設定をスキップしました。";
-        public const string MSG_HEAD_NOT_FOUND = "Headボーンが見つからないため、EyeOffsetの位置設定をスキップしました。";
         public const string MSG_EXISTING_GIMMICK_DELETED = "みんなでつかめるだこちてギミックを\nアバターから削除しました。";
         public const string MSG_PROCESS_CANCELED = "処理がキャンセルされました。";
         public const string MSG_PHYSBONE_NOT_FOUND_FOR_ANIMATION = "除外パスを考慮した結果、アニメーション対象のPhysBoneが見つかりませんでした。PhysBoneが存在し、除外パスの下にないことを確認してください。";
@@ -100,9 +91,7 @@ namespace Aramaa.DakochiteGimmick.Editor
         public const string LOG_PREFAB_NOT_FOUND_AT_PATH = "[Error] 指定されたプレハブが見つかりません: {0}";
         public const string LOG_PREFAB_INSTANTIATION_FAILED = "[Error] プレハブのインスタンス化に失敗しました。";
         public const string LOG_CONSTRAINT_NOT_FOUND_IN_PREFAB = "[Error] 新しく生成されたギミック '{0}' のパス ({1}) にVRCParentConstraintが見つかりません。";
-        public const string LOG_AVATARDESCRIPTOR_NOT_FOUND = "[Warning] アバターのルートオブジェクトに VRCAvatarDescriptor コンポーネントが見つかりません。EyeOffsetの位置設定をスキップします。";
         public const string LOG_EYEOFFSET_ADJUSTED = "EyeOffsetオブジェクトをVRCAvatarDescriptorのView位置とHeadボーンの反転回転に基づいて修正しました。 LocalPos: {0}, WorldRot: {1}, LocalScale: {2}";
-        public const string LOG_EYEOFFSET_ADJUSTMENT_SKIPPED_NULL = "アバターまたはギミックのインスタンスがnullのため、EyeOffset調整をスキップしました。";
         public const string LOG_CONSTRAINT_GO_NOT_FOUND = "LogConstraintPosition: Constraint GameObjectが見つかりませんでした。";
         public const string LOG_GIMMICK_INSTANCE_NOT_FOUND = "LogConstraintPosition: ギミックプレハブのインスタンス '{0}' がアバター直下に見つかりませんでした。";
         public const string LOG_MA_LINKER_NULL_PARAMS = "[MA Linker] アバターのルートまたは割り当てるAnimatorControllerがnullです。";

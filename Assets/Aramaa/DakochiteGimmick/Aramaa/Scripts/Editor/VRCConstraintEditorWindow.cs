@@ -1,9 +1,10 @@
+using Aramaa.DakochiteGimmick.Editor;
 using System.IO;
+using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 using VRC.SDK3.Avatars.Components;
 using VRC.SDK3.Dynamics.Constraint.Components;
-using System.Threading.Tasks;
 
 namespace Aramaa.DakochiteGimmick.Editor
 {
@@ -153,9 +154,9 @@ namespace Aramaa.DakochiteGimmick.Editor
 
             // 青文字のリンクボタンのように見せるために LinkButton を使用
             EditorGUILayout.BeginHorizontal();
-            if (GUILayout.Button("説明書", EditorStyles.linkLabel)) {Application.OpenURL("https://docs.google.com/document/d/141h1qxOo8ZeFPDXLFmx2fjn6jsYxf7dL6XJkSFxztec/edit?usp=sharing");}
+            if (GUILayout.Button("説明書", EditorStyles.linkLabel)) { Application.OpenURL("https://docs.google.com/document/d/141h1qxOo8ZeFPDXLFmx2fjn6jsYxf7dL6XJkSFxztec/edit?usp=sharing"); }
             if (GUILayout.Button("Booth", EditorStyles.linkLabel)) { Application.OpenURL("https://aramaa.booth.pm/items/7016968"); }
-            if (GUILayout.Button("GitHub", EditorStyles.linkLabel)) { Application.OpenURL("https://github.com/aramaa-vr/dakochite-gimmick"); }
+            if (GUILayout.Button("更新履歴", EditorStyles.linkLabel)) { Application.OpenURL("https://aramaa-vr.github.io/dakochite-gimmick/CHANGELOG.md"); }
             EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.Space();
@@ -316,97 +317,88 @@ namespace Aramaa.DakochiteGimmick.Editor
 
             EditorGUILayout.LabelField("現在のギミックとConstraint情報:", EditorStyles.boldLabel);
 
-            if (_targetAvatarRootObject != null)
-            {
-                // GIMMICK_PREFAB_PATHもResources.Loadに変更する必要があるが、
-                // これはVRCConstraintEditorWindowの責務ではないため、そのままにしておく。
-                // ConstraintSetupService内で同様の修正が必要。
-                string gimmickPrefabName = Path.GetFileNameWithoutExtension(GimmickConstants.GIMMICK_PREFAB_PATH);
-                Transform gimmickInstanceTransform = HierarchyUtility.FindChildRecursive(_targetAvatarRootObject.transform, gimmickPrefabName);
-
-                if (gimmickInstanceTransform != null)
-                {
-                    VRCParentConstraint foundConstraint = HierarchyUtility.FindConstraintInHierarchy(gimmickInstanceTransform, GimmickConstants.CONSTRAINT_PATH_INSIDE_PREFAB);
-                    if (foundConstraint != null)
-                    {
-                        EditorGUILayout.ObjectField("見つかったConstraint", foundConstraint.gameObject, typeof(GameObject), true);
-                        if (foundConstraint.TargetTransform != null)
-                        {
-                            EditorGUILayout.ObjectField("現在のTarget Transform", foundConstraint.TargetTransform, typeof(Transform), true);
-                        }
-                        else
-                        {
-                            EditorGUILayout.LabelField("現在のTarget Transform: 未設定", EditorStyles.label);
-                        }
-                    }
-                    else
-                    {
-                        EditorGUILayout.HelpBox($"プレハブインスタンス '{gimmickInstanceTransform.name}' 内のパス ({GimmickConstants.CONSTRAINT_PATH_INSIDE_PREFAB}) にVRCParentConstraintが見つかりません。\nプレハブの構造が正しいか確認してください。", MessageType.Info);
-                    }
-
-                    EditorGUILayout.Space();
-                    EditorGUILayout.LabelField("EyeOffsetオブジェクト情報:", EditorStyles.boldLabel);
-                    Transform eyeOffsetTransform = HierarchyUtility.FindChildTransformByRelativePath(gimmickInstanceTransform, GimmickConstants.EYEOFFSET_PATH_INSIDE_PREFAB);
-                    if (eyeOffsetTransform != null)
-                    {
-                        EditorGUILayout.ObjectField("見つかったEyeOffset", eyeOffsetTransform.gameObject, typeof(GameObject), true);
-                        EditorGUILayout.Vector3Field("現在のローカル座標", eyeOffsetTransform.localPosition);
-                        EditorGUILayout.Vector3Field("現在のローカル回転 (オイラー)", eyeOffsetTransform.localRotation.eulerAngles);
-                        EditorGUILayout.Vector3Field("現在のワールド回転 (オイラー)", eyeOffsetTransform.rotation.eulerAngles);
-                    }
-                    else
-                    {
-                        EditorGUILayout.HelpBox($"プレハブインスタンス '{gimmickInstanceTransform.name}' 内のパス ({GimmickConstants.EYEOFFSET_PATH_INSIDE_PREFAB}) にEyeOffsetオブジェクトが見つかりません。", MessageType.Info);
-                    }
-                }
-                else
-                {
-                    EditorGUILayout.HelpBox($"アバター直下にギミックプレハブ '{gimmickPrefabName}' のインスタンスが見つかりません。", MessageType.Info);
-                }
-
-                EditorGUILayout.Space();
-
-                // Animator Hips & Head ボーン情報の表示
-                EditorGUILayout.LabelField("アバターのHipsボーン情報:", EditorStyles.boldLabel);
-                Transform hipsBone = AvatarUtility.GetAnimatorHipsBone(_targetAvatarRootObject);
-                if (hipsBone != null)
-                {
-                    EditorGUILayout.ObjectField("見つかったAnimator Hipsボーン", hipsBone, typeof(Transform), true);
-                }
-                else
-                {
-                    EditorGUILayout.HelpBox(string.Format(GimmickConstants.LOG_ANIMATOR_NOT_FOUND, _targetAvatarRootObject.name) + " またはAnimatorがHumanoid型ではありません。", MessageType.Warning);
-                }
-
-                EditorGUILayout.Space();
-                EditorGUILayout.LabelField("アバターのHeadボーン情報:", EditorStyles.boldLabel);
-                Transform headBone = AvatarUtility.GetAnimatorHeadBone(_targetAvatarRootObject);
-                if (headBone != null)
-                {
-                    EditorGUILayout.ObjectField("見つかったAnimator Headボーン", headBone, typeof(Transform), true);
-                }
-                else
-                {
-                    EditorGUILayout.HelpBox(string.Format(GimmickConstants.LOG_ANIMATOR_NOT_FOUND, _targetAvatarRootObject.name) + " またはAnimatorがHumanoid型ではありません。（Headボーン）", MessageType.Warning);
-                }
-
-                // VRCAvatarDescriptorのView位置の表示
-                EditorGUILayout.Space();
-                EditorGUILayout.LabelField("VRCAvatarDescriptor View位置:", EditorStyles.boldLabel);
-                VRCAvatarDescriptor avatarDescriptor = _targetAvatarRootObject.GetComponent<VRCAvatarDescriptor>();
-                if (avatarDescriptor != null)
-                {
-                    EditorGUILayout.Vector3Field("View Position (Avatar Local)", avatarDescriptor.ViewPosition);
-                }
-                else
-                {
-                    EditorGUILayout.HelpBox(GimmickConstants.MSG_AVATARDESCRIPTOR_NOT_FOUND, MessageType.Warning);
-                }
-            }
-            else
+            if (_targetAvatarRootObject == null)
             {
                 EditorGUILayout.LabelField("アバターのルートオブジェクトを選択してください。（詳細情報）", EditorStyles.label);
+                return;
             }
+
+            // GIMMICK_PREFAB_PATHもResources.Loadに変更する必要があるが、
+            // これはVRCConstraintEditorWindowの責務ではないため、そのままにしておく。
+            // ConstraintSetupService内で同様の修正が必要。
+            string gimmickPrefabName = Path.GetFileNameWithoutExtension(GimmickConstants.GIMMICK_PREFAB_PATH);
+            Transform gimmickInstanceTransform = HierarchyUtility.FindChildRecursive(_targetAvatarRootObject.transform, gimmickPrefabName);
+            if (gimmickInstanceTransform == null)
+            {
+                EditorGUILayout.HelpBox($"アバター直下にギミックプレハブ '{gimmickPrefabName}' のインスタンスが見つかりません。", MessageType.Info);
+                return;
+            }
+
+            VRCParentConstraint foundConstraint = HierarchyUtility.FindConstraintInHierarchy(gimmickInstanceTransform, GimmickConstants.CONSTRAINT_PATH_INSIDE_PREFAB);
+            if (foundConstraint == null)
+            {
+                EditorGUILayout.HelpBox($"プレハブインスタンス '{gimmickInstanceTransform.name}' 内のパス ({GimmickConstants.CONSTRAINT_PATH_INSIDE_PREFAB}) にVRCParentConstraintが見つかりません。\nプレハブの構造が正しいか確認してください。", MessageType.Info);
+                return;
+            }
+
+            EditorGUILayout.ObjectField("見つかったConstraint", foundConstraint.gameObject, typeof(GameObject), true);
+            if (foundConstraint.TargetTransform == null)
+            {
+                EditorGUILayout.LabelField("現在のTarget Transform: 未設定", EditorStyles.label);
+                return;
+            }
+
+            EditorGUILayout.ObjectField("現在のTarget Transform", foundConstraint.TargetTransform, typeof(Transform), true);
+
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("EyeOffsetオブジェクト情報:", EditorStyles.boldLabel);
+            Transform eyeOffsetTransform = HierarchyUtility.FindChildTransformByRelativePath(gimmickInstanceTransform, GimmickConstants.EYEOFFSET_PATH_INSIDE_PREFAB);
+            if (eyeOffsetTransform == null)
+            {
+                EditorGUILayout.HelpBox($"プレハブインスタンス '{gimmickInstanceTransform.name}' 内のパス ({GimmickConstants.EYEOFFSET_PATH_INSIDE_PREFAB}) にEyeOffsetオブジェクトが見つかりません。", MessageType.Info);
+                return;
+            }
+
+            EditorGUILayout.ObjectField("見つかったEyeOffset", eyeOffsetTransform.gameObject, typeof(GameObject), true);
+            EditorGUILayout.Vector3Field("現在のローカル座標", eyeOffsetTransform.localPosition);
+            EditorGUILayout.Vector3Field("現在のローカル回転 (オイラー)", eyeOffsetTransform.localRotation.eulerAngles);
+            EditorGUILayout.Vector3Field("現在のワールド回転 (オイラー)", eyeOffsetTransform.rotation.eulerAngles);
+
+            EditorGUILayout.Space();
+
+            // Animator Hips & Head ボーン情報の表示
+            EditorGUILayout.LabelField("アバターのHipsボーン情報:", EditorStyles.boldLabel);
+            Transform hipsBone = AvatarUtility.GetAnimatorHipsBone(_targetAvatarRootObject);
+            if (hipsBone == null)
+            {
+                EditorGUILayout.HelpBox(string.Format(GimmickConstants.LOG_ANIMATOR_NOT_FOUND, _targetAvatarRootObject.name) + " またはAnimatorがHumanoid型ではありません。", MessageType.Warning);
+                return;
+            }
+
+            EditorGUILayout.ObjectField("見つかったAnimator Hipsボーン", hipsBone, typeof(Transform), true);
+
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("アバターのHeadボーン情報:", EditorStyles.boldLabel);
+            Transform headBone = AvatarUtility.GetAnimatorHeadBone(_targetAvatarRootObject);
+            if (headBone == null)
+            {
+                EditorGUILayout.HelpBox(string.Format(GimmickConstants.LOG_ANIMATOR_NOT_FOUND, _targetAvatarRootObject.name) + " またはAnimatorがHumanoid型ではありません。（Headボーン）", MessageType.Warning);
+                return;
+            }
+
+            EditorGUILayout.ObjectField("見つかったAnimator Headボーン", headBone, typeof(Transform), true);
+
+            // VRCAvatarDescriptorのView位置の表示
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("VRCAvatarDescriptor View位置:", EditorStyles.boldLabel);
+            VRCAvatarDescriptor avatarDescriptor = _targetAvatarRootObject.GetComponent<VRCAvatarDescriptor>();
+            if (avatarDescriptor == null)
+            {
+                EditorGUILayout.HelpBox("アバターにVRCAvatarDescriptorが見つかりません。", MessageType.Warning);
+                return;
+            }
+
+            EditorGUILayout.Vector3Field("View Position (Avatar Local)", avatarDescriptor.ViewPosition);
         }
     }
 }
