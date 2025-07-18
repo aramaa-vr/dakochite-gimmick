@@ -25,18 +25,20 @@ namespace Aramaa.DakochiteGimmick.Editor
                 return;
             }
 
+            var avatarRootObject = gimmickData.AvatarRootObject;
+
             EditorGUILayout.HelpBox("開発者モードが有効です。詳細情報が表示されています。", MessageType.Info);
             EditorGUILayout.Space();
 
             EditorGUILayout.LabelField("現在のギミックとConstraint情報:", EditorStyles.boldLabel);
 
-            if (gimmickData.AvatarRootObject == null)
+            if (avatarRootObject == null)
             {
                 EditorGUILayout.LabelField("アバターのルートオブジェクトを選択してください。（詳細情報）", EditorStyles.label);
                 return;
             }
 
-            Transform gimmickInstanceTransform = HierarchyUtility.FindChildRecursive(gimmickData.AvatarRootObject.transform, GimmickConstants.HOLD_GIMMICK_NAME);
+            Transform gimmickInstanceTransform = HierarchyUtility.FindChildRecursive(avatarRootObject.transform, GimmickConstants.HOLD_GIMMICK_NAME);
             if (gimmickInstanceTransform == null)
             {
                 EditorGUILayout.HelpBox($"アバター直下にギミックプレハブ '{GimmickConstants.HOLD_GIMMICK_NAME}' のインスタンスが見つかりません。", MessageType.Info);
@@ -76,33 +78,36 @@ namespace Aramaa.DakochiteGimmick.Editor
             EditorGUILayout.Space();
 
             EditorGUILayout.LabelField("アバターのHipsボーン情報:", EditorStyles.boldLabel);
-            if (gimmickData.HipsBone == null)
+            var hipsBone = AvatarUtility.GetAnimatorHipsBone(avatarRootObject);
+            if (hipsBone == null)
             {
-                EditorGUILayout.HelpBox(string.Format(GimmickConstants.LOG_ANIMATOR_NOT_FOUND, gimmickData.AvatarRootObject.name) + " またはAnimatorがHumanoid型ではありません。", MessageType.Warning);
+                EditorGUILayout.HelpBox(string.Format(GimmickConstants.LOG_ANIMATOR_NOT_FOUND, avatarRootObject.name) + " またはAnimatorがHumanoid型ではありません。", MessageType.Warning);
                 return;
             }
 
-            EditorGUILayout.ObjectField("見つかったAnimator Hipsボーン", gimmickData.HipsBone, typeof(Transform), true);
+            EditorGUILayout.ObjectField("見つかったAnimator Hipsボーン", hipsBone, typeof(Transform), true);
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("アバターのHeadボーン情報:", EditorStyles.boldLabel);
-            if (gimmickData.HeadBone == null)
+            var headBone = AvatarUtility.GetAnimatorHeadBone(avatarRootObject);
+            if (headBone == null)
             {
-                EditorGUILayout.HelpBox(string.Format(GimmickConstants.LOG_ANIMATOR_NOT_FOUND, gimmickData.AvatarRootObject.name) + " またはAnimatorがHumanoid型ではありません。（Headボーン）", MessageType.Warning);
+                EditorGUILayout.HelpBox(string.Format(GimmickConstants.LOG_ANIMATOR_NOT_FOUND, avatarRootObject.name) + " またはAnimatorがHumanoid型ではありません。（Headボーン）", MessageType.Warning);
                 return;
             }
 
-            EditorGUILayout.ObjectField("見つかったAnimator Headボーン", gimmickData.HeadBone, typeof(Transform), true);
+            EditorGUILayout.ObjectField("見つかったAnimator Headボーン", headBone, typeof(Transform), true);
 
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("VRCAvatarDescriptor View位置:", EditorStyles.boldLabel);
-            if (gimmickData.AvatarDescriptor == null)
+            var avatarDescriptor = avatarRootObject.GetComponent<VRCAvatarDescriptor>();
+            if (avatarDescriptor == null)
             {
                 EditorGUILayout.HelpBox("アバターにVRCAvatarDescriptorが見つかりません。", MessageType.Warning);
                 return;
             }
 
-            EditorGUILayout.Vector3Field("View Position (Avatar Local)", gimmickData.AvatarDescriptor.ViewPosition);
+            EditorGUILayout.Vector3Field("View Position (Avatar Local)", avatarDescriptor.ViewPosition);
         }
 
         /// <summary>

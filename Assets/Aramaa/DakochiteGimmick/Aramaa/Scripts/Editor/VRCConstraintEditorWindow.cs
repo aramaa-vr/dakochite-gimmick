@@ -21,6 +21,8 @@ namespace Aramaa.DakochiteGimmick.Editor
         private static readonly Vector2 NORMAL_WINDOW_SIZE = new Vector2(WINDOW_WIDTH, 300f); // 通常モードのサイズ
         private static readonly Vector2 DEVELOPER_WINDOW_SIZE = new Vector2(WINDOW_WIDTH, 800f); // 開発者モードのサイズ
 
+        private GameObject _selectedGameObject = null;
+
         GimmickData _gimmickData = new GimmickData();
 
         /// <summary>
@@ -74,6 +76,7 @@ namespace Aramaa.DakochiteGimmick.Editor
                 GimmickConstants.WINDOW_TITLE, // タイトルバーのテキスト
                 true // フォーカス
             );
+            window._selectedGameObject = selectedGameObject; // 選択中のアバターをセット
             window._gimmickData.AvatarRootObject = selectedGameObject; // 選択中のアバターをセット
             window.maxSize = NORMAL_WINDOW_SIZE;
             window.minSize = NORMAL_WINDOW_SIZE;
@@ -95,6 +98,7 @@ namespace Aramaa.DakochiteGimmick.Editor
             }
 
             _gimmickData.ResetData();
+            _gimmickData.AvatarRootObject = _selectedGameObject; // 選択中のアバターをセット
 
             // titleContentを設定（ウィンドウタブやタイトルバーの表示）
             titleContent = new GUIContent(GimmickConstants.WINDOW_TITLE);
