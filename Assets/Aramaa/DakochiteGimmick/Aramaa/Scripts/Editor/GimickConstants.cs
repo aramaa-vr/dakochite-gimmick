@@ -21,11 +21,21 @@ namespace Aramaa.DakochiteGimmick.Editor
 
         // ====================================================================================================
         // アセットパス / 階層
+        //
+        // Gimick -> Gimmick には変更しない手遅れ
+        //
         // ====================================================================================================
         /// <summary>
-        /// Unityプロジェクト内で生成するプレハブのアセットパス。
+        /// ギミックプレハブのファイル名（拡張子なし）。
+        /// Resourcesフォルダからのパス構築に使用されます。
         /// </summary>
-        public const string GIMMICK_PREFAB_PATH = "Aramaa/HoldGimick/Prefabs/HoldGimickAndCamera";
+        public const string HOLD_GIMMICK_NAME = "HoldGimickAndCamera";
+
+        /// <summary>
+        /// UnityプロジェクトのResourcesフォルダ内にあるギミックプレハブへのアセットパス。
+        /// GIMMICK_NAMEと組み合わせて構築されます。
+        /// </summary>
+        public static readonly string HOLD_GIMMICK_PREFAB_RESOURCE_PATH = $"Aramaa/HoldGimick/Prefabs/{HOLD_GIMMICK_NAME}";
 
         /// <summary>
         /// 生成されるギミックプレハブのルートオブジェクトからの相対パスで、

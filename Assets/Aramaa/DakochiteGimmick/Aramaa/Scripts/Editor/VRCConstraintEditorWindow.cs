@@ -1,10 +1,8 @@
-using Aramaa.DakochiteGimmick.Editor;
-using System.IO;
+using librsync.net;
 using System.Threading.Tasks;
 using UnityEditor;
+using UnityEditor.PackageManager.UI;
 using UnityEngine;
-using VRC.SDK3.Avatars.Components;
-using VRC.SDK3.Dynamics.Constraint.Components;
 
 namespace Aramaa.DakochiteGimmick.Editor
 {
@@ -23,17 +21,7 @@ namespace Aramaa.DakochiteGimmick.Editor
         private static readonly Vector2 NORMAL_WINDOW_SIZE = new Vector2(WINDOW_WIDTH, 300f); // 通常モードのサイズ
         private static readonly Vector2 DEVELOPER_WINDOW_SIZE = new Vector2(WINDOW_WIDTH, 800f); // 開発者モードのサイズ
 
-        /// <summary>
-        /// 操作対象となるVRChatアバターのルートGameObject。
-        /// Inspector上でユーザーが Hierarchyからドラッグ＆ドロップして設定します。
-        /// このオブジェクトにはAnimatorコンポーネントがアタッチされており、Humanoidアバターとして設定されている必要があります。
-        /// </summary>
-        private GameObject _targetAvatarRootObject;
-
-        /// <summary>
-        /// 開発者向けの詳細情報を表示するかどうかのフラグ。
-        /// </summary>
-        private bool _showDeveloperInfo = false; // デフォルトは非表示
+        GimmickData _gimmickData = new GimmickData();
 
         /// <summary>
         /// ウィンドウ内部に表示するロゴ画像。OnEnableで一度だけロードされます。
@@ -86,7 +74,7 @@ namespace Aramaa.DakochiteGimmick.Editor
                 GimmickConstants.WINDOW_TITLE, // タイトルバーのテキスト
                 true // フォーカス
             );
-            window._targetAvatarRootObject = selectedGameObject; // 選択中のアバターをセット
+            window._gimmickData.AvatarRootObject = selectedGameObject; // 選択中のアバターをセット
             window.maxSize = NORMAL_WINDOW_SIZE;
             window.minSize = NORMAL_WINDOW_SIZE;
         }
@@ -100,6 +88,14 @@ namespace Aramaa.DakochiteGimmick.Editor
         /// </summary>
         private async void OnEnable() // async キーワードを追加
         {
+            if (_gimmickData == null)
+            {
+                _gimmickData = new GimmickData();
+                Debug.Log("[VRCConstraintEditorWindow] _gimmickData initialized in OnEnable.");
+            }
+
+            _gimmickData.ResetData();
+
             // titleContentを設定（ウィンドウタブやタイトルバーの表示）
             titleContent = new GUIContent(GimmickConstants.WINDOW_TITLE);
 
@@ -136,7 +132,7 @@ namespace Aramaa.DakochiteGimmick.Editor
         private void OnGUI()
         {
             // ウィンドウサイズの動的調整
-            if (_showDeveloperInfo)
+            if (_gimmickData.ShowDeveloperInfo)
             {
                 // 開発者モードがオンの場合、ウィンドウを大きくする
                 minSize = DEVELOPER_WINDOW_SIZE;
@@ -166,35 +162,29 @@ namespace Aramaa.DakochiteGimmick.Editor
             EditorGUILayout.Space();
 
             // アバター選択フィールド
-            _targetAvatarRootObject = (GameObject)EditorGUILayout.ObjectField(
-                "アバターのルート",
-                _targetAvatarRootObject,
-                typeof(GameObject),
-                true // シーン内のオブジェクトのみ
-            );
+            _gimmickData.AvatarRootObject = (GameObject)EditorGUILayout.ObjectField("アバターのルート", _gimmickData.AvatarRootObject, typeof(GameObject), true);
 
             EditorGUILayout.Space();
 
-            // ギミック生成/再生成ボタン
-            if (GUILayout.Button(new GUIContent(GimmickConstants.BUTTON_GENERATE_OR_REGENERATE_TEXT, GimmickConstants.BUTTON_GENERATE_OR_REGENERATE_TOOLTIP)))
+            if (_gimmickData.CallbackState == UpdateCallbackState.Waiting)
             {
-                // セットアップ処理をサービスに委譲
-                // PerformFullSetupは既存ギミックを自動で削除し、新規生成を行います
-                ConstraintSetupService.PerformFullSetup(_targetAvatarRootObject);
-                Repaint(); // UI情報を更新し、DeveloperInfoに最新情報を表示
+                EditorGUILayout.HelpBox("処理中...", MessageType.Info);
+            }
+            else
+            {
+                // ギミック生成/再生成ボタン
+                if (GUILayout.Button(new GUIContent(GimmickConstants.BUTTON_GENERATE_OR_REGENERATE_TEXT, GimmickConstants.BUTTON_GENERATE_OR_REGENERATE_TOOLTIP)))
+                {
+                    // セットアップ処理をサービスに委譲
+                    // PerformFullSetupは既存ギミックを自動で削除し、新規生成を行います
+                    ConstraintSetupService.PerformFullSetup(_gimmickData);
+                    Repaint(); // UI情報を更新し、DeveloperInfoに最新情報を表示
+                }
             }
 
             EditorGUILayout.Space();
 
-            // 開発者モードのトグル
-            _showDeveloperInfo = EditorGUILayout.Toggle("開発者モード", _showDeveloperInfo);
-            EditorGUILayout.Space();
-
-            // 開発者モードが有効な場合のみ詳細情報を表示
-            if (_showDeveloperInfo)
-            {
-                DrawDeveloperInfoSection();
-            }
+            DeveloperDebugInfoDrawer.DrawAvatarDebugInfo(_gimmickData);
         }
 
         /// <summary>
@@ -203,11 +193,12 @@ namespace Aramaa.DakochiteGimmick.Editor
         /// </summary>
         private void OnDestroy()
         {
-            // リフレクションを使用して、ConstraintSetupServiceのプライベート静的フィールドをクリア
-            // これにより、ウィンドウが閉じられたときに古いプレハブアセットへの参照が残るのを防ぎます。
-            typeof(ConstraintSetupService).GetField("_gimmickPrefabAssetCache", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic)?
-                                         .SetValue(null, null);
-            Debug.Log("[VRCConstraintEditorWindow] ConstraintSetupServiceのプレハブキャッシュをクリアしました。");
+            if (_gimmickData != null)
+            {
+                _gimmickData.ResetData();
+                _gimmickData = null;
+                Debug.Log("[VRCConstraintEditorWindow] Gimmick data cleaned up.");
+            }
         }
 
         // ====================================================================================================
@@ -305,100 +296,6 @@ namespace Aramaa.DakochiteGimmick.Editor
 
             EditorGUILayout.LabelField(displayMessage, EditorStyles.boldLabel); // 太字で表示
             GUI.contentColor = originalColor; // 色を元に戻す
-        }
-
-        /// <summary>
-        /// 開発者モード時に表示される詳細情報セクションを描画するヘルパーメソッド。
-        /// </summary>
-        private void DrawDeveloperInfoSection()
-        {
-            EditorGUILayout.HelpBox("開発者モードが有効です。詳細情報が表示されています。", MessageType.Info);
-            EditorGUILayout.Space();
-
-            EditorGUILayout.LabelField("現在のギミックとConstraint情報:", EditorStyles.boldLabel);
-
-            if (_targetAvatarRootObject == null)
-            {
-                EditorGUILayout.LabelField("アバターのルートオブジェクトを選択してください。（詳細情報）", EditorStyles.label);
-                return;
-            }
-
-            // GIMMICK_PREFAB_PATHもResources.Loadに変更する必要があるが、
-            // これはVRCConstraintEditorWindowの責務ではないため、そのままにしておく。
-            // ConstraintSetupService内で同様の修正が必要。
-            string gimmickPrefabName = Path.GetFileNameWithoutExtension(GimmickConstants.GIMMICK_PREFAB_PATH);
-            Transform gimmickInstanceTransform = HierarchyUtility.FindChildRecursive(_targetAvatarRootObject.transform, gimmickPrefabName);
-            if (gimmickInstanceTransform == null)
-            {
-                EditorGUILayout.HelpBox($"アバター直下にギミックプレハブ '{gimmickPrefabName}' のインスタンスが見つかりません。", MessageType.Info);
-                return;
-            }
-
-            VRCParentConstraint foundConstraint = HierarchyUtility.FindConstraintInHierarchy(gimmickInstanceTransform, GimmickConstants.CONSTRAINT_PATH_INSIDE_PREFAB);
-            if (foundConstraint == null)
-            {
-                EditorGUILayout.HelpBox($"プレハブインスタンス '{gimmickInstanceTransform.name}' 内のパス ({GimmickConstants.CONSTRAINT_PATH_INSIDE_PREFAB}) にVRCParentConstraintが見つかりません。\nプレハブの構造が正しいか確認してください。", MessageType.Info);
-                return;
-            }
-
-            EditorGUILayout.ObjectField("見つかったConstraint", foundConstraint.gameObject, typeof(GameObject), true);
-            if (foundConstraint.TargetTransform == null)
-            {
-                EditorGUILayout.LabelField("現在のTarget Transform: 未設定", EditorStyles.label);
-                return;
-            }
-
-            EditorGUILayout.ObjectField("現在のTarget Transform", foundConstraint.TargetTransform, typeof(Transform), true);
-
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField("EyeOffsetオブジェクト情報:", EditorStyles.boldLabel);
-            Transform eyeOffsetTransform = HierarchyUtility.FindChildTransformByRelativePath(gimmickInstanceTransform, GimmickConstants.EYEOFFSET_PATH_INSIDE_PREFAB);
-            if (eyeOffsetTransform == null)
-            {
-                EditorGUILayout.HelpBox($"プレハブインスタンス '{gimmickInstanceTransform.name}' 内のパス ({GimmickConstants.EYEOFFSET_PATH_INSIDE_PREFAB}) にEyeOffsetオブジェクトが見つかりません。", MessageType.Info);
-                return;
-            }
-
-            EditorGUILayout.ObjectField("見つかったEyeOffset", eyeOffsetTransform.gameObject, typeof(GameObject), true);
-            EditorGUILayout.Vector3Field("現在のローカル座標", eyeOffsetTransform.localPosition);
-            EditorGUILayout.Vector3Field("現在のローカル回転 (オイラー)", eyeOffsetTransform.localRotation.eulerAngles);
-            EditorGUILayout.Vector3Field("現在のワールド回転 (オイラー)", eyeOffsetTransform.rotation.eulerAngles);
-
-            EditorGUILayout.Space();
-
-            // Animator Hips & Head ボーン情報の表示
-            EditorGUILayout.LabelField("アバターのHipsボーン情報:", EditorStyles.boldLabel);
-            Transform hipsBone = AvatarUtility.GetAnimatorHipsBone(_targetAvatarRootObject);
-            if (hipsBone == null)
-            {
-                EditorGUILayout.HelpBox(string.Format(GimmickConstants.LOG_ANIMATOR_NOT_FOUND, _targetAvatarRootObject.name) + " またはAnimatorがHumanoid型ではありません。", MessageType.Warning);
-                return;
-            }
-
-            EditorGUILayout.ObjectField("見つかったAnimator Hipsボーン", hipsBone, typeof(Transform), true);
-
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField("アバターのHeadボーン情報:", EditorStyles.boldLabel);
-            Transform headBone = AvatarUtility.GetAnimatorHeadBone(_targetAvatarRootObject);
-            if (headBone == null)
-            {
-                EditorGUILayout.HelpBox(string.Format(GimmickConstants.LOG_ANIMATOR_NOT_FOUND, _targetAvatarRootObject.name) + " またはAnimatorがHumanoid型ではありません。（Headボーン）", MessageType.Warning);
-                return;
-            }
-
-            EditorGUILayout.ObjectField("見つかったAnimator Headボーン", headBone, typeof(Transform), true);
-
-            // VRCAvatarDescriptorのView位置の表示
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField("VRCAvatarDescriptor View位置:", EditorStyles.boldLabel);
-            VRCAvatarDescriptor avatarDescriptor = _targetAvatarRootObject.GetComponent<VRCAvatarDescriptor>();
-            if (avatarDescriptor == null)
-            {
-                EditorGUILayout.HelpBox("アバターにVRCAvatarDescriptorが見つかりません。", MessageType.Warning);
-                return;
-            }
-
-            EditorGUILayout.Vector3Field("View Position (Avatar Local)", avatarDescriptor.ViewPosition);
         }
     }
 }

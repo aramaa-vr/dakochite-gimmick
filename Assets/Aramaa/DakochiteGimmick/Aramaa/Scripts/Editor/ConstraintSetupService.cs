@@ -12,14 +12,7 @@ namespace Aramaa.DakochiteGimmick.Editor
     /// </summary>
     public static class ConstraintSetupService
     {
-        private static GameObject _gimmickPrefabAssetCache; // プレハブアセットのキャッシュ
-        private static int _delayedCallFrameCounter = 0; // 遅延呼び出し用フレームカウンター
         private const int DELAY_FRAMES_FOR_CONSTRAINT_UPDATE = 240; // コンストレイントの更新待ちフレーム数
-
-        private static EditorApplication.CallbackFunction _updateCallback;
-        private static GameObject _avatarRootObject; // コールバック内で使用するアバターのルート
-        private static GameObject _gimmickPrefabInstance; // コールバック内で使用するギミックインスタンス
-        private static Transform _currentHeadBone; // コールバック内で使用するHeadボーン
 
         /// <summary>
         /// VRChatアバターに対するギミックのフルセットアップを実行します。
@@ -27,24 +20,23 @@ namespace Aramaa.DakochiteGimmick.Editor
         /// </summary>
         /// <param name="avatarRootObject">セットアップ対象のアバターのルートGameObject。</param>
         /// <returns>セットアップが成功したかどうか。</returns>
-        public static void PerformFullSetup(GameObject avatarRootObject)
+        public static void PerformFullSetup(GimmickData gimmickData)
         {
-            if (avatarRootObject == null)
+            if (gimmickData.AvatarRootObject == null)
             {
-                EditorErrorDialog.DisplayDialog(ErrorInfo.CODE_001);
+                EditorErrorDialog.DisplayDialog(GimmickError.AvatarRootIsNull);
                 return;
             }
 
-            VRCAvatarDescriptor avatarDescriptor = avatarRootObject.GetComponent<VRCAvatarDescriptor>();
-            if (avatarDescriptor == null)
+            gimmickData.AvatarDescriptor = gimmickData.AvatarRootObject.GetComponent<VRCAvatarDescriptor>();
+            if (gimmickData.AvatarDescriptor == null)
             {
-                EditorErrorDialog.DisplayDialog(ErrorInfo.CODE_014);
+                EditorErrorDialog.DisplayDialog(GimmickError.AvatarDescriptorNotFound);
                 return;
             }
 
             // 既存ギミックの検出と削除
-            string gimmickPrefabName = GimmickConstants.GIMMICK_PREFAB_PATH.Substring(GimmickConstants.GIMMICK_PREFAB_PATH.LastIndexOf('/') + 1);
-            Transform existingGimmickInstance = HierarchyUtility.FindChildRecursive(avatarRootObject.transform, gimmickPrefabName);
+            Transform existingGimmickInstance = HierarchyUtility.FindChildRecursive(gimmickData.AvatarRootObject.transform, GimmickConstants.HOLD_GIMMICK_NAME);
             if (existingGimmickInstance != null)
             {
                 // MissingReferenceExceptionの調査をしたが、不明点が多く解決しないので一旦保留
@@ -56,142 +48,137 @@ namespace Aramaa.DakochiteGimmick.Editor
             }
 
             // 疑似ビューポイントがずれるため、アバターのルートの座標が (0,0,0) からわずかでも離れている場合にエラーとする
-            if (Vector3.Distance(avatarRootObject.transform.position, Vector3.zero) > GimmickConstants.AVATAR_ROOT_POSITION_TOLERANCE)
+            if (Vector3.Distance(gimmickData.AvatarRootObject.transform.position, Vector3.zero) > GimmickConstants.AVATAR_ROOT_POSITION_TOLERANCE)
             {
-                EditorErrorDialog.DisplayDialog(ErrorInfo.CODE_002);
+                EditorErrorDialog.DisplayDialog(GimmickError.AvatarRootPositionIsNotZero);
                 return;
             }
 
             // Hipsボーンの取得
-            Transform hipsBone = AvatarUtility.GetAnimatorHipsBone(avatarRootObject);
-            if (hipsBone == null)
+            gimmickData.HipsBone = AvatarUtility.GetAnimatorHipsBone(gimmickData.AvatarRootObject);
+            if (gimmickData.HipsBone == null)
             {
-                EditorErrorDialog.DisplayDialog(ErrorInfo.CODE_003);
+                EditorErrorDialog.DisplayDialog(GimmickError.HipsBoneNotFound);
                 return;
             }
 
-            // Headボーンの取得（EyeOffset調整に必要だが必須ではない）
-            Transform headBone = AvatarUtility.GetAnimatorHeadBone(avatarRootObject);
-            if (headBone == null)
+            // Headボーンの取得
+            gimmickData.HeadBone = AvatarUtility.GetAnimatorHeadBone(gimmickData.AvatarRootObject);
+            if (gimmickData.HeadBone == null)
             {
-                EditorErrorDialog.DisplayDialog(ErrorInfo.CODE_009);
+                EditorErrorDialog.DisplayDialog(GimmickError.HeadBoneNotFound);
                 return;
             }
 
             // ギミックプレハブのロード
-            if (_gimmickPrefabAssetCache == null)
+            if (gimmickData.GimmickPrefabAssetCache == null)
             {
-                _gimmickPrefabAssetCache = Resources.Load<GameObject>(GimmickConstants.GIMMICK_PREFAB_PATH);
+                gimmickData.GimmickPrefabAssetCache = Resources.Load<GameObject>(GimmickConstants.HOLD_GIMMICK_PREFAB_RESOURCE_PATH);
             }
-            GameObject gimmickPrefabAsset = _gimmickPrefabAssetCache;
 
-            if (gimmickPrefabAsset == null)
+            if (gimmickData.GimmickPrefabAssetCache == null)
             {
-                EditorErrorDialog.DisplayDialog(ErrorInfo.CODE_004);
+                EditorErrorDialog.DisplayDialog(GimmickError.GimmickPrefabNotFound);
                 return;
             }
 
             // ギミックプレハブのインスタンス化とアバターへのアタッチ
-            GameObject gimmickPrefabInstance = PrefabUtility.InstantiatePrefab(gimmickPrefabAsset) as GameObject;
-            if (gimmickPrefabInstance == null)
+            gimmickData.GimmickPrefabInstance = PrefabUtility.InstantiatePrefab(gimmickData.GimmickPrefabAssetCache) as GameObject;
+            if (gimmickData.GimmickPrefabInstance == null)
             {
-                EditorErrorDialog.DisplayDialog(ErrorInfo.CODE_005);
+                EditorErrorDialog.DisplayDialog(GimmickError.GimmickPrefabInstantiationFailed);
                 return;
             }
 
-            gimmickPrefabInstance.transform.SetParent(avatarRootObject.transform, false);
-            gimmickPrefabInstance.transform.localPosition = Vector3.zero;
-            gimmickPrefabInstance.transform.localRotation = Quaternion.identity;
-            gimmickPrefabInstance.transform.localScale = Vector3.one;
+            gimmickData.GimmickPrefabInstance.transform.SetParent(gimmickData.AvatarRootObject.transform, false);
+            gimmickData.GimmickPrefabInstance.transform.localPosition = Vector3.zero;
+            gimmickData.GimmickPrefabInstance.transform.localRotation = Quaternion.identity;
+            gimmickData.GimmickPrefabInstance.transform.localScale = Vector3.one;
 
-            EditorUtility.SetDirty(gimmickPrefabInstance);
+            EditorUtility.SetDirty(gimmickData.GimmickPrefabInstance);
 
             // VRCParentConstraintの設定
-            VRCParentConstraint parentConstraint = HierarchyUtility.FindConstraintInHierarchy(gimmickPrefabInstance.transform, GimmickConstants.CONSTRAINT_PATH_INSIDE_PREFAB);
+            VRCParentConstraint parentConstraint = HierarchyUtility.FindConstraintInHierarchy(gimmickData.GimmickPrefabInstance.transform, GimmickConstants.CONSTRAINT_PATH_INSIDE_PREFAB);
             if (parentConstraint == null)
             {
-                GameObject.DestroyImmediate(gimmickPrefabInstance.gameObject);
-                EditorErrorDialog.DisplayDialog(ErrorInfo.CODE_006);
-                Debug.LogError(string.Format(GimmickConstants.LOG_CONSTRAINT_NOT_FOUND_IN_PREFAB, gimmickPrefabInstance.name, GimmickConstants.CONSTRAINT_PATH_INSIDE_PREFAB));
+                GameObject.DestroyImmediate(gimmickData.GimmickPrefabInstance.gameObject);
+                EditorErrorDialog.DisplayDialog(GimmickError.GimmickPrefabCorrupted);
+                Debug.LogError(string.Format(GimmickConstants.LOG_CONSTRAINT_NOT_FOUND_IN_PREFAB, gimmickData.GimmickPrefabInstance.name, GimmickConstants.CONSTRAINT_PATH_INSIDE_PREFAB));
                 return;
             }
 
-            parentConstraint.TargetTransform = hipsBone; // Hipsボーンをターゲットに設定
+            parentConstraint.TargetTransform = gimmickData.HipsBone; // Hipsボーンをターゲットに設定
             EditorUtility.SetDirty(parentConstraint);
 
-            RefreshEditorWindows(gimmickPrefabInstance); // 強制再描画で反映を促す
+            RefreshEditorWindows(gimmickData.GimmickPrefabInstance); // 強制再描画で反映を促す
 
-            // EyeOffsetの調整処理をEditorApplication.updateで呼び出す
-            _delayedCallFrameCounter = 0; // フレームカウンターをリセット
-
-            // コールバック内で必要な引数を静的変数にキャッシュ
-            _avatarRootObject = avatarRootObject;
-            _gimmickPrefabInstance = gimmickPrefabInstance;
-            _currentHeadBone = headBone;
-
-            // 既存のコールバックがあれば解除しておく（念のため）
-            if (_updateCallback != null)
-            {
-                EditorApplication.update -= _updateCallback;
-            }
+            gimmickData.SetWaiting();
 
             // EditorApplication.update に登録する CallbackFunction 型のラムダ式を定義
-            _updateCallback = () =>
+            gimmickData.AddUpdateCallback(() =>
             {
-                _delayedCallFrameCounter++;
-                if (_delayedCallFrameCounter < DELAY_FRAMES_FOR_CONSTRAINT_UPDATE)
+                // 保険
+                if (gimmickData.CallbackState == UpdateCallbackState.None)
+                {
+                    gimmickData.RemoveUpdateCallbackIfNeeded();
+                    return;
+                }
+
+                gimmickData.DelayedCallFrameCounter++;
+                if (gimmickData.DelayedCallFrameCounter < DELAY_FRAMES_FOR_CONSTRAINT_UPDATE)
                 {
                     // 指定フレーム数に達するまで待機を継続
+                    gimmickData.CallbackState = UpdateCallbackState.Waiting;
                     return;
                 }
 
                 // 指定フレーム数に達したので、デリゲートから削除
-                EditorApplication.update -= _updateCallback;
-                // 後処理のために参照をクリア
-                _updateCallback = null;
+                gimmickData.RemoveUpdateCallbackIfNeeded();
 
-                // 遅延実行中にギミックが削除されていないかチェック
-                if (_gimmickPrefabInstance == null)
+                UpdateCallback(gimmickData);
+
+                if (gimmickData.CallbackState == UpdateCallbackState.Error)
                 {
-                    EditorErrorDialog.DisplayDialog(ErrorInfo.CODE_012);
-                    ClearCurrentCallbackContext();
-                    return;
+                    gimmickData.DestroyInstanceImmediateIfNeeded();
                 }
 
-                // 遅延実行中にアバターが削除されていないかチェック
-                if (_avatarRootObject == null)
-                {
-                    GameObject.DestroyImmediate(_gimmickPrefabInstance.gameObject);
-                    EditorErrorDialog.DisplayDialog(ErrorInfo.CODE_013);
-                    ClearCurrentCallbackContext();
-                    return;
-                }
+                gimmickData.ClearCurrentCallbackContext();
+            });
+        }
 
-                // EyeOffsetの調整が成功した場合のみPhysBoneのセットアップに進む
-                bool eyeOffsetAdjusted = AdjustEyeOffset(_avatarRootObject, _gimmickPrefabInstance.transform, _currentHeadBone);
-                if (!eyeOffsetAdjusted)
-                {
-                    GameObject.DestroyImmediate(_gimmickPrefabInstance.gameObject);
-                    ClearCurrentCallbackContext();
-                    return;
-                }
+        private static UpdateCallbackState UpdateCallback(GimmickData gimmickData)
+        {
 
-                // PhysBoneGimmickAutomationを呼び出す（PhysBone関連の追加設定を行う別スクリプト）
-                bool physBoneSetupSuccess = PhysBoneGimmickAutomation.GeneratePhysBoneHoldGimmickSetup(_avatarRootObject);
-                if (!physBoneSetupSuccess)
-                {
-                    GameObject.DestroyImmediate(_gimmickPrefabInstance.gameObject);
-                    EditorErrorDialog.DisplayDialog(ErrorInfo.CODE_007);
-                    ClearCurrentCallbackContext();
-                    return;
-                }
+            // 遅延実行中にギミックが削除されていないかチェック
+            if (gimmickData.GimmickPrefabInstance == null)
+            {
+                EditorErrorDialog.DisplayDialog(GimmickError.GimmickInstanceRemovedDuringSetup);
+                return UpdateCallbackState.Error;
+            }
 
-                ClearCurrentCallbackContext();
-            };
+            // 遅延実行中にアバターが削除されていないかチェック
+            if (gimmickData.AvatarRootObject == null)
+            {
+                EditorErrorDialog.DisplayDialog(GimmickError.AvatarObjectRemovedDuringSetup);
+                return UpdateCallbackState.Error;
+            }
 
-            EditorApplication.update += _updateCallback; // EditorApplication.update に登録
+            // EyeOffsetの調整が成功した場合のみPhysBoneのセットアップに進む
+            bool eyeOffsetAdjusted = AdjustEyeOffset(gimmickData);
+            if (!eyeOffsetAdjusted)
+            {
+                return UpdateCallbackState.Error;
+            }
 
-            return;
+            // PhysBoneGimmickAutomationを呼び出す（PhysBone関連の追加設定を行う別スクリプト）
+            bool physBoneSetupSuccess = PhysBoneGimmickAutomation.GeneratePhysBoneHoldGimmickSetup(gimmickData.AvatarRootObject);
+            if (!physBoneSetupSuccess)
+            {
+                EditorErrorDialog.DisplayDialog(GimmickError.PhysBoneSetupExecutionFailed);
+                return UpdateCallbackState.Error;
+            }
+
+            return UpdateCallbackState.Success;
         }
 
         /// <summary>
@@ -229,26 +216,25 @@ namespace Aramaa.DakochiteGimmick.Editor
         /// <param name="gimmickRootTransform">生成されたギミックプレハブのルートTransform。</param>
         /// <param name="headBone">アバターのHeadボーンのTransform。</param>
         /// <returns>EyeOffsetの調整が正常に完了したかどうか。</returns>
-        private static bool AdjustEyeOffset(GameObject avatarRootObject, Transform gimmickRootTransform, Transform headBone)
+        private static bool AdjustEyeOffset(GimmickData gimmickData)
         {
             // ギミック内のEyeOffsetに対応するTransformを探す
-            Transform eyeOffsetTransform = HierarchyUtility.FindChildTransformByRelativePath(gimmickRootTransform, GimmickConstants.EYEOFFSET_PATH_INSIDE_PREFAB);
+            Transform eyeOffsetTransform = HierarchyUtility.FindChildTransformByRelativePath(gimmickData.GimmickPrefabInstance.transform, GimmickConstants.EYEOFFSET_PATH_INSIDE_PREFAB);
             if (eyeOffsetTransform == null)
             {
-                EditorErrorDialog.DisplayDialog(ErrorInfo.CODE_011);
+                EditorErrorDialog.DisplayDialog(GimmickError.EyeOffsetTransformNotFoundInGimmick);
                 return false;
             }
 
-            VRCAvatarDescriptor avatarDescriptor = avatarRootObject.GetComponent<VRCAvatarDescriptor>();
-            if (avatarDescriptor == null)
+            if (gimmickData.AvatarDescriptor == null)
             {
-                EditorErrorDialog.DisplayDialog(ErrorInfo.CODE_008);
+                EditorErrorDialog.DisplayDialog(GimmickError.AvatarDescriptorRemovedDuringSetup);
                 return false;
             }
 
-            if (headBone == null) // Headボーンが見つからない場合は調整できない
+            if (gimmickData.HeadBone == null) // Headボーンが見つからない場合は調整できない
             {
-                EditorErrorDialog.DisplayDialog(ErrorInfo.CODE_009);
+                EditorErrorDialog.DisplayDialog(GimmickError.EyeOffsetHeadBoneNotFound);
                 return false;
             }
 
@@ -258,71 +244,23 @@ namespace Aramaa.DakochiteGimmick.Editor
             // 制約の親の位置がVector3.zeroだとおかしいのでチェック
             if (constraintParentTransform == null || constraintParentTransform.position == Vector3.zero)
             {
-                EditorErrorDialog.DisplayDialog(ErrorInfo.CODE_010);
+                EditorErrorDialog.DisplayDialog(GimmickError.ConstraintUpdateFailedOrTimedOut);
                 return false;
             }
 
             // ViewPositionはアバターローカル座標なので、Constraintの親のローカル座標に変換して設定
-            Vector3 viewPositionInConstraintParentLocal = constraintParentTransform.InverseTransformPoint(avatarDescriptor.ViewPosition);
+            Vector3 viewPositionInConstraintParentLocal = constraintParentTransform.InverseTransformPoint(gimmickData.AvatarDescriptor.ViewPosition);
             eyeOffsetTransform.localPosition = viewPositionInConstraintParentLocal;
 
             // Headボーンの回転の逆をEyeOffsetのローカル回転に設定（Headの回転を打ち消すことで視線に合わせる？）
-            eyeOffsetTransform.localRotation = Quaternion.Inverse(headBone.rotation);
+            eyeOffsetTransform.localRotation = Quaternion.Inverse(gimmickData.HeadBone.rotation);
             eyeOffsetTransform.localScale = Vector3.one;
 
             EditorUtility.SetDirty(eyeOffsetTransform); // 変更を保存
             Debug.Log(string.Format(GimmickConstants.LOG_EYEOFFSET_ADJUSTED, eyeOffsetTransform.localPosition, eyeOffsetTransform.localRotation.eulerAngles, eyeOffsetTransform.localScale));
-            Debug.Log(string.Format(GimmickConstants.LOG_EYEOFFSET_ADJUSTMENT_SUMMARY, avatarDescriptor.ViewPosition, eyeOffsetTransform.position, eyeOffsetTransform.rotation.eulerAngles));
+            Debug.Log(string.Format(GimmickConstants.LOG_EYEOFFSET_ADJUSTMENT_SUMMARY, gimmickData.AvatarDescriptor.ViewPosition, eyeOffsetTransform.position, eyeOffsetTransform.rotation.eulerAngles));
 
             return true;
-        }
-
-        /// <summary>
-        /// Constraintオブジェクトの現在のTransform情報をデバッグログに出力します。
-        /// 主に開発者モードでの情報確認用です。
-        /// </summary>
-        /// <param name="avatarRootObject">アバターのルートGameObject。</param>
-        public static void LogConstraintPosition(GameObject avatarRootObject)
-        {
-            if (avatarRootObject == null) return;
-
-            string gimmickPrefabName = GimmickConstants.GIMMICK_PREFAB_PATH.Substring(GimmickConstants.GIMMICK_PREFAB_PATH.LastIndexOf('/') + 1);
-            Transform gimmickInstanceTransform = HierarchyUtility.FindChildRecursive(avatarRootObject.transform, gimmickPrefabName);
-
-            if (gimmickInstanceTransform != null)
-            {
-                VRCParentConstraint parentConstraint = HierarchyUtility.FindConstraintInHierarchy(gimmickInstanceTransform, GimmickConstants.CONSTRAINT_PATH_INSIDE_PREFAB);
-                if (parentConstraint != null)
-                {
-                    Transform constraintTransform = parentConstraint.transform;
-                    Debug.Log($"<color=green>Constraint GameObject: {constraintTransform.name}</color>");
-                    Debug.Log($"<color=green>Constraint Local Position: {constraintTransform.localPosition}</color>");
-                    Debug.Log($"<color=green>Constraint World Position: {constraintTransform.position}</color>");
-                    Debug.Log($"<color=green>Constraint Local Rotation: {constraintTransform.localRotation.eulerAngles}</color>");
-                    Debug.Log($"<color=green>Constraint World Rotation: {constraintTransform.rotation.eulerAngles}</color>");
-                    if (parentConstraint.TargetTransform != null)
-                    {
-                        Debug.Log($"<color=green>Constraint Target (Hips/Head) World Position: {parentConstraint.TargetTransform.position}</color>");
-                        Debug.Log($"<color=green>Constraint Target (Hips/Head) World Rotation: {parentConstraint.TargetTransform.rotation.eulerAngles}</color>");
-                    }
-                }
-                else
-                {
-                    Debug.LogWarning(GimmickConstants.LOG_CONSTRAINT_GO_NOT_FOUND);
-                }
-            }
-            else
-            {
-                Debug.LogWarning(string.Format(GimmickConstants.LOG_GIMMICK_INSTANCE_NOT_FOUND, gimmickPrefabName));
-            }
-        }
-
-        private static void ClearCurrentCallbackContext()
-        {
-            _updateCallback = null;
-            _avatarRootObject = null;
-            _gimmickPrefabInstance = null;
-            _currentHeadBone = null;
         }
     }
 }
