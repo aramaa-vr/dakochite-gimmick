@@ -1,7 +1,8 @@
 using UnityEditor;
 using UnityEngine;
-using VRC.SDK3.Dynamics.Constraint.Components;
+using VRC.Dynamics;
 using VRC.SDK3.Avatars.Components;
+using VRC.SDK3.Dynamics.Constraint.Components;
 
 namespace Aramaa.DakochiteGimmick.Editor
 {
@@ -13,7 +14,12 @@ namespace Aramaa.DakochiteGimmick.Editor
     {
         private static GameObject _gimmickPrefabAssetCache; // プレハブアセットのキャッシュ
         private static int _delayedCallFrameCounter = 0; // 遅延呼び出し用フレームカウンター
-        private const int DELAY_FRAMES_FOR_CONSTRAINT_UPDATE = 5; // コンストレイントの更新待ちフレーム数
+        private const int DELAY_FRAMES_FOR_CONSTRAINT_UPDATE = 180; // コンストレイントの更新待ちフレーム数
+
+        private static EditorApplication.CallbackFunction _updateCallback;
+        private static GameObject _avatarRootObject; // コールバック内で使用するアバターのルート
+        private static GameObject _gimmickPrefabInstance; // コールバック内で使用するギミックインスタンス
+        private static Transform _currentHeadBone; // コールバック内で使用するHeadボーン
 
         /// <summary>
         /// VRChatアバターに対するギミックのフルセットアップを実行します。
@@ -30,10 +36,6 @@ namespace Aramaa.DakochiteGimmick.Editor
             }
 
             // 既存ギミックの検出と削除
-            // Resources.Loadを使用するため、Path.GetFileNameWithoutExtensionは不要。
-            // ただし、既存ギミックの検索名としてはファイル名部分が必要なので注意。
-            // ここではGIMMICK_PREFAB_PATHに拡張子を含めない形式がConstantsで定義されていると仮定し、
-            // 末尾のパスセグメントを直接利用します。
             string gimmickPrefabName = GimmickConstants.GIMMICK_PREFAB_PATH.Substring(GimmickConstants.GIMMICK_PREFAB_PATH.LastIndexOf('/') + 1);
             Transform existingGimmickInstance = HierarchyUtility.FindChildRecursive(avatarRootObject.transform, gimmickPrefabName);
 
@@ -43,10 +45,8 @@ namespace Aramaa.DakochiteGimmick.Editor
                 // SafeDestroyUtility.SafeDestroyGameObject(existingGimmickInstance.gameObject);
 
                 GameObject.DestroyImmediate(existingGimmickInstance.gameObject);
-
                 EditorUtility.DisplayDialog("削除完了", GimmickConstants.MSG_EXISTING_GIMMICK_DELETED, "OK");
-                // ここで処理を終了し、再実行を促す、または削除と生成の間に間隔を設けるべきかの検討が必要
-                return false; // 通常、既存削除後はメッセージを出して終了させるのが親切
+                return false;
             }
 
             // 疑似ビューポイントがずれるため、アバターのルートの座標が (0,0,0) からわずかでも離れている場合にエラーとする
@@ -69,13 +69,12 @@ namespace Aramaa.DakochiteGimmick.Editor
             if (headBone == null)
             {
                 Debug.LogWarning(GimmickConstants.MSG_HEAD_NOT_FOUND);
-                // エラーダイアログはPhysBoneGimmickAutomationで表示されるためここでは省略
             }
 
             // ギミックプレハブのロード
             if (_gimmickPrefabAssetCache == null)
             {
-                _gimmickPrefabAssetCache = Resources.Load<GameObject>(GimmickConstants.GIMMICK_PREFAB_PATH); // Resources.Loadに変更
+                _gimmickPrefabAssetCache = Resources.Load<GameObject>(GimmickConstants.GIMMICK_PREFAB_PATH);
             }
             GameObject gimmickPrefabAsset = _gimmickPrefabAssetCache;
 
@@ -95,7 +94,7 @@ namespace Aramaa.DakochiteGimmick.Editor
                 return false;
             }
 
-            gimmickPrefabInstance.transform.SetParent(avatarRootObject.transform, false); // ワールド座標を維持しない
+            gimmickPrefabInstance.transform.SetParent(avatarRootObject.transform, false);
             gimmickPrefabInstance.transform.localPosition = Vector3.zero;
             gimmickPrefabInstance.transform.localRotation = Quaternion.identity;
             gimmickPrefabInstance.transform.localScale = Vector3.one;
@@ -103,7 +102,6 @@ namespace Aramaa.DakochiteGimmick.Editor
             EditorUtility.SetDirty(gimmickPrefabInstance);
 
             // VRCParentConstraintの設定
-            // ギミックプレハブ内の特定のパスにあるVRCParentConstraintを探す
             VRCParentConstraint parentConstraint = HierarchyUtility.FindConstraintInHierarchy(gimmickPrefabInstance.transform, GimmickConstants.CONSTRAINT_PATH_INSIDE_PREFAB);
             if (parentConstraint == null)
             {
@@ -115,54 +113,96 @@ namespace Aramaa.DakochiteGimmick.Editor
             parentConstraint.TargetTransform = hipsBone; // Hipsボーンをターゲットに設定
             EditorUtility.SetDirty(parentConstraint);
 
-            // EyeOffsetの調整処理をdelayCallで呼び出す
-            // VRCParentConstraintがワールド座標を正しく更新するのに数フレームかかる場合があるため、遅延実行
-            _delayedCallFrameCounter = 0; // フレームカウンターをリセット
-            EditorApplication.CallbackFunction delayedAction = null;
+            RefreshEditorWindows(gimmickPrefabInstance); // 強制再描画で反映を促す
 
-            delayedAction = () =>
+            // EyeOffsetの調整処理をEditorApplication.updateで呼び出す
+            _delayedCallFrameCounter = 0; // フレームカウンターをリセット
+
+            // コールバック内で必要な引数を静的変数にキャッシュ
+            _avatarRootObject = avatarRootObject;
+            _gimmickPrefabInstance = gimmickPrefabInstance;
+            _currentHeadBone = headBone;
+
+            // 既存のコールバックがあれば解除しておく（念のため）
+            if (_updateCallback != null)
+            {
+                EditorApplication.update -= _updateCallback;
+            }
+
+            // EditorApplication.update に登録する CallbackFunction 型のラムダ式を定義
+            _updateCallback = () =>
             {
                 _delayedCallFrameCounter++;
                 if (_delayedCallFrameCounter < DELAY_FRAMES_FOR_CONSTRAINT_UPDATE)
                 {
                     // 指定フレーム数に達するまで待機を継続
-                    EditorApplication.delayCall += delayedAction;
                     return;
                 }
 
-                // delayCallの実行が完了したので、デリゲートから削除
-                EditorApplication.delayCall -= delayedAction;
+                // 指定フレーム数に達したので、デリゲートから削除
+                EditorApplication.update -= _updateCallback;
+                // 後処理のために参照をクリア
+                _updateCallback = null;
 
                 // 遅延実行中にアバターやギミックが削除されていないかチェック
-                if (avatarRootObject == null || gimmickPrefabInstance == null)
+                if (_avatarRootObject == null || _gimmickPrefabInstance == null)
                 {
                     Debug.LogWarning(GimmickConstants.LOG_EYEOFFSET_ADJUSTMENT_SKIPPED_NULL);
+                    ClearCurrentCallbackContext(); // コンテキストをクリア
                     return;
                 }
 
-                bool eyeOffsetAdjusted = AdjustEyeOffset(avatarRootObject, gimmickPrefabInstance.transform, headBone);
+                bool eyeOffsetAdjusted = AdjustEyeOffset(_avatarRootObject, _gimmickPrefabInstance.transform, _currentHeadBone);
 
                 // EyeOffsetの調整が成功した場合のみPhysBoneのセットアップに進む
                 if (eyeOffsetAdjusted)
                 {
                     // PhysBoneGimmickAutomationを呼び出す（PhysBone関連の追加設定を行う別スクリプト）
-                    bool physBoneSetupSuccess = PhysBoneGimmickAutomation.GeneratePhysBoneHoldGimmickSetup(avatarRootObject);
+                    bool physBoneSetupSuccess = PhysBoneGimmickAutomation.GeneratePhysBoneHoldGimmickSetup(_avatarRootObject);
 
                     if (!physBoneSetupSuccess)
                     {
                         EditorUtility.DisplayDialog("エラー", "PhysBone Hold Gimmick Setupの実行に失敗しました。", "OK");
                     }
                 }
+                ClearCurrentCallbackContext(); // コンテキストをクリア
             };
 
-            EditorApplication.delayCall += delayedAction; // 遅延実行を登録
+            EditorApplication.update += _updateCallback; // EditorApplication.update に登録
 
             return true;
         }
 
         /// <summary>
+        /// 強制的にModular AvatarやVRCConstraintに更新を書けるための保険処理
+        /// </summary>
+        /// <param name="gimmickPrefabInstance"></param>
+        private static void RefreshEditorWindows(GameObject gimmickPrefabInstance)
+        {
+            // --- コンストレイントの強制更新とエディタ描画の促し ---
+            var constraints = gimmickPrefabInstance.GetComponentsInChildren<VRCConstraintBase>(true);
+            if (constraints != null && constraints.Length > 0)
+            {
+                Debug.Log($"SafeDestroyUtility: {constraints.Length} 個のVRCConstraintBaseをリフレッシュします。");
+
+                // 注意！このメソッドは非推奨のため将来使えなくなる可能性がある
+                VRCConstraintManager.Sdk_ManuallyRefreshGroups(constraints);
+            }
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+
+            foreach (EditorWindow window in Resources.FindObjectsOfTypeAll<EditorWindow>())
+            {
+                window.Repaint();
+            }
+
+            SceneView.RepaintAll();
+            EditorApplication.QueuePlayerLoopUpdate();
+        }
+
+        /// <summary>
         /// EyeOffsetオブジェクトのワールドTransformをVRCAvatarDescriptorのViewPositionに合わせて調整します。
-        /// このメソッドは、EditorApplication.delayCallを介して、Unityの更新処理後に呼び出されることを想定しています。
         /// </summary>
         /// <param name="avatarRootObject">アバターのルートGameObject。</param>
         /// <param name="gimmickRootTransform">生成されたギミックプレハブのルートTransform。</param>
@@ -266,6 +306,14 @@ namespace Aramaa.DakochiteGimmick.Editor
             {
                 Debug.LogWarning(string.Format(GimmickConstants.LOG_GIMMICK_INSTANCE_NOT_FOUND, gimmickPrefabName));
             }
+        }
+
+        private static void ClearCurrentCallbackContext()
+        {
+            _updateCallback = null;
+            _avatarRootObject = null;
+            _gimmickPrefabInstance = null;
+            _currentHeadBone = null;
         }
     }
 }
