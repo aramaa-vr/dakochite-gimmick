@@ -96,7 +96,7 @@ namespace Aramaa.DakochiteGimmick.Editor
                     GimmickError.EyeOffsetTransformNotFoundInGimmick,
                     (
                         message: "ギミック内のEyeOffsetTransformオブジェクトが見つかりませんでした。",
-                        solutionSuggestion: "Unityの「Window」メニューから「VRChat SDK」>「Manage Packages」を開き、「dakochite-gimmick - みんなでつかめるだこちてギミック」を**一度アンインストールしてから再インストール**してください。"
+                        solutionSuggestion: "「VCC」から「Manage Project」を開き、「dakochite-gimmick - みんなでつかめるだこちてギミック」を一度アンインストールしてから再インストールしてください。"
                     )
                 },
                 {
@@ -124,7 +124,7 @@ namespace Aramaa.DakochiteGimmick.Editor
                     GimmickError.OutputFolderCreationFailed,
                     (
                         message: "アセットフォルダの作成に失敗しました。",
-                        solutionSuggestion: "パーミッションまたはパスの有効性を確認してください。"
+                        solutionSuggestion: "もう一度ギミックを生成し直してください。"
                     )
                 },
                 {
