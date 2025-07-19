@@ -21,11 +21,21 @@ namespace Aramaa.DakochiteGimmick.Editor
 
         // ====================================================================================================
         // アセットパス / 階層
+        //
+        // Gimick -> Gimmick には変更しない手遅れ
+        //
         // ====================================================================================================
         /// <summary>
-        /// Unityプロジェクト内で生成するプレハブのアセットパス。
+        /// ギミックプレハブのファイル名（拡張子なし）。
+        /// Resourcesフォルダからのパス構築に使用されます。
         /// </summary>
-        public const string GIMMICK_PREFAB_PATH = "Aramaa/HoldGimick/Prefabs/HoldGimickAndCamera";
+        public const string HOLD_GIMMICK_NAME = "HoldGimickAndCamera";
+
+        /// <summary>
+        /// UnityプロジェクトのResourcesフォルダ内にあるギミックプレハブへのアセットパス。
+        /// GIMMICK_NAMEと組み合わせて構築されます。
+        /// </summary>
+        public static readonly string HOLD_GIMMICK_PREFAB_RESOURCE_PATH = $"Aramaa/HoldGimick/Prefabs/{HOLD_GIMMICK_NAME}";
 
         /// <summary>
         /// 生成されるギミックプレハブのルートオブジェクトからの相対パスで、
@@ -66,18 +76,11 @@ namespace Aramaa.DakochiteGimmick.Editor
         public const string PHYSBONE_PROPERTY_NAME = "allowGrabbing";
         public const float ADVANCED_BOOL_FALSE_VALUE = 0.0f;
         public const float ADVANCED_BOOL_TRUE_VALUE = 1e-45f; // VRCPhysBoneのAdvancedBool.Trueに相当
+        public const float AVATAR_ROOT_POSITION_TOLERANCE = 0.0001f;
 
         // ====================================================================================================
         // メッセージ (ユーザー向け)
         // ====================================================================================================
-        public const string MSG_AVATAR_NOT_SELECTED = "アバターが選択されていません。";
-        public const string MSG_HIPS_NOT_FOUND = "アバターのHipsボーンが見つかりません。Animatorの設定を確認してください。";
-        public const string MSG_PREFAB_NOT_FOUND = "ギミックの元となるプレハブが見つかりません。ツールが正しくインポートされているか確認してください。";
-        public const string MSG_PREFAB_INSTANTIATION_FAILED = "プレハブの生成に失敗しました。";
-        public const string MSG_CONSTRAINT_NOT_FOUND = "生成されたギミック内で必要なコンポーネントが見つかりません。プレハブが破損している可能性があります。";
-        public const string MSG_AVATARDESCRIPTOR_NOT_FOUND = "アバターにVRCAvatarDescriptorが見つかりません。EyeOffsetの設定をスキップしました。";
-        public const string MSG_EYEOFFSET_NOT_FOUND = "EyeOffsetオブジェクトが見つかりませんでした。EyeOffsetの設定をスキップしました。";
-        public const string MSG_HEAD_NOT_FOUND = "Headボーンが見つからないため、EyeOffsetの位置設定をスキップしました。";
         public const string MSG_EXISTING_GIMMICK_DELETED = "みんなでつかめるだこちてギミックを\nアバターから削除しました。";
         public const string MSG_PROCESS_CANCELED = "処理がキャンセルされました。";
         public const string MSG_PHYSBONE_NOT_FOUND_FOR_ANIMATION = "除外パスを考慮した結果、アニメーション対象のPhysBoneが見つかりませんでした。PhysBoneが存在し、除外パスの下にないことを確認してください。";
@@ -98,9 +101,7 @@ namespace Aramaa.DakochiteGimmick.Editor
         public const string LOG_PREFAB_NOT_FOUND_AT_PATH = "[Error] 指定されたプレハブが見つかりません: {0}";
         public const string LOG_PREFAB_INSTANTIATION_FAILED = "[Error] プレハブのインスタンス化に失敗しました。";
         public const string LOG_CONSTRAINT_NOT_FOUND_IN_PREFAB = "[Error] 新しく生成されたギミック '{0}' のパス ({1}) にVRCParentConstraintが見つかりません。";
-        public const string LOG_AVATARDESCRIPTOR_NOT_FOUND = "[Warning] アバターのルートオブジェクトに VRCAvatarDescriptor コンポーネントが見つかりません。EyeOffsetの位置設定をスキップします。";
         public const string LOG_EYEOFFSET_ADJUSTED = "EyeOffsetオブジェクトをVRCAvatarDescriptorのView位置とHeadボーンの反転回転に基づいて修正しました。 LocalPos: {0}, WorldRot: {1}, LocalScale: {2}";
-        public const string LOG_EYEOFFSET_ADJUSTMENT_SKIPPED_NULL = "アバターまたはギミックのインスタンスがnullのため、EyeOffset調整をスキップしました。";
         public const string LOG_CONSTRAINT_GO_NOT_FOUND = "LogConstraintPosition: Constraint GameObjectが見つかりませんでした。";
         public const string LOG_GIMMICK_INSTANCE_NOT_FOUND = "LogConstraintPosition: ギミックプレハブのインスタンス '{0}' がアバター直下に見つかりませんでした。";
         public const string LOG_MA_LINKER_NULL_PARAMS = "[MA Linker] アバターのルートまたは割り当てるAnimatorControllerがnullです。";

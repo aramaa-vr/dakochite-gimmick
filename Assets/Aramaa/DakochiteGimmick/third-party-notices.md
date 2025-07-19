@@ -58,3 +58,21 @@ otologicのウェブサイトで、より詳細な情報や素材のダウンロ
 [https://otologic.jp](https://otologic.jp)
 
 ---
+
+## 3. こども丸ゴシック（Fontopo）
+
+**提供元:** © 2025 Fonts free download｜fontopo.
+
+**ライセンス:** fontopoの利用規約に基づく
+
+**ライセンス全文:**
+[https://fontopo.com/?page_id=55](https://fontopo.com/?page_id=55)
+
+---
+
+**著作権情報:**
+本プロジェクトでは「こども丸ゴシック」フォントを使用して文字を画像化し、さらに画像として改変したものを含みます。  
+フォントの著作権は fontopo に帰属し、利用にあたっては同サイトの利用規約を遵守しています。  
+フォントファイル自体は配布していません。
+
+---

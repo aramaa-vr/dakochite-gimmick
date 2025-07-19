@@ -20,30 +20,35 @@ namespace Aramaa.DakochiteGimmick.Editor
         /// 指定されたアバターのPhysBoneに対して、ホールドギミックのアニメーションとAnimator Controllerを生成し、
         /// Modular Avatar Merge Animator に割り当て、VRCExpressionParameters を設定します。
         /// </summary>
-        /// <param name="avatarRoot">アバターのルートGameObject。</param>
-        /// <returns>操作が成功した場合はtrue、失敗した場合はfalse。</returns>
         public static bool GeneratePhysBoneHoldGimmickSetup(GameObject avatarRoot)
         {
             if (avatarRoot == null)
             {
-                Debug.LogError("[PhysBoneGimmickAutomation] Target Avatar Root がnullです。");
-                EditorUtility.DisplayDialog("エラー", "アバターのルートGameObjectが指定されていません。", "OK");
+                EditorErrorDialog.DisplayDialog(GimmickError.AvatarObjectRemovedDuringSetup);
                 return false;
             }
-
-            // Undoグループの開始
-            Undo.IncrementCurrentGroup();
-            int undoGroup = Undo.GetCurrentGroup();
-            Undo.SetCurrentGroupName($"Generate PhysBone Hold Gimmick Setup for {avatarRoot.name}");
 
             // 除外パスを考慮してPhysBoneを検索
             List<VRCPhysBone> targetPhysBones = FindEligiblePhysBones(avatarRoot);
 
-            if (targetPhysBones.Count == 0)
+            // phys boneの数が0の場合、エラー回避のためにhysBoneHoldGimickGeneratorを削除して完了
+            if (!targetPhysBones.Any())
             {
-                EditorUtility.DisplayDialog("エラー", "除外パスを考慮した結果、アニメーション対象のPhysBoneが見つかりませんでした。PhysBoneが存在し、除外パスの下にないことを確認してください。", "OK");
-                Undo.RevertAllInCurrentGroup();
-                return false;
+                GameObject holdGimickAndCamera = ModularAvatarLinkerUtility.FindChildGameObjectRecursive(avatarRoot, GimmickConstants.MA_TARGET_PARENT_GO_NAME);
+                if (holdGimickAndCamera != null)
+                {
+                    GameObject physBoneHoldGimickGenerator = ModularAvatarLinkerUtility.FindChildGameObjectRecursive(holdGimickAndCamera, GimmickConstants.MA_TARGET_CHILD_GO_NAME);
+                    if (physBoneHoldGimickGenerator != null)
+                    {
+                        GameObject.DestroyImmediate(physBoneHoldGimickGenerator.gameObject);
+                        physBoneHoldGimickGenerator = null;
+                    }
+                }
+
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+
+                return true;
             }
 
             // アセット出力パスの準備
@@ -66,8 +71,7 @@ namespace Aramaa.DakochiteGimmick.Editor
                     string guid = AssetDatabase.CreateFolder(currentPath, pathSegments[i]);
                     if (string.IsNullOrEmpty(guid))
                     {
-                        EditorUtility.DisplayDialog("エラー", $"アセットフォルダの作成に失敗しました: {nextPath}。パーミッションまたはパスの有効性を確認してください。", "OK");
-                        Undo.RevertAllInCurrentGroup();
+                        EditorErrorDialog.DisplayDialog(GimmickError.OutputFolderCreationFailed, nextPath);
                         return false;
                     }
                 }
@@ -77,8 +81,7 @@ namespace Aramaa.DakochiteGimmick.Editor
             // 最終的なoutputDirectoryが存在することを確認
             if (!AssetDatabase.IsValidFolder(outputDirectory))
             {
-                EditorUtility.DisplayDialog("エラー", $"最終的なアセットフォルダの作成に失敗しました: {outputDirectory}。パーミッションまたはパスの有効性を確認してください。", "OK");
-                Undo.RevertAllInCurrentGroup();
+                EditorErrorDialog.DisplayDialog(GimmickError.OutputFolderCreationFailed, outputDirectory);
                 return false;
             }
 
@@ -90,8 +93,7 @@ namespace Aramaa.DakochiteGimmick.Editor
 
             if (grabOffClip == null || grabDefaultClip == null)
             {
-                EditorUtility.DisplayDialog("エラー", "アニメーションクリップの生成に失敗しました。詳細についてはコンソールを確認してください。", "OK");
-                Undo.RevertAllInCurrentGroup();
+                EditorErrorDialog.DisplayDialog(GimmickError.AnimationClipCreationFailed);
                 return false;
             }
 
@@ -99,8 +101,7 @@ namespace Aramaa.DakochiteGimmick.Editor
             AnimatorController animatorController = CreatePhysBoneAnimatorController(avatarRoot.name, outputDirectory, grabDefaultClip, grabOffClip);
             if (animatorController == null)
             {
-                EditorUtility.DisplayDialog("エラー", "Animator Controllerの作成に失敗しました。", "OK");
-                Undo.RevertAllInCurrentGroup();
+                EditorErrorDialog.DisplayDialog(GimmickError.AnimatorControllerCreationFailed);
                 return false;
             }
 
@@ -115,28 +116,23 @@ namespace Aramaa.DakochiteGimmick.Editor
 
             if (!maLinkSuccess)
             {
-                Debug.LogError("[PhysBoneGimmickAutomation] Modular Avatar Merge Animator のリンクに失敗しました。詳細はコンソールログを確認してください。", avatarRoot);
-                EditorUtility.DisplayDialog("エラー", "Modular Avatar Merge Animator のリンクに失敗しました。", "OK");
-                Undo.RevertAllInCurrentGroup();
+                EditorErrorDialog.DisplayDialog(GimmickError.ModularAvatarLinkFailed);
                 return false;
             }
 
             // VRCExpressionParametersの設定
             // GimmickConstants.PHYSBONE_PARAMETER_NAME を使用
-            bool paramSuccess = SetupVRCExpressionParameters(avatarRoot, GimmickConstants.PHYSBONE_PARAMETER_NAME);
-            if (!paramSuccess)
-            {
-                // VRCExpressionParametersの設定は必須ではないため、警告に留める
-                Debug.LogWarning("[PhysBoneGimmickAutomation] VRCExpressionParameters の設定に問題がありました。手動での確認が必要です。");
-            }
+            // bool paramSuccess = SetupVRCExpressionParameters(avatarRoot, GimmickConstants.PHYSBONE_PARAMETER_NAME);
+            // if (!paramSuccess)
+            // {
+            //     // VRCExpressionParametersの設定は必須ではないため、警告に留める
+            //     Debug.LogWarning("[PhysBoneGimmickAutomation] VRCExpressionParameters の設定に問題がありました。手動での確認が必要です。");
+            // }
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
-            Debug.Log($"[PhysBoneGimmickAutomation] Successfully generated PhysBone grab toggle animations and Animator Controller in: {outputDirectory}");
-            EditorUtility.DisplayDialog("セットアップ完了", "みんなでつかめるだこちてギミックを\nアバターに設定しました。", "OK");
-
-            Undo.CollapseUndoOperations(undoGroup);
+            // Debug.Log($"[PhysBoneGimmickAutomation] Successfully generated PhysBone grab toggle animations and Animator Controller in: {outputDirectory}");
             return true;
         }
 
@@ -217,19 +213,19 @@ namespace Aramaa.DakochiteGimmick.Editor
                 {
                     // Grab_Defaultクリップの場合、PhysBoneの現在のallowGrabbing状態を取得し、その値を使用
                     keyValue = (pb.allowGrabbing == VRCPhysBone.AdvancedBool.True) ? GimmickConstants.ADVANCED_BOOL_TRUE_VALUE : GimmickConstants.ADVANCED_BOOL_FALSE_VALUE;
-                    Debug.Log($"[Animation Curve Setup] For '{clip.name}', PhysBone '{pb.gameObject.name}' initial allowGrabbing: {pb.allowGrabbing}, setting to: {keyValue}");
+                    // Debug.Log($"[Animation Curve Setup] For '{clip.name}', PhysBone '{pb.gameObject.name}' initial allowGrabbing: {pb.allowGrabbing}, setting to: {keyValue}");
                 }
                 else
                 {
                     // Grab_Offクリップの場合、allowGrabbingを常にfalseに設定
                     keyValue = GimmickConstants.ADVANCED_BOOL_FALSE_VALUE;
-                    Debug.Log($"[Animation Curve Setup] For '{clip.name}', PhysBone '{pb.gameObject.name}' setting to: {keyValue} (False)");
+                    // Debug.Log($"[Animation Curve Setup] For '{clip.name}', PhysBone '{pb.gameObject.name}' setting to: {keyValue} (False)");
                 }
 
                 curve.AddKey(new Keyframe(0f, keyValue, 0f, 0f, 0f, 0f));
                 AnimationUtility.SetEditorCurve(clip, EditorCurveBinding.FloatCurve(physBonePath, typeof(VRCPhysBone), GimmickConstants.PHYSBONE_PROPERTY_NAME), curve);
 
-                Debug.Log($"[Animation Curve Setup] Clip: '{clip.name}', GameObject Path: '{physBonePath}', Property: '{GimmickConstants.PHYSBONE_PROPERTY_NAME}', Set Value: {keyValue} (Expected Bool State: {(isDefaultStateClip ? (pb.allowGrabbing == VRCPhysBone.AdvancedBool.True ? "True" : "False") : "False")})");
+                // Debug.Log($"[Animation Curve Setup] Clip: '{clip.name}', GameObject Path: '{physBonePath}', Property: '{GimmickConstants.PHYSBONE_PROPERTY_NAME}', Set Value: {keyValue} (Expected Bool State: {(isDefaultStateClip ? (pb.allowGrabbing == VRCPhysBone.AdvancedBool.True ? "True" : "False") : "False")})");
             }
 
             string fullPath = Path.Combine(outputPath, $"{clip.name}.anim");
@@ -298,51 +294,50 @@ namespace Aramaa.DakochiteGimmick.Editor
 
         /// <summary>
         /// VRCExpressionParametersにPhysBone制御用パラメータを追加します。
+        /// これは、既にプレハブの方に追加してあるので不要と思う一旦コメントアウト
         /// </summary>
-        private static bool SetupVRCExpressionParameters(GameObject avatarRoot, string parameterName)
-        {
-            VRCAvatarDescriptor avatarDescriptor = avatarRoot.GetComponent<VRCAvatarDescriptor>();
-            VRCExpressionParameters currentParams = avatarDescriptor?.expressionParameters;
-
-            if (currentParams == null)
-            {
-                Debug.LogWarning("[PhysBoneGimmickAutomation] VRCExpressionParameters not found on avatar. Please add a VRC Avatar Descriptor and Expression Parameters asset manually if needed, then re-run this tool.");
-                return false;
-            }
-
-            Undo.RecordObject(currentParams, $"Add {parameterName} Parameter");
-
-            var paramList = new List<VRCExpressionParameters.Parameter>(currentParams.parameters);
-            // GimmickConstants.PHYSBONE_PARAMETER_NAME を使用
-            VRCExpressionParameters.Parameter existingParam = paramList.FirstOrDefault(p => p.name == parameterName);
-
-            if (existingParam == null)
-            {
-                var newParam = new VRCExpressionParameters.Parameter
-                {
-                    name = parameterName, // GimmickConstants.PHYSBONE_PARAMETER_NAME を使用
-                    valueType = VRCExpressionParameters.ValueType.Int, // 型をIntに変更
-                    defaultValue = 0f, // 初期状態がGrab_Default (0)
-                    saved = true
-                };
-                paramList.Add(newParam);
-                currentParams.parameters = paramList.ToArray();
-                EditorUtility.SetDirty(currentParams);
-                Debug.Log($"[PhysBoneGimmickAutomation] Added '{parameterName}' parameter to VRCExpressionParameters: {AssetDatabase.GetAssetPath(currentParams)}");
-            }
-            else
-            {
-                // 既存のパラメータがInt型であるかをチェック
-                if (existingParam.valueType != VRCExpressionParameters.ValueType.Int)
-                {
-                    Debug.LogWarning($"[PhysBoneGimmickAutomation] Parameter '{parameterName}' already exists but is not of type Int. Please verify manually.");
-                }
-                else
-                {
-                    Debug.LogWarning($"[PhysBoneGimmickAutomation] Parameter '{parameterName}' already exists in VRCExpressionParameters. Please ensure its 'Default' value is set to 0 if you want 'Grab_Default' as initial state.");
-                }
-            }
-            return true;
-        }
+        // private static bool SetupVRCExpressionParameters(GameObject avatarRoot, string parameterName)
+        // {
+        //     VRCAvatarDescriptor avatarDescriptor = avatarRoot.GetComponent<VRCAvatarDescriptor>();
+        //     VRCExpressionParameters currentParams = avatarDescriptor?.expressionParameters;
+        // 
+        //     if (currentParams == null)
+        //     {
+        //         Debug.LogWarning("[PhysBoneGimmickAutomation] VRCExpressionParameters not found on avatar. Please add a VRC Avatar Descriptor and Expression Parameters asset manually if needed, then re-run this tool.");
+        //         return false;
+        //     }
+        // 
+        //     var paramList = new List<VRCExpressionParameters.Parameter>(currentParams.parameters);
+        //     // GimmickConstants.PHYSBONE_PARAMETER_NAME を使用
+        //     VRCExpressionParameters.Parameter existingParam = paramList.FirstOrDefault(p => p.name == parameterName);
+        // 
+        //     if (existingParam == null)
+        //     {
+        //         var newParam = new VRCExpressionParameters.Parameter
+        //         {
+        //             name = parameterName, // GimmickConstants.PHYSBONE_PARAMETER_NAME を使用
+        //             valueType = VRCExpressionParameters.ValueType.Int, // 型をIntに変更
+        //             defaultValue = 0f, // 初期状態がGrab_Default (0)
+        //             saved = true
+        //         };
+        //         paramList.Add(newParam);
+        //         currentParams.parameters = paramList.ToArray();
+        //         EditorUtility.SetDirty(currentParams);
+        //         Debug.Log($"[PhysBoneGimmickAutomation] Added '{parameterName}' parameter to VRCExpressionParameters: {AssetDatabase.GetAssetPath(currentParams)}");
+        //     }
+        //     else
+        //     {
+        //         // 既存のパラメータがInt型であるかをチェック
+        //         if (existingParam.valueType != VRCExpressionParameters.ValueType.Int)
+        //         {
+        //             Debug.LogWarning($"[PhysBoneGimmickAutomation] Parameter '{parameterName}' already exists but is not of type Int. Please verify manually.");
+        //         }
+        //         else
+        //         {
+        //             Debug.LogWarning($"[PhysBoneGimmickAutomation] Parameter '{parameterName}' already exists in VRCExpressionParameters. Please ensure its 'Default' value is set to 0 if you want 'Grab_Default' as initial state.");
+        //         }
+        //     }
+        //     return true;
+        // }
     }
 }
