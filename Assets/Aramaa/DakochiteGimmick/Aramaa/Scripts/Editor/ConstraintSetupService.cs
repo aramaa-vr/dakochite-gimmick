@@ -111,7 +111,7 @@ namespace Aramaa.DakochiteGimmick.Editor
             parentConstraint.TargetTransform = gimmickData.HipsBone; // Hipsボーンをターゲットに設定
             EditorUtility.SetDirty(parentConstraint);
 
-            RefreshEditorWindows(gimmickData.GimmickPrefabInstance); // 強制再描画で反映を促す
+            // RefreshEditorWindows(gimmickData.GimmickPrefabInstance); // 強制再描画で反映を促す
 
             gimmickData.SetWaiting();
 
@@ -182,32 +182,35 @@ namespace Aramaa.DakochiteGimmick.Editor
             return UpdateCallbackState.Success;
         }
 
+        // 一旦コメントアウト
+        // エラーダイアログが出せない問題があるのを回避
+        // MissingReferenceExceptionが発生している場合、Sdk_ManuallyRefreshGroupsを実行した時点でエラーになり進行が停止する。
         /// <summary>
         /// 強制的にModular AvatarやVRCConstraintに更新を書けるための保険処理
         /// </summary>
         /// <param name="gimmickPrefabInstance"></param>
-        private static void RefreshEditorWindows(GameObject gimmickPrefabInstance)
-        {
-            var constraints = gimmickPrefabInstance.GetComponentsInChildren<VRCConstraintBase>(true);
-            if (constraints != null && constraints.Length > 0)
-            {
-                Debug.Log($"SafeDestroyUtility: {constraints.Length} 個のVRCConstraintBaseをリフレッシュします。");
-
-                // 注意！このメソッドは非推奨のため将来使えなくなる可能性がある
-                VRCConstraintManager.Sdk_ManuallyRefreshGroups(constraints);
-            }
-
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-
-            foreach (EditorWindow window in Resources.FindObjectsOfTypeAll<EditorWindow>())
-            {
-                window.Repaint();
-            }
-
-            SceneView.RepaintAll();
-            EditorApplication.QueuePlayerLoopUpdate();
-        }
+        // private static void RefreshEditorWindows(GameObject gimmickPrefabInstance)
+        // {
+        //     var constraints = gimmickPrefabInstance.GetComponentsInChildren<VRCConstraintBase>(true);
+        //     if (constraints != null && constraints.Length > 0)
+        //     {
+        //         Debug.Log($"SafeDestroyUtility: {constraints.Length} 個のVRCConstraintBaseをリフレッシュします。");
+        // 
+        //         // 注意！このメソッドは非推奨のため将来使えなくなる可能性がある
+        //         VRCConstraintManager.Sdk_ManuallyRefreshGroups(constraints);
+        //     }
+        // 
+        //     AssetDatabase.SaveAssets();
+        //     AssetDatabase.Refresh();
+        // 
+        //     foreach (EditorWindow window in Resources.FindObjectsOfTypeAll<EditorWindow>())
+        //     {
+        //         window.Repaint();
+        //     }
+        // 
+        //     SceneView.RepaintAll();
+        //     EditorApplication.QueuePlayerLoopUpdate();
+        // }
 
         /// <summary>
         /// EyeOffsetオブジェクトのワールドTransformをVRCAvatarDescriptorのViewPositionに合わせて調整します。
