@@ -134,7 +134,7 @@ namespace Aramaa.DakochiteGimmick.Editor
                 // 指定フレーム数に達したので、デリゲートから削除
                 gimmickData.RemoveUpdateCallbackIfNeeded();
 
-                UpdateCallback(gimmickData);
+                gimmickData.CallbackState = UpdateCallback(gimmickData);
 
                 if (gimmickData.CallbackState == UpdateCallbackState.Error)
                 {
