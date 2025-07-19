@@ -21,6 +21,8 @@ namespace Aramaa.DakochiteGimmick.Editor
         /// </summary>
         public static void PerformFullSetup(GimmickData gimmickData)
         {
+            gimmickData.ClearCurrentCallbackContext();
+
             if (gimmickData.AvatarRootObject == null)
             {
                 EditorErrorDialog.DisplayDialog(GimmickError.AvatarRootIsNull);
