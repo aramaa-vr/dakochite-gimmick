@@ -1,7 +1,5 @@
-using librsync.net;
 using System.Threading.Tasks;
 using UnityEditor;
-using UnityEditor.PackageManager.UI;
 using UnityEngine;
 
 namespace Aramaa.DakochiteGimmick.Editor
@@ -17,9 +15,11 @@ namespace Aramaa.DakochiteGimmick.Editor
         // ====================================================================================================
         // フィールド (EditorWindow UIおよび内部状態)
         // ====================================================================================================
-        private const float WINDOW_WIDTH = 700f; // ウィンドウの幅は共通
-        private static readonly Vector2 NORMAL_WINDOW_SIZE = new Vector2(WINDOW_WIDTH, 300f); // 通常モードのサイズ
-        private static readonly Vector2 DEVELOPER_WINDOW_SIZE = new Vector2(WINDOW_WIDTH, 800f); // 開発者モードのサイズ
+        private const float WINDOW_WIDTH = 700f;
+        private const float WINDOW_HEIGHT = 300f;
+        private const float WINDOW_HEIGHT_ADD_DEVELOPER = 450f;
+        private static readonly Vector2 NORMAL_WINDOW_SIZE = new Vector2(WINDOW_WIDTH, WINDOW_HEIGHT); // 通常モードのサイズ
+        private static readonly Vector2 DEVELOPER_WINDOW_SIZE = new Vector2(WINDOW_WIDTH, WINDOW_HEIGHT + WINDOW_HEIGHT_ADD_DEVELOPER); // 開発者モードのサイズ
 
         private GameObject _selectedGameObject = null;
 
@@ -31,10 +31,9 @@ namespace Aramaa.DakochiteGimmick.Editor
         private Texture2D _logoTexture;
 
         /// <summary>
-        /// ロゴ画像のパス（Resourcesフォルダからの相対パス、拡張子なし）。
-        /// 例: Assets/Resources/Images/dako_gimmick_icon.png に配置した場合、"Images/dako_gimmick_icon"
+        /// ロゴ画像のパス
         /// </summary>
-        private const string LOGO_RESOURCES_PATH = "Aramaa/HoldGimick/Images/dako_gimmick_icon"; // Resources.Load用にパスを修正
+        private const string LOGO_RESOURCES_PATH = "Aramaa/HoldGimick/Images/dako_gimmick_icon";
 
         private PackageUpdater.PackageUpdateState _currentUpdateState = PackageUpdater.PackageUpdateState.Unknown;
         private string _updateMessage = "バージョン情報を確認中...";
@@ -89,28 +88,25 @@ namespace Aramaa.DakochiteGimmick.Editor
         /// <summary>
         /// ウィンドウが有効になったときに呼び出される関数。ロゴ画像をロードします。
         /// </summary>
-        private async void OnEnable() // async キーワードを追加
+        private async void OnEnable()
         {
             if (_gimmickData == null)
             {
                 _gimmickData = new GimmickData();
-                Debug.Log("[VRCConstraintEditorWindow] _gimmickData initialized in OnEnable.");
             }
 
             _gimmickData.ResetData();
-            _gimmickData.AvatarRootObject = _selectedGameObject; // 選択中のアバターをセット
+            _gimmickData.AvatarRootObject = _selectedGameObject;
 
-            // titleContentを設定（ウィンドウタブやタイトルバーの表示）
             titleContent = new GUIContent(GimmickConstants.WINDOW_TITLE);
 
-            // --- ウィンドウ内部に表示するロゴ画像をロード (Resources.Loadを使用) ---
-            _logoTexture = Resources.Load<Texture2D>(LOGO_RESOURCES_PATH); // Resources.Loadに変更
-            if (_logoTexture == null)
-            {
-                Debug.LogWarning($"だこちてギミック設定ツールのロゴ画像が見つかりません。Resourcesフォルダ内（例: Assets/Resources/{LOGO_RESOURCES_PATH}.png）に配置してください。");
-            }
+            _logoTexture = Resources.Load<Texture2D>(LOGO_RESOURCES_PATH);
 
-            await CheckPackageUpdateStatus(); // 非同期で更新チェックを実行
+            // ウィンドウサイズを初期化
+            ChangeWindowSize();
+
+            // 非同期で更新チェックを実行
+            await CheckPackageUpdateStatus(); 
         }
 
         /// <summary>
@@ -129,35 +125,11 @@ namespace Aramaa.DakochiteGimmick.Editor
             Repaint(); // UIを更新して最新の状態を表示
         }
 
-        /// <summary>
-        /// EditorWindow が開かれ、GUIが描画されるたびに呼び出されます。
-        /// ここでウィンドウのレイアウトとUI要素を定義します。
-        /// </summary>
         private void OnGUI()
         {
-            // ウィンドウサイズの動的調整
-            if (_gimmickData.ShowDeveloperInfo)
-            {
-                // 開発者モードがオンの場合、ウィンドウを大きくする
-                minSize = DEVELOPER_WINDOW_SIZE;
-                maxSize = DEVELOPER_WINDOW_SIZE;
-            }
-            else
-            {
-                // 開発者モードがオフの場合、ウィンドウを小さくする
-                minSize = NORMAL_WINDOW_SIZE;
-                maxSize = NORMAL_WINDOW_SIZE;
-            }
-
-            // --- ロゴ表示 ---
             DrawLogoSection();
 
-            // 青文字のリンクボタンのように見せるために LinkButton を使用
-            EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("説明書", EditorStyles.linkLabel)) { Application.OpenURL("https://docs.google.com/document/d/141h1qxOo8ZeFPDXLFmx2fjn6jsYxf7dL6XJkSFxztec/edit?usp=sharing"); }
-            if (GUILayout.Button("Booth", EditorStyles.linkLabel)) { Application.OpenURL("https://aramaa.booth.pm/items/7016968"); }
-            if (GUILayout.Button("更新履歴", EditorStyles.linkLabel)) { Application.OpenURL("https://aramaa-vr.github.io/dakochite-gimmick/CHANGELOG.md"); }
-            EditorGUILayout.EndHorizontal();
 
             EditorGUILayout.Space();
 
@@ -167,28 +139,64 @@ namespace Aramaa.DakochiteGimmick.Editor
 
             // アバター選択フィールド
             _gimmickData.AvatarRootObject = (GameObject)EditorGUILayout.ObjectField("アバターのルート", _gimmickData.AvatarRootObject, typeof(GameObject), true);
+            _selectedGameObject = _gimmickData.AvatarRootObject;
 
             EditorGUILayout.Space();
 
             if (_gimmickData.CallbackState == UpdateCallbackState.Waiting)
             {
-                EditorGUILayout.HelpBox("処理中...", MessageType.Info);
+                EditorGUILayout.HelpBox($"{GimmickConstants.WINDOW_TITLE}生成中...", MessageType.Info);
             }
             else
             {
                 // ギミック生成/再生成ボタン
                 if (GUILayout.Button(new GUIContent(GimmickConstants.BUTTON_GENERATE_OR_REGENERATE_TEXT, GimmickConstants.BUTTON_GENERATE_OR_REGENERATE_TOOLTIP)))
                 {
-                    // セットアップ処理をサービスに委譲
-                    // PerformFullSetupは既存ギミックを自動で削除し、新規生成を行います
                     ConstraintSetupService.PerformFullSetup(_gimmickData);
-                    Repaint(); // UI情報を更新し、DeveloperInfoに最新情報を表示
+                    Repaint();
                 }
             }
 
             EditorGUILayout.Space();
 
-            DeveloperDebugInfoDrawer.DrawAvatarDebugInfo(_gimmickData);
+            ToggleChangeWindowSize();
+
+            // 開発者モードが有効な場合のみ詳細情報を表示
+            if (_gimmickData.ShowDeveloperInfo)
+            {
+                DeveloperDebugInfoDrawer.DrawAvatarDebugInfo(_gimmickData.AvatarRootObject);
+            }
+        }
+
+        private void ToggleChangeWindowSize()
+        {
+            // 変更前の値を一時的に保存
+            var currentShowDeveloperInfo = _gimmickData.ShowDeveloperInfo;
+            _gimmickData.ShowDeveloperInfo = EditorGUILayout.Toggle("開発者モード", _gimmickData.ShowDeveloperInfo);
+
+            // ShowDeveloperInfo の値が変更されたかをチェック
+            if (_gimmickData.ShowDeveloperInfo == currentShowDeveloperInfo)
+            {
+                return;
+            }
+
+            ChangeWindowSize();
+            Repaint();
+        }
+
+        private void ChangeWindowSize()
+        {
+            // 値が変更された場合のみウィンドウサイズを調整
+            if (_gimmickData.ShowDeveloperInfo)
+            {
+                minSize = DEVELOPER_WINDOW_SIZE;
+                maxSize = DEVELOPER_WINDOW_SIZE;
+            }
+            else
+            {
+                minSize = NORMAL_WINDOW_SIZE;
+                maxSize = NORMAL_WINDOW_SIZE;
+            }
         }
 
         /// <summary>
@@ -203,6 +211,9 @@ namespace Aramaa.DakochiteGimmick.Editor
                 _gimmickData = null;
                 Debug.Log("[VRCConstraintEditorWindow] Gimmick data cleaned up.");
             }
+
+            _selectedGameObject = null;
+            _logoTexture = null;
         }
 
         // ====================================================================================================
@@ -214,53 +225,52 @@ namespace Aramaa.DakochiteGimmick.Editor
         /// </summary>
         private void DrawLogoSection()
         {
-            if (_logoTexture != null)
+            if (_logoTexture == null)
             {
-                float originalWidth = _logoTexture.width;
-                float originalHeight = _logoTexture.height;
-                float aspectRatio = originalWidth / originalHeight;
+                EditorGUILayout.HelpBox($"ロゴ画像が見つかりません (Resources/{LOGO_RESOURCES_PATH}.png など)。", MessageType.Warning);
+                return;
+            }
 
-                float availableWidth = position.width;
-                float maxHeight = 185f; // ロゴ画像の元の高さに合わせて調整
+            float originalWidth = _logoTexture.width;
+            float originalHeight = _logoTexture.height;
+            float aspectRatio = originalWidth / originalHeight;
 
-                float finalWidth;
-                float finalHeight;
+            float availableWidth = position.width;
+            float maxHeight = 185f; // ロゴ画像の元の高さに合わせて調整
 
-                // ウィンドウ幅に合わせてアスペクト比を維持したサイズを計算
-                float widthBasedHeight = originalHeight * (availableWidth / originalWidth);
+            float finalWidth;
+            float finalHeight;
 
-                if (widthBasedHeight > maxHeight)
-                {
-                    // ウィンドウ幅に合わせると高さがmaxHeightを超える場合、高さをmaxHeightに制限
-                    finalHeight = maxHeight;
-                    finalWidth = originalWidth * (maxHeight / originalHeight);
-                }
-                else
-                {
-                    // ウィンドウ幅に収まる、またはmaxHeight以下で収まる場合、ウィンドウ幅に合わせる
-                    finalWidth = availableWidth;
-                    finalHeight = widthBasedHeight;
-                }
+            // ウィンドウ幅に合わせてアスペクト比を維持したサイズを計算
+            float widthBasedHeight = originalHeight * (availableWidth / originalWidth);
 
-                // 最終的に、ウィンドウの幅を超えないようにする（念のため）
-                if (finalWidth > availableWidth)
-                {
-                    finalWidth = availableWidth;
-                    finalHeight = finalWidth / aspectRatio;
-                }
-
-                GUILayout.BeginHorizontal();
-                GUILayout.FlexibleSpace(); // 左に余白を置いて中央寄せ
-                GUILayout.Box(_logoTexture, GUIStyle.none, GUILayout.Width(finalWidth), GUILayout.Height(finalHeight));
-                GUILayout.FlexibleSpace(); // 右に余白
-                GUILayout.EndHorizontal();
-                EditorGUILayout.Space(); // ロゴの下にスペース
+            if (widthBasedHeight > maxHeight)
+            {
+                // ウィンドウ幅に合わせると高さがmaxHeightを超える場合、高さをmaxHeightに制限
+                finalHeight = maxHeight;
+                finalWidth = originalWidth * (maxHeight / originalHeight);
             }
             else
             {
-                // Resources.Loadにしたので、パスのヒントをResourcesフォルダ内である旨に変更
-                EditorGUILayout.HelpBox($"ロゴ画像が見つかりません (Resources/{LOGO_RESOURCES_PATH}.png など)。", MessageType.Warning);
+                // ウィンドウ幅に収まる、またはmaxHeight以下で収まる場合、ウィンドウ幅に合わせる
+                finalWidth = availableWidth;
+                finalHeight = widthBasedHeight;
             }
+
+            // 最終的に、ウィンドウの幅を超えないようにする（念のため）
+            if (finalWidth > availableWidth)
+            {
+                finalWidth = availableWidth;
+                finalHeight = finalWidth / aspectRatio;
+            }
+
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace(); // 左に余白を置いて中央寄せ
+            GUILayout.Box(_logoTexture, GUIStyle.none, GUILayout.Width(finalWidth), GUILayout.Height(finalHeight));
+            GUILayout.FlexibleSpace(); // 右に余白
+            GUILayout.EndHorizontal();
+
+            EditorGUILayout.Space();
         }
 
         /// <summary>

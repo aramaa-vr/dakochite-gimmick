@@ -1,11 +1,12 @@
 namespace Aramaa.DakochiteGimmick.Editor
 {
-    public enum GimmickError
+    public enum GimmickError : int
     {
+        None = 1000,
         /// <summary>
         /// アバターのルートオブジェクトがnullです。
         /// </summary>
-        AvatarRootIsNull = 1001,
+        AvatarRootIsNull,
         /// <summary>
         /// アバターにVRCAvatarDescriptorが見つかりません。
         /// </summary>
@@ -66,5 +67,21 @@ namespace Aramaa.DakochiteGimmick.Editor
         /// <br/>解決策：もう一度ギミックを生成し直してください。コンソールにMissingReferenceExceptionのようなエラーがある場合は、Unityを再起動してから再度お試しください。
         /// </summary>
         ConstraintUpdateFailedOrTimedOut,
+        /// <summary>
+        /// アセット出力フォルダの作成に失敗した場合
+        /// </summary>
+        OutputFolderCreationFailed,
+        /// <summary>
+        /// アニメーションクリップの生成に失敗した場合
+        /// </summary>
+        AnimationClipCreationFailed,
+        /// <summary>
+        /// Animator Controllerの作成に失敗した場合
+        /// </summary>
+        AnimatorControllerCreationFailed,
+        /// <summary>
+        /// Modular Avatar Merge Animator へのリンクに失敗した場合
+        /// </summary>
+        ModularAvatarLinkFailed
     }
 }

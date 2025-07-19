@@ -12,12 +12,16 @@ namespace Aramaa.DakochiteGimmick.Editor
         /// <summary>
         /// エラーダイアログを表示し、関連情報を出力します。
         /// </summary>
-        public static void DisplayDialog(GimmickError gimmickError)
+        public static void DisplayDialog(GimmickError gimmickError, string param = "")
         {
             var (message, solutionSuggestion) = ErrorInfo.Get(gimmickError);
 
             string displayMessage = "内容\n";
             displayMessage += $"{message}\n";
+            if (param != string.Empty)
+            {
+                displayMessage += $"{param}\n";
+            }
             displayMessage += "\n";
             displayMessage += "対応方法\n";
             displayMessage += $"{solutionSuggestion}\n";
@@ -29,11 +33,11 @@ namespace Aramaa.DakochiteGimmick.Editor
             displayMessage += "Unityのスクショと詳しい状況を添えて、\n";
             displayMessage += "Boothへご連絡ください。\n";
             displayMessage += "\n";
-            displayMessage += $"エラーコード: {gimmickError.ToString()}";
+            displayMessage += $"エラーコード: {(int)gimmickError}";
 
             EditorUtility.DisplayDialog("エラーが発生しました", displayMessage, "OK");
 
-            Debug.LogError($"[エラーコード: {gimmickError.ToString()}] {message}");
+            Debug.LogError($"[エラーコード: {(int)gimmickError}] {message}");
         }
     }
 }

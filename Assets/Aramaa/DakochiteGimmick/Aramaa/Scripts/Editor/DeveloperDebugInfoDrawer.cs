@@ -13,19 +13,9 @@ namespace Aramaa.DakochiteGimmick.Editor
         /// ギミックのインスタンス、Constraint、EyeOffset、Hips/Headボーン、VRCAvatarDescriptorのView位置などを表示します。
         /// </summary>
         /// <param name="avatarRootObject">詳細情報を表示する対象のアバターのルートGameObject。</param>
-        public static void DrawAvatarDebugInfo(GimmickData gimmickData)
+        public static void DrawAvatarDebugInfo(GameObject avatarRootObject)
         {
-            // 開発者モードのトグル
-            gimmickData.ShowDeveloperInfo = EditorGUILayout.Toggle("開発者モード", gimmickData.ShowDeveloperInfo);
             EditorGUILayout.Space();
-
-            // 開発者モードが有効な場合のみ詳細情報を表示
-            if (!gimmickData.ShowDeveloperInfo)
-            {
-                return;
-            }
-
-            var avatarRootObject = gimmickData.AvatarRootObject;
 
             EditorGUILayout.HelpBox("開発者モードが有効です。詳細情報が表示されています。", MessageType.Info);
             EditorGUILayout.Space();
@@ -123,7 +113,6 @@ namespace Aramaa.DakochiteGimmick.Editor
             }
 
             Transform gimmickInstanceTransform = HierarchyUtility.FindChildRecursive(avatarRootObject.transform, GimmickConstants.HOLD_GIMMICK_NAME);
-
             if (gimmickInstanceTransform == null)
             {
                 Debug.LogWarning(string.Format(GimmickConstants.LOG_GIMMICK_INSTANCE_NOT_FOUND, GimmickConstants.HOLD_GIMMICK_NAME));
@@ -143,11 +132,13 @@ namespace Aramaa.DakochiteGimmick.Editor
             Debug.Log($"<color=green>Constraint World Position: {constraintTransform.position}</color>");
             Debug.Log($"<color=green>Constraint Local Rotation: {constraintTransform.localRotation.eulerAngles}</color>");
             Debug.Log($"<color=green>Constraint World Rotation: {constraintTransform.rotation.eulerAngles}</color>");
-            if (parentConstraint.TargetTransform != null)
+            if (parentConstraint.TargetTransform == null)
             {
-                Debug.Log($"<color=green>Constraint Target (Hips/Head) World Position: {parentConstraint.TargetTransform.position}</color>");
-                Debug.Log($"<color=green>Constraint Target (Hips/Head) World Rotation: {parentConstraint.TargetTransform.rotation.eulerAngles}</color>");
+                return;
             }
+
+            Debug.Log($"<color=green>Constraint Target (Hips/Head) World Position: {parentConstraint.TargetTransform.position}</color>");
+            Debug.Log($"<color=green>Constraint Target (Hips/Head) World Rotation: {parentConstraint.TargetTransform.rotation.eulerAngles}</color>");
         }
     }
 }

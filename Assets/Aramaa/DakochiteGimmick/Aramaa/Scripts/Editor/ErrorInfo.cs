@@ -119,6 +119,34 @@ namespace Aramaa.DakochiteGimmick.Editor
                         message: "VRCParentConstraintの更新がタイムアウトしたか、正しく設定されませんでした。",
                         solutionSuggestion:  "もう一度ギミックを生成し直してください。コンソールにMissingReferenceExceptionのようなエラーがある場合は、Unityを再起動してから再度お試しください。"
                     )
+                },
+                {
+                    GimmickError.OutputFolderCreationFailed,
+                    (
+                        message: "アセットフォルダの作成に失敗しました。",
+                        solutionSuggestion:  "パーミッションまたはパスの有効性を確認してください。"
+                    )
+                },
+                {
+                    GimmickError.AnimationClipCreationFailed,
+                    (
+                        message: "アニメーションクリップの生成に失敗しました。",
+                        solutionSuggestion:  "もう一度ギミックを生成し直してください。"
+                    )
+                },
+                {
+                    GimmickError.AnimatorControllerCreationFailed,
+                    (
+                        message: "Animator Controllerの作成に失敗しました。",
+                        solutionSuggestion:  "もう一度ギミックを生成し直してください。"
+                    )
+                },
+                {
+                    GimmickError.ModularAvatarLinkFailed,
+                    (
+                        message: "Modular Avatar Merge Animator のリンクに失敗しました。",
+                        solutionSuggestion:  "もう一度ギミックを生成し直してください。"
+                    )
                 }
             };
         }

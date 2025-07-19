@@ -12,14 +12,13 @@ namespace Aramaa.DakochiteGimmick.Editor
     /// </summary>
     public static class ConstraintSetupService
     {
-        private const int DELAY_FRAMES_FOR_CONSTRAINT_UPDATE = 240; // コンストレイントの更新待ちフレーム数
+        // コンストレイントの更新待ちフレーム数 (自分のPCだと1フレームで完了するが、低スペックPCのために待たせる)
+        private const int DELAY_FRAMES_FOR_CONSTRAINT_UPDATE = 240;
 
         /// <summary>
         /// VRChatアバターに対するギミックのフルセットアップを実行します。
         /// 既存ギミックがある場合はそれを削除し、新規に生成します。
         /// </summary>
-        /// <param name="avatarRootObject">セットアップ対象のアバターのルートGameObject。</param>
-        /// <returns>セットアップが成功したかどうか。</returns>
         public static void PerformFullSetup(GimmickData gimmickData)
         {
             if (gimmickData.AvatarRootObject == null)
@@ -125,7 +124,7 @@ namespace Aramaa.DakochiteGimmick.Editor
                 }
 
                 gimmickData.DelayedCallFrameCounter++;
-                if (gimmickData.DelayedCallFrameCounter < DELAY_FRAMES_FOR_CONSTRAINT_UPDATE)
+                if (gimmickData.DelayedCallFrameCounter <= DELAY_FRAMES_FOR_CONSTRAINT_UPDATE)
                 {
                     // 指定フレーム数に達するまで待機を継続
                     gimmickData.CallbackState = UpdateCallbackState.Waiting;
@@ -174,10 +173,10 @@ namespace Aramaa.DakochiteGimmick.Editor
             bool physBoneSetupSuccess = PhysBoneGimmickAutomation.GeneratePhysBoneHoldGimmickSetup(gimmickData.AvatarRootObject);
             if (!physBoneSetupSuccess)
             {
-                EditorErrorDialog.DisplayDialog(GimmickError.PhysBoneSetupExecutionFailed);
                 return UpdateCallbackState.Error;
             }
 
+            EditorUtility.DisplayDialog("セットアップ完了", "みんなでつかめるだこちてギミックを\nアバターに設定しました。", "OK");
             return UpdateCallbackState.Success;
         }
 
@@ -187,7 +186,6 @@ namespace Aramaa.DakochiteGimmick.Editor
         /// <param name="gimmickPrefabInstance"></param>
         private static void RefreshEditorWindows(GameObject gimmickPrefabInstance)
         {
-            // --- コンストレイントの強制更新とエディタ描画の促し ---
             var constraints = gimmickPrefabInstance.GetComponentsInChildren<VRCConstraintBase>(true);
             if (constraints != null && constraints.Length > 0)
             {
@@ -239,9 +237,9 @@ namespace Aramaa.DakochiteGimmick.Editor
             }
 
             // VRCParentConstraintが設定されたTransform（Constraintの親）
-            // おそらく、eyeOffsetTransformの親がParentConstraintを持つGameObjectを想定
             Transform constraintParentTransform = eyeOffsetTransform.parent;
-            // 制約の親の位置がVector3.zeroだとおかしいのでチェック
+
+            // Headの座標がVector3.zeroの場合、座標が更新されていないためエラー
             if (constraintParentTransform == null || constraintParentTransform.position == Vector3.zero)
             {
                 EditorErrorDialog.DisplayDialog(GimmickError.ConstraintUpdateFailedOrTimedOut);
@@ -252,7 +250,7 @@ namespace Aramaa.DakochiteGimmick.Editor
             Vector3 viewPositionInConstraintParentLocal = constraintParentTransform.InverseTransformPoint(gimmickData.AvatarDescriptor.ViewPosition);
             eyeOffsetTransform.localPosition = viewPositionInConstraintParentLocal;
 
-            // Headボーンの回転の逆をEyeOffsetのローカル回転に設定（Headの回転を打ち消すことで視線に合わせる？）
+            // Headボーンの回転の逆をEyeOffsetのローカル回転に設定（Headの回転を打ち消すことで視線に合わせる）
             eyeOffsetTransform.localRotation = Quaternion.Inverse(gimmickData.HeadBone.rotation);
             eyeOffsetTransform.localScale = Vector3.one;
 
