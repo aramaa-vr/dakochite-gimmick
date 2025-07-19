@@ -54,98 +54,98 @@ namespace Aramaa.DakochiteGimmick.Editor
                     GimmickError.GimmickPrefabNotFound,
                     (
                         message: "必要なギミックプレハブが見つかりません。",
-                        solutionSuggestion:  "Unityの「Window」メニューから「VRChat SDK」>「Manage Packages」を開き、「dakochite-gimmick - みんなでつかめるだこちてギミック」を**一度アンインストールしてから再インストール**してください。"
+                        solutionSuggestion: "「VCC」から「Manage Project」を開き、「dakochite-gimmick - みんなでつかめるだこちてギミック」を一度アンインストールしてから再インストールしてください。"
                     )
                 },
                 {
                     GimmickError.GimmickPrefabInstantiationFailed,
                     (
                         message: "ギミックプレハブのインスタンス生成に失敗しました。",
-                        solutionSuggestion:  "Unityの「Window」メニューから「VRChat SDK」>「Manage Packages」を開き、「dakochite-gimmick - みんなでつかめるだこちてギミック」を**一度アンインストールしてから再インストール**してください。"
+                        solutionSuggestion: "「VCC」から「Manage Project」を開き、「dakochite-gimmick - みんなでつかめるだこちてギミック」を一度アンインストールしてから再インストールしてください。"
                     )
                 },
                 {
                     GimmickError.GimmickPrefabCorrupted,
                     (
                         message: "ギミックプレハブのデータが破損している可能性があります。",
-                        solutionSuggestion:  "Unityの「Window」メニューから「VRChat SDK」>「Manage Packages」を開き、「dakochite-gimmick - みんなでつかめるだこちてギミック」を**一度アンインストールしてから再インストール**してください。"
+                        solutionSuggestion: "「VCC」から「Manage Project」を開き、「dakochite-gimmick - みんなでつかめるだこちてギミック」を一度アンインストールしてから再インストールしてください。"
                     )
                 },
                 {
                     GimmickError.GimmickInstanceRemovedDuringSetup,
                     (
                         message: "処理中にギミックのインスタンスがヒエラルキーから削除されました。",
-                        solutionSuggestion:  "ギミック生成中は、アバターやヒエラルキーの操作を控えてください。"
+                        solutionSuggestion: "ギミック生成中は、アバターやヒエラルキーの操作を控えてください。"
                     )
                 },
                 {
                     GimmickError.AvatarObjectRemovedDuringSetup,
                     (
                         message: "処理中にアバターオブジェクト自体がヒエラルキーから削除されました。",
-                        solutionSuggestion:  "ギミック生成中は、アバターやヒエラルキーの操作を控えてください。"
+                        solutionSuggestion: "ギミック生成中は、アバターやヒエラルキーの操作を控えてください。"
                     )
                 },
                 {
                     GimmickError.PhysBoneSetupExecutionFailed,
                     (
                         message: "PhysBone Hold Gimmickの設定スクリプトの実行に失敗しました。",
-                        solutionSuggestion:  ""
+                        solutionSuggestion: ""
                     )
                 },
                 {
                     GimmickError.EyeOffsetTransformNotFoundInGimmick,
                     (
                         message: "ギミック内のEyeOffsetTransformオブジェクトが見つかりませんでした。",
-                        solutionSuggestion:  "Unityの「Window」メニューから「VRChat SDK」>「Manage Packages」を開き、「dakochite-gimmick - みんなでつかめるだこちてギミック」を**一度アンインストールしてから再インストール**してください。"
+                        solutionSuggestion: "Unityの「Window」メニューから「VRChat SDK」>「Manage Packages」を開き、「dakochite-gimmick - みんなでつかめるだこちてギミック」を**一度アンインストールしてから再インストール**してください。"
                     )
                 },
                 {
                     GimmickError.AvatarDescriptorRemovedDuringSetup,
                     (
                         message: "処理中にアバターのルートオブジェクトからVRCAvatarDescriptorが削除された可能性があります。",
-                        solutionSuggestion:  "ギミック生成中は、アバターやヒエラルキーの操作を控えてください。"
+                        solutionSuggestion: "ギミック生成中は、アバターやヒエラルキーの操作を控えてください。"
                     )
                 },
                 {
                     GimmickError.EyeOffsetHeadBoneNotFound,
                     (
                         message: "EyeOffsetの調整に必要なHeadボーンが削除された可能性があります。",
-                        solutionSuggestion:  "ギミック生成中は、アバターやヒエラルキーの操作を控えてください。"
+                        solutionSuggestion: "ギミック生成中は、アバターやヒエラルキーの操作を控えてください。"
                     )
                 },
                 {
                     GimmickError.ConstraintUpdateFailedOrTimedOut,
                     (
                         message: "VRCParentConstraintの更新がタイムアウトしたか、正しく設定されませんでした。",
-                        solutionSuggestion:  "もう一度ギミックを生成し直してください。コンソールにMissingReferenceExceptionのようなエラーがある場合は、Unityを再起動してから再度お試しください。"
+                        solutionSuggestion: "もう一度ギミックを生成し直してください。コンソールにMissingReferenceExceptionのようなエラーがある場合は、Unityを再起動してから再度お試しください。"
                     )
                 },
                 {
                     GimmickError.OutputFolderCreationFailed,
                     (
                         message: "アセットフォルダの作成に失敗しました。",
-                        solutionSuggestion:  "パーミッションまたはパスの有効性を確認してください。"
+                        solutionSuggestion: "パーミッションまたはパスの有効性を確認してください。"
                     )
                 },
                 {
                     GimmickError.AnimationClipCreationFailed,
                     (
                         message: "アニメーションクリップの生成に失敗しました。",
-                        solutionSuggestion:  "もう一度ギミックを生成し直してください。"
+                        solutionSuggestion: "もう一度ギミックを生成し直してください。"
                     )
                 },
                 {
                     GimmickError.AnimatorControllerCreationFailed,
                     (
                         message: "Animator Controllerの作成に失敗しました。",
-                        solutionSuggestion:  "もう一度ギミックを生成し直してください。"
+                        solutionSuggestion: "もう一度ギミックを生成し直してください。"
                     )
                 },
                 {
                     GimmickError.ModularAvatarLinkFailed,
                     (
                         message: "Modular Avatar Merge Animator のリンクに失敗しました。",
-                        solutionSuggestion:  "もう一度ギミックを生成し直してください。"
+                        solutionSuggestion: "もう一度ギミックを生成し直してください。"
                     )
                 }
             };
