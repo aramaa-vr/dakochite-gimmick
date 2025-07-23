@@ -5805,13 +5805,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   foldout_transforms: 0
-  foldout_forces: 1
-  foldout_collision: 1
+  foldout_forces: 0
+  foldout_collision: 0
   foldout_stretchsquish: 1
-  foldout_limits: 1
-  foldout_grabpose: 1
-  foldout_options: 1
-  foldout_gizmos: 1
+  foldout_limits: 0
+  foldout_grabpose: 0
+  foldout_options: 0
+  foldout_gizmos: 0
   version: 1
   integrationType: 0
   rootTransform: {fileID: 0}
@@ -5937,21 +5937,21 @@ MonoBehaviour:
     allowOthers: 1
   snapToHand: 0
   grabMovement: 1
-  maxStretch: 0
+  maxStretch: 5
   maxStretchCurve:
     serializedVersion: 2
     m_Curve: []
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  maxSquish: 0
+  maxSquish: 0.5
   maxSquishCurve:
     serializedVersion: 2
     m_Curve: []
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  stretchMotion: 0
+  stretchMotion: 1
   stretchMotionCurve:
     serializedVersion: 2
     m_Curve: []
