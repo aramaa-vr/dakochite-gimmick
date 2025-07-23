@@ -9,9 +9,10 @@
 
 ## 2. バージョン情報の更新
 
-* package.json の version を変更
-* package.json の zip パスを変更
-* バージョン更新確認クラスの version を変更
+* package.json の 「"version": "x.y.z",」 を変更
+* package.json の 「"url": ".../x.y.z/jp.aramaa.dakochite-gimmick-x.y.z.zip?」 パスを変更
+* HoldGimickMenuMain.assetの「だこちて ver x.y.z」を変更
+* PackageUpdater.csの 「LOCAL_INSTALLED_VERSION = "x.y.z"」 を変更
 
 ## 3. コミットとプッシュ
 
