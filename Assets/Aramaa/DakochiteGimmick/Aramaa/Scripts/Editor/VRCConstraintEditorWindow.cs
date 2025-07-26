@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
@@ -22,14 +23,12 @@ namespace Aramaa.DakochiteGimmick.Editor
         // ギミックの設定処理
         // ====================================================================================================
         private GameObject _selectedGameObject = null;
-        private GimmickData _gimmickData = new GimmickData();
+        private GimmickData _gimmickData = null;
 
         // ====================================================================================================
         // 除外処理
         // ====================================================================================================
-        private GameObjectListHolder _holder;
-        private SerializedObject _serializedHolder;
-        private SerializedProperty _listProperty;
+        [SerializeField] private List<GameObject> _ignoreGameObjects = new List<GameObject>();
 
         /// <summary>
         /// ウィンドウ内部に表示するロゴ画像。OnEnableで一度だけロードされます。
@@ -96,7 +95,6 @@ namespace Aramaa.DakochiteGimmick.Editor
         /// </summary>
         private async void OnEnable()
         {
-            InitHolder();
             InitGimmick();
 
             // ウィンドウ初期化
@@ -104,18 +102,7 @@ namespace Aramaa.DakochiteGimmick.Editor
             _logoTexture = Resources.Load<Texture2D>(LOGO_RESOURCES_PATH);
 
             // 非同期で更新チェックを実行
-            await CheckPackageUpdateStatus(); 
-        }
-
-        private void InitHolder()
-        {
-            if (_holder == null)
-            {
-                _holder = ScriptableObject.CreateInstance<GameObjectListHolder>();
-            }
-
-            _serializedHolder = new SerializedObject(_holder);
-            _listProperty = _serializedHolder.FindProperty("ignoreGameObjects");
+            await CheckPackageUpdateStatus();
         }
 
         private void InitGimmick()
@@ -127,7 +114,7 @@ namespace Aramaa.DakochiteGimmick.Editor
 
             _gimmickData.ResetData();
             _gimmickData.AvatarRootObject = _selectedGameObject;
-            _gimmickData.Holder = _holder;
+            _gimmickData.ignoreGameObjects = _ignoreGameObjects;
         }
 
         /// <summary>
@@ -162,9 +149,22 @@ namespace Aramaa.DakochiteGimmick.Editor
 
             EditorGUILayout.Space();
 
+            if (Application.isPlaying)
+            {
+                EditorGUILayout.HelpBox("プレイモード中は操作できません。", MessageType.Info);
+                return;
+            }
+
+            // スクロールビューの開始
+            _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition, false, false);
+
             // アバター選択フィールド
             _selectedGameObject = (GameObject)EditorGUILayout.ObjectField("アバターのルート", _gimmickData.AvatarRootObject, typeof(GameObject), true);
             _gimmickData.AvatarRootObject = _selectedGameObject;
+
+            EditorGUILayout.Space();
+
+            HandleDragAndDropEvent();
 
             EditorGUILayout.Space();
 
@@ -181,13 +181,6 @@ namespace Aramaa.DakochiteGimmick.Editor
                     Repaint();
                 }
             }
-
-            EditorGUILayout.Space();
-
-            // スクロールビューの開始
-            _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition, false, false);
-
-            HandleDragAndDropEvent();
 
             EditorGUILayout.Space();
 
@@ -231,19 +224,6 @@ namespace Aramaa.DakochiteGimmick.Editor
 
             _selectedGameObject = null;
             _logoTexture = null;
-            _holder = null;
-
-            if (_serializedHolder != null)
-            {
-                _serializedHolder.Dispose();
-                _serializedHolder = null;
-            }
-
-            if (_listProperty != null)
-            {
-                _listProperty.Dispose();
-                _listProperty = null;
-            }
         }
 
         // ====================================================================================================
@@ -344,9 +324,11 @@ namespace Aramaa.DakochiteGimmick.Editor
 
         private void HandleDragAndDropEvent()
         {
-            _serializedHolder.Update();
-            EditorGUILayout.PropertyField(_listProperty, new GUIContent("競合するPhysBoneやギミックのオブジェクトを入れてください"), true);
-            _serializedHolder.ApplyModifiedProperties();
+            var so = new SerializedObject(this);
+            var listProperty = so.FindProperty("_ignoreGameObjects");
+            so.Update();
+            EditorGUILayout.PropertyField(listProperty, new GUIContent("つかめなくなった耳（PhysBone）やギミックをここへドラッグ＆ドロップ"), true);
+            so.ApplyModifiedProperties();
         }
     }
 }

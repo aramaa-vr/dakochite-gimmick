@@ -171,7 +171,7 @@ namespace Aramaa.DakochiteGimmick.Editor
             }
 
             // PhysBoneGimmickAutomationを呼び出す（PhysBone関連の追加設定を行う別スクリプト）
-            bool physBoneSetupSuccess = PhysBoneGimmickAutomation.GeneratePhysBoneHoldGimmickSetup(gimmickData.AvatarRootObject, gimmickData.Holder.ignoreGameObjects);
+            bool physBoneSetupSuccess = PhysBoneGimmickAutomation.GeneratePhysBoneHoldGimmickSetup(gimmickData.AvatarRootObject, gimmickData.ignoreGameObjects);
             if (!physBoneSetupSuccess)
             {
                 return UpdateCallbackState.Error;
