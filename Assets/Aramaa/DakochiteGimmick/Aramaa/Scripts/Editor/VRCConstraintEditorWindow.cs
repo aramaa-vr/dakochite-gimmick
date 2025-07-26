@@ -29,6 +29,8 @@ namespace Aramaa.DakochiteGimmick.Editor
         // 除外処理
         // ====================================================================================================
         [SerializeField] private List<GameObject> _ignoreGameObjects = new List<GameObject>();
+        private SerializedObject _serializedObject;
+        private SerializedProperty _listProperty;
 
         /// <summary>
         /// ウィンドウ内部に表示するロゴ画像。OnEnableで一度だけロードされます。
@@ -94,6 +96,9 @@ namespace Aramaa.DakochiteGimmick.Editor
         /// </summary>
         private async void OnEnable()
         {
+            _serializedObject = new SerializedObject(this);
+            _listProperty = _serializedObject.FindProperty("_ignoreGameObjects");
+
             InitGimmick();
 
             // ウィンドウ初期化
@@ -214,6 +219,18 @@ namespace Aramaa.DakochiteGimmick.Editor
         /// </summary>
         private void OnDestroy()
         {
+            if (_serializedObject != null)
+            {
+                _serializedObject.Dispose();
+                _serializedObject = null;
+            }
+
+            if (_listProperty != null)
+            {
+                _listProperty.Dispose();
+                _listProperty = null;
+            }
+
             if (_gimmickData != null)
             {
                 _gimmickData.ResetData();
@@ -323,11 +340,9 @@ namespace Aramaa.DakochiteGimmick.Editor
 
         private void HandleDragAndDropEvent()
         {
-            var so = new SerializedObject(this);
-            var listProperty = so.FindProperty("_ignoreGameObjects");
-            so.Update();
-            EditorGUILayout.PropertyField(listProperty, new GUIContent("つかめなくなった耳（PhysBone）やギミックをここへドラッグ＆ドロップ"), true);
-            so.ApplyModifiedProperties();
+            _serializedObject.Update();
+            EditorGUILayout.PropertyField(_listProperty, new GUIContent("つかめなくなった耳（PhysBone）やギミックをここへドラッグ＆ドロップ"), true);
+            _serializedObject.ApplyModifiedProperties();
         }
     }
 }
