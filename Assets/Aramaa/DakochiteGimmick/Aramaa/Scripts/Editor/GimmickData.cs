@@ -1,8 +1,6 @@
-using System.Collections.Generic;
-using UnityEditor; // EditorWindow内で使用されるコンポーネント用
+using UnityEditor;
 using UnityEngine;
-using VRC.SDK3.Avatars.Components; // VRCAvatarDescriptor, VRCParentConstraintなど
-using VRC.SDK3.Dynamics.Constraint.Components;
+using VRC.SDK3.Avatars.Components;
 
 namespace Aramaa.DakochiteGimmick.Editor
 {
@@ -44,6 +42,8 @@ namespace Aramaa.DakochiteGimmick.Editor
         /// </summary>
         public bool ShowDeveloperInfo { get; set; } = false;
 
+        public GameObjectListHolder Holder { get; set; } = null;
+
         // ====================================================================================================
         // コンストラクタ (初期化処理)
         // ====================================================================================================
@@ -72,6 +72,7 @@ namespace Aramaa.DakochiteGimmick.Editor
             AvatarRootObject = null;
             GimmickPrefabAssetCache = null;
             ShowDeveloperInfo = false;
+            Holder = null;
 
             ClearCurrentCallbackContext();
 

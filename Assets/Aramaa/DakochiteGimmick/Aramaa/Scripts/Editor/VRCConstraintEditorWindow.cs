@@ -16,14 +16,23 @@ namespace Aramaa.DakochiteGimmick.Editor
         // フィールド (EditorWindow UIおよび内部状態)
         // ====================================================================================================
         private const float WINDOW_WIDTH = 700f;
-        private const float WINDOW_HEIGHT = 300f;
+        private const float WINDOW_HEIGHT = 500f;
         private const float WINDOW_HEIGHT_ADD_DEVELOPER = 450f;
         private static readonly Vector2 NORMAL_WINDOW_SIZE = new Vector2(WINDOW_WIDTH, WINDOW_HEIGHT); // 通常モードのサイズ
         private static readonly Vector2 DEVELOPER_WINDOW_SIZE = new Vector2(WINDOW_WIDTH, WINDOW_HEIGHT + WINDOW_HEIGHT_ADD_DEVELOPER); // 開発者モードのサイズ
 
+        // ====================================================================================================
+        // ギミックの設定処理
+        // ====================================================================================================
         private GameObject _selectedGameObject = null;
+        private GimmickData _gimmickData = new GimmickData();
 
-        GimmickData _gimmickData = new GimmickData();
+        // ====================================================================================================
+        // 除外処理
+        // ====================================================================================================
+        private GameObjectListHolder _holder;
+        private SerializedObject _serializedHolder;
+        private SerializedProperty _listProperty;
 
         /// <summary>
         /// ウィンドウ内部に表示するロゴ画像。OnEnableで一度だけロードされます。
@@ -90,16 +99,11 @@ namespace Aramaa.DakochiteGimmick.Editor
         /// </summary>
         private async void OnEnable()
         {
-            if (_gimmickData == null)
-            {
-                _gimmickData = new GimmickData();
-            }
+            InitHolder();
+            InitGimmick();
 
-            _gimmickData.ResetData();
-            _gimmickData.AvatarRootObject = _selectedGameObject;
-
+            // ウィンドウ初期化
             titleContent = new GUIContent(GimmickConstants.WINDOW_TITLE);
-
             _logoTexture = Resources.Load<Texture2D>(LOGO_RESOURCES_PATH);
 
             // ウィンドウサイズを初期化
@@ -107,6 +111,29 @@ namespace Aramaa.DakochiteGimmick.Editor
 
             // 非同期で更新チェックを実行
             await CheckPackageUpdateStatus(); 
+        }
+
+        private void InitHolder()
+        {
+            if (_holder == null)
+            {
+                _holder = ScriptableObject.CreateInstance<GameObjectListHolder>();
+            }
+
+            _serializedHolder = new SerializedObject(_holder);
+            _listProperty = _serializedHolder.FindProperty("ignoreGameObjects");
+        }
+
+        private void InitGimmick()
+        {
+            if (_gimmickData == null)
+            {
+                _gimmickData = new GimmickData();
+            }
+
+            _gimmickData.ResetData();
+            _gimmickData.AvatarRootObject = _selectedGameObject;
+            _gimmickData.Holder = _holder;
         }
 
         /// <summary>
@@ -138,8 +165,8 @@ namespace Aramaa.DakochiteGimmick.Editor
             EditorGUILayout.Space();
 
             // アバター選択フィールド
-            _gimmickData.AvatarRootObject = (GameObject)EditorGUILayout.ObjectField("アバターのルート", _gimmickData.AvatarRootObject, typeof(GameObject), true);
-            _selectedGameObject = _gimmickData.AvatarRootObject;
+            _selectedGameObject = (GameObject)EditorGUILayout.ObjectField("アバターのルート", _gimmickData.AvatarRootObject, typeof(GameObject), true);
+            _gimmickData.AvatarRootObject = _selectedGameObject;
 
             EditorGUILayout.Space();
 
@@ -156,6 +183,10 @@ namespace Aramaa.DakochiteGimmick.Editor
                     Repaint();
                 }
             }
+
+            EditorGUILayout.Space();
+
+            HandleDragAndDropEvent();
 
             EditorGUILayout.Space();
 
@@ -214,6 +245,11 @@ namespace Aramaa.DakochiteGimmick.Editor
 
             _selectedGameObject = null;
             _logoTexture = null;
+            _holder = null;
+            _serializedHolder.Dispose();
+            _serializedHolder = null;
+            _listProperty.Dispose();
+            _listProperty = null;
         }
 
         // ====================================================================================================
@@ -310,6 +346,13 @@ namespace Aramaa.DakochiteGimmick.Editor
 
             EditorGUILayout.LabelField(displayMessage, EditorStyles.boldLabel); // 太字で表示
             GUI.contentColor = originalColor; // 色を元に戻す
+        }
+
+        private void HandleDragAndDropEvent()
+        {
+            _serializedHolder.Update();
+            EditorGUILayout.PropertyField(_listProperty, new GUIContent("競合するPhysBoneやギミックのオブジェクトを入れてください"), true);
+            _serializedHolder.ApplyModifiedProperties();
         }
     }
 }
