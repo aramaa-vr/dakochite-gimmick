@@ -15,11 +15,8 @@ namespace Aramaa.DakochiteGimmick.Editor
         // ====================================================================================================
         // フィールド (EditorWindow UIおよび内部状態)
         // ====================================================================================================
-        private const float WINDOW_WIDTH = 700f;
-        private const float WINDOW_HEIGHT = 500f;
-        private const float WINDOW_HEIGHT_ADD_DEVELOPER = 450f;
-        private static readonly Vector2 NORMAL_WINDOW_SIZE = new Vector2(WINDOW_WIDTH, WINDOW_HEIGHT); // 通常モードのサイズ
-        private static readonly Vector2 DEVELOPER_WINDOW_SIZE = new Vector2(WINDOW_WIDTH, WINDOW_HEIGHT + WINDOW_HEIGHT_ADD_DEVELOPER); // 開発者モードのサイズ
+        private static readonly Vector2 NORMAL_WINDOW_SIZE = new Vector2(700f, 500f);
+        private Vector2 _scrollPosition = Vector2.zero;
 
         // ====================================================================================================
         // ギミックの設定処理
@@ -106,9 +103,6 @@ namespace Aramaa.DakochiteGimmick.Editor
             titleContent = new GUIContent(GimmickConstants.WINDOW_TITLE);
             _logoTexture = Resources.Load<Texture2D>(LOGO_RESOURCES_PATH);
 
-            // ウィンドウサイズを初期化
-            ChangeWindowSize();
-
             // 非同期で更新チェックを実行
             await CheckPackageUpdateStatus(); 
         }
@@ -177,7 +171,7 @@ namespace Aramaa.DakochiteGimmick.Editor
             else
             {
                 // ギミック生成/再生成ボタン
-                if (GUILayout.Button(new GUIContent(GimmickConstants.BUTTON_GENERATE_OR_REGENERATE_TEXT, GimmickConstants.BUTTON_GENERATE_OR_REGENERATE_TOOLTIP)))
+                if (GUILayout.Button(new GUIContent(GimmickConstants.BUTTON_GENERATE_OR_REGENERATE_TEXT, GimmickConstants.BUTTON_GENERATE_OR_REGENERATE_TOOLTIP), GUILayout.Height(40)))
                 {
                     ConstraintSetupService.PerformFullSetup(_gimmickData);
                     Repaint();
@@ -185,6 +179,9 @@ namespace Aramaa.DakochiteGimmick.Editor
             }
 
             EditorGUILayout.Space();
+
+            // スクロールビューの開始
+            _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition, false, false);
 
             HandleDragAndDropEvent();
 
@@ -197,6 +194,9 @@ namespace Aramaa.DakochiteGimmick.Editor
             {
                 DeveloperDebugInfoDrawer.DrawAvatarDebugInfo(_gimmickData.AvatarRootObject);
             }
+
+            // スクロールビューの終了
+            EditorGUILayout.EndScrollView();
         }
 
         private void ToggleChangeWindowSize()
@@ -209,24 +209,6 @@ namespace Aramaa.DakochiteGimmick.Editor
             if (_gimmickData.ShowDeveloperInfo == currentShowDeveloperInfo)
             {
                 return;
-            }
-
-            ChangeWindowSize();
-            Repaint();
-        }
-
-        private void ChangeWindowSize()
-        {
-            // 値が変更された場合のみウィンドウサイズを調整
-            if (_gimmickData.ShowDeveloperInfo)
-            {
-                minSize = DEVELOPER_WINDOW_SIZE;
-                maxSize = DEVELOPER_WINDOW_SIZE;
-            }
-            else
-            {
-                minSize = NORMAL_WINDOW_SIZE;
-                maxSize = NORMAL_WINDOW_SIZE;
             }
         }
 
@@ -246,10 +228,18 @@ namespace Aramaa.DakochiteGimmick.Editor
             _selectedGameObject = null;
             _logoTexture = null;
             _holder = null;
-            _serializedHolder.Dispose();
-            _serializedHolder = null;
-            _listProperty.Dispose();
-            _listProperty = null;
+
+            if (_serializedHolder != null)
+            {
+                _serializedHolder.Dispose();
+                _serializedHolder = null;
+            }
+
+            if (_listProperty != null)
+            {
+                _listProperty.Dispose();
+                _listProperty = null;
+            }
         }
 
         // ====================================================================================================
