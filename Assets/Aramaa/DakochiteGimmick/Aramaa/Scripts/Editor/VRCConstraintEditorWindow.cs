@@ -150,7 +150,11 @@ namespace Aramaa.DakochiteGimmick.Editor
         {
             DrawLogoSection();
 
-            if (GUILayout.Button("説明書", EditorStyles.linkLabel)) { Application.OpenURL("https://docs.google.com/document/d/141h1qxOo8ZeFPDXLFmx2fjn6jsYxf7dL6XJkSFxztec/edit?usp=sharing"); }
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button("説明書", EditorStyles.linkLabel)) { Application.OpenURL(GimmickConstants.DOCUMENTATION_URL); }
+            GUILayout.Space(10);
+            if (GUILayout.Button("更新履歴", EditorStyles.linkLabel)) { Application.OpenURL(GimmickConstants.CHANGELOG_URL); }
+            GUILayout.EndHorizontal();
 
             EditorGUILayout.Space();
 
