@@ -1,6 +1,5 @@
 using UnityEditor;
 using UnityEngine;
-using VRC.Dynamics;
 using VRC.SDK3.Avatars.Components;
 using VRC.SDK3.Dynamics.Constraint.Components;
 
@@ -172,7 +171,7 @@ namespace Aramaa.DakochiteGimmick.Editor
             }
 
             // PhysBoneGimmickAutomationを呼び出す（PhysBone関連の追加設定を行う別スクリプト）
-            bool physBoneSetupSuccess = PhysBoneGimmickAutomation.GeneratePhysBoneHoldGimmickSetup(gimmickData.AvatarRootObject);
+            bool physBoneSetupSuccess = PhysBoneGimmickAutomation.GeneratePhysBoneHoldGimmickSetup(gimmickData.AvatarRootObject, gimmickData.IgnoreGameObjects);
             if (!physBoneSetupSuccess)
             {
                 return UpdateCallbackState.Error;

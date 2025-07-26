@@ -17,7 +17,7 @@ namespace Aramaa.DakochiteGimmick.Editor
 
         // ローカルのインストール済みパッケージバージョン (コード上でハードコード)
         // ここに現在プロジェクトに導入されているギミックのバージョンを直接入力してください。
-        public const string LOCAL_INSTALLED_VERSION = "1.0.2"; // ここに実際のバージョンを記述します
+        public const string LOCAL_INSTALLED_VERSION = "1.0.3"; // ここに実際のバージョンを記述します
 
         /// <summary>
         /// JSONからバージョン情報をデシリアライズするためのクラス。

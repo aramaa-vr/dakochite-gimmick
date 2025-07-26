@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
@@ -15,15 +16,21 @@ namespace Aramaa.DakochiteGimmick.Editor
         // ====================================================================================================
         // フィールド (EditorWindow UIおよび内部状態)
         // ====================================================================================================
-        private const float WINDOW_WIDTH = 700f;
-        private const float WINDOW_HEIGHT = 300f;
-        private const float WINDOW_HEIGHT_ADD_DEVELOPER = 450f;
-        private static readonly Vector2 NORMAL_WINDOW_SIZE = new Vector2(WINDOW_WIDTH, WINDOW_HEIGHT); // 通常モードのサイズ
-        private static readonly Vector2 DEVELOPER_WINDOW_SIZE = new Vector2(WINDOW_WIDTH, WINDOW_HEIGHT + WINDOW_HEIGHT_ADD_DEVELOPER); // 開発者モードのサイズ
+        private static readonly Vector2 NORMAL_WINDOW_SIZE = new Vector2(700f, 700f);
+        private Vector2 _scrollPosition = Vector2.zero;
 
+        // ====================================================================================================
+        // ギミックの設定処理
+        // ====================================================================================================
         private GameObject _selectedGameObject = null;
+        private GimmickData _gimmickData = null;
 
-        GimmickData _gimmickData = new GimmickData();
+        // ====================================================================================================
+        // 除外処理
+        // ====================================================================================================
+        [SerializeField] private List<GameObject> _ignoreGameObjects = new List<GameObject>();
+        private SerializedObject _serializedObject;
+        private SerializedProperty _listProperty;
 
         /// <summary>
         /// ウィンドウ内部に表示するロゴ画像。OnEnableで一度だけロードされます。
@@ -76,7 +83,6 @@ namespace Aramaa.DakochiteGimmick.Editor
                 true // フォーカス
             );
             window._selectedGameObject = selectedGameObject; // 選択中のアバターをセット
-            window._gimmickData.AvatarRootObject = selectedGameObject; // 選択中のアバターをセット
             window.maxSize = NORMAL_WINDOW_SIZE;
             window.minSize = NORMAL_WINDOW_SIZE;
         }
@@ -90,6 +96,21 @@ namespace Aramaa.DakochiteGimmick.Editor
         /// </summary>
         private async void OnEnable()
         {
+            _serializedObject = new SerializedObject(this);
+            _listProperty = _serializedObject.FindProperty("_ignoreGameObjects");
+
+            InitGimmick();
+
+            // ウィンドウ初期化
+            titleContent = new GUIContent(GimmickConstants.WINDOW_TITLE);
+            _logoTexture = Resources.Load<Texture2D>(LOGO_RESOURCES_PATH);
+
+            // 非同期で更新チェックを実行
+            await CheckPackageUpdateStatus();
+        }
+
+        private void InitGimmick()
+        {
             if (_gimmickData == null)
             {
                 _gimmickData = new GimmickData();
@@ -97,16 +118,7 @@ namespace Aramaa.DakochiteGimmick.Editor
 
             _gimmickData.ResetData();
             _gimmickData.AvatarRootObject = _selectedGameObject;
-
-            titleContent = new GUIContent(GimmickConstants.WINDOW_TITLE);
-
-            _logoTexture = Resources.Load<Texture2D>(LOGO_RESOURCES_PATH);
-
-            // ウィンドウサイズを初期化
-            ChangeWindowSize();
-
-            // 非同期で更新チェックを実行
-            await CheckPackageUpdateStatus(); 
+            _gimmickData.IgnoreGameObjects = _ignoreGameObjects;
         }
 
         /// <summary>
@@ -129,7 +141,11 @@ namespace Aramaa.DakochiteGimmick.Editor
         {
             DrawLogoSection();
 
-            if (GUILayout.Button("説明書", EditorStyles.linkLabel)) { Application.OpenURL("https://docs.google.com/document/d/141h1qxOo8ZeFPDXLFmx2fjn6jsYxf7dL6XJkSFxztec/edit?usp=sharing"); }
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button("説明書", EditorStyles.linkLabel)) { Application.OpenURL(GimmickConstants.DOCUMENTATION_URL); }
+            GUILayout.Space(10);
+            if (GUILayout.Button("更新履歴", EditorStyles.linkLabel)) { Application.OpenURL(GimmickConstants.CHANGELOG_URL); }
+            GUILayout.EndHorizontal();
 
             EditorGUILayout.Space();
 
@@ -137,9 +153,22 @@ namespace Aramaa.DakochiteGimmick.Editor
 
             EditorGUILayout.Space();
 
+            if (Application.isPlaying)
+            {
+                EditorGUILayout.HelpBox("プレイモード中は操作できません。", MessageType.Info);
+                return;
+            }
+
+            // スクロールビューの開始
+            _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition, false, false);
+
             // アバター選択フィールド
-            _gimmickData.AvatarRootObject = (GameObject)EditorGUILayout.ObjectField("アバターのルート", _gimmickData.AvatarRootObject, typeof(GameObject), true);
-            _selectedGameObject = _gimmickData.AvatarRootObject;
+            _selectedGameObject = (GameObject)EditorGUILayout.ObjectField("アバターのルート", _selectedGameObject, typeof(GameObject), true);
+            _gimmickData.AvatarRootObject = _selectedGameObject;
+
+            EditorGUILayout.Space();
+
+            HandleDragAndDropEvent();
 
             EditorGUILayout.Space();
 
@@ -150,7 +179,7 @@ namespace Aramaa.DakochiteGimmick.Editor
             else
             {
                 // ギミック生成/再生成ボタン
-                if (GUILayout.Button(new GUIContent(GimmickConstants.BUTTON_GENERATE_OR_REGENERATE_TEXT, GimmickConstants.BUTTON_GENERATE_OR_REGENERATE_TOOLTIP)))
+                if (GUILayout.Button(new GUIContent(GimmickConstants.BUTTON_GENERATE_OR_REGENERATE_TEXT, GimmickConstants.BUTTON_GENERATE_OR_REGENERATE_TOOLTIP), GUILayout.Height(40)))
                 {
                     ConstraintSetupService.PerformFullSetup(_gimmickData);
                     Repaint();
@@ -166,6 +195,9 @@ namespace Aramaa.DakochiteGimmick.Editor
             {
                 DeveloperDebugInfoDrawer.DrawAvatarDebugInfo(_gimmickData.AvatarRootObject);
             }
+
+            // スクロールビューの終了
+            EditorGUILayout.EndScrollView();
         }
 
         private void ToggleChangeWindowSize()
@@ -179,24 +211,6 @@ namespace Aramaa.DakochiteGimmick.Editor
             {
                 return;
             }
-
-            ChangeWindowSize();
-            Repaint();
-        }
-
-        private void ChangeWindowSize()
-        {
-            // 値が変更された場合のみウィンドウサイズを調整
-            if (_gimmickData.ShowDeveloperInfo)
-            {
-                minSize = DEVELOPER_WINDOW_SIZE;
-                maxSize = DEVELOPER_WINDOW_SIZE;
-            }
-            else
-            {
-                minSize = NORMAL_WINDOW_SIZE;
-                maxSize = NORMAL_WINDOW_SIZE;
-            }
         }
 
         /// <summary>
@@ -205,6 +219,18 @@ namespace Aramaa.DakochiteGimmick.Editor
         /// </summary>
         private void OnDestroy()
         {
+            if (_serializedObject != null)
+            {
+                _serializedObject.Dispose();
+                _serializedObject = null;
+            }
+
+            if (_listProperty != null)
+            {
+                _listProperty.Dispose();
+                _listProperty = null;
+            }
+
             if (_gimmickData != null)
             {
                 _gimmickData.ResetData();
@@ -310,6 +336,13 @@ namespace Aramaa.DakochiteGimmick.Editor
 
             EditorGUILayout.LabelField(displayMessage, EditorStyles.boldLabel); // 太字で表示
             GUI.contentColor = originalColor; // 色を元に戻す
+        }
+
+        private void HandleDragAndDropEvent()
+        {
+            _serializedObject.Update();
+            EditorGUILayout.PropertyField(_listProperty, new GUIContent("つかめなくなった耳（PhysBone）やギミックをここへドラッグ＆ドロップ"), true);
+            _serializedObject.ApplyModifiedProperties();
         }
     }
 }

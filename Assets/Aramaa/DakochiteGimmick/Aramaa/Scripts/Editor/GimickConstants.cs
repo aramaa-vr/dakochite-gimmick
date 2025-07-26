@@ -7,7 +7,7 @@ namespace Aramaa.DakochiteGimmick.Editor
     {
         // 説明書
         public const string DOCUMENTATION_URL = "https://docs.google.com/document/d/141h1qxOo8ZeFPDXLFmx2fjn6jsYxf7dL6XJkSFxztec/edit?usp=sharing";
-        public const string DOCUMENTATION_TEXT = "説明書";
+        public const string CHANGELOG_URL = "https://aramaa-vr.github.io/dakochite-gimmick/CHANGELOG.md";
 
         // ====================================================================================================
         // UI / メニュー
