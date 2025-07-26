@@ -43,7 +43,7 @@ namespace Aramaa.DakochiteGimmick.Editor
         /// </summary>
         public bool ShowDeveloperInfo { get; set; } = false;
 
-        public List<GameObject> ignoreGameObjects { get; set; } = null;
+        public List<GameObject> IgnoreGameObjects { get; set; } = null;
 
         // ====================================================================================================
         // コンストラクタ (初期化処理)
@@ -73,7 +73,7 @@ namespace Aramaa.DakochiteGimmick.Editor
             AvatarRootObject = null;
             GimmickPrefabAssetCache = null;
             ShowDeveloperInfo = false;
-            ignoreGameObjects = null;
+            IgnoreGameObjects = null;
 
             ClearCurrentCallbackContext();
 

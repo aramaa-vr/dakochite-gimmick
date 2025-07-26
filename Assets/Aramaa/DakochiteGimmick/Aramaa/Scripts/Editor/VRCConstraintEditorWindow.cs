@@ -81,7 +81,6 @@ namespace Aramaa.DakochiteGimmick.Editor
                 true // フォーカス
             );
             window._selectedGameObject = selectedGameObject; // 選択中のアバターをセット
-            window._gimmickData.AvatarRootObject = selectedGameObject; // 選択中のアバターをセット
             window.maxSize = NORMAL_WINDOW_SIZE;
             window.minSize = NORMAL_WINDOW_SIZE;
         }
@@ -114,7 +113,7 @@ namespace Aramaa.DakochiteGimmick.Editor
 
             _gimmickData.ResetData();
             _gimmickData.AvatarRootObject = _selectedGameObject;
-            _gimmickData.ignoreGameObjects = _ignoreGameObjects;
+            _gimmickData.IgnoreGameObjects = _ignoreGameObjects;
         }
 
         /// <summary>
@@ -159,7 +158,7 @@ namespace Aramaa.DakochiteGimmick.Editor
             _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition, false, false);
 
             // アバター選択フィールド
-            _selectedGameObject = (GameObject)EditorGUILayout.ObjectField("アバターのルート", _gimmickData.AvatarRootObject, typeof(GameObject), true);
+            _selectedGameObject = (GameObject)EditorGUILayout.ObjectField("アバターのルート", _selectedGameObject, typeof(GameObject), true);
             _gimmickData.AvatarRootObject = _selectedGameObject;
 
             EditorGUILayout.Space();
