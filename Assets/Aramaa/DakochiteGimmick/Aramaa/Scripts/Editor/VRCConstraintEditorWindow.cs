@@ -15,7 +15,7 @@ namespace Aramaa.DakochiteGimmick.Editor
         // ====================================================================================================
         // フィールド (EditorWindow UIおよび内部状態)
         // ====================================================================================================
-        private static readonly Vector2 NORMAL_WINDOW_SIZE = new Vector2(700f, 500f);
+        private static readonly Vector2 NORMAL_WINDOW_SIZE = new Vector2(700f, 700f);
         private Vector2 _scrollPosition = Vector2.zero;
 
         // ====================================================================================================
