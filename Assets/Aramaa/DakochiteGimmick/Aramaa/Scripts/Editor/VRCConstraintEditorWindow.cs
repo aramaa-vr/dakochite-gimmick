@@ -341,7 +341,7 @@ namespace Aramaa.DakochiteGimmick.Editor
         private void HandleDragAndDropEvent()
         {
             _serializedObject.Update();
-            EditorGUILayout.PropertyField(_listProperty, new GUIContent("つかめなくなった耳（PhysBone）やギミックをここへドラッグ＆ドロップ"), true);
+            EditorGUILayout.PropertyField(_listProperty, new GUIContent("「だこちてギミック」と一緒に動かしたいギミック（PhysBone付き）を、ここにドラッグ＆ドロップ"), true);
             _serializedObject.ApplyModifiedProperties();
         }
     }
