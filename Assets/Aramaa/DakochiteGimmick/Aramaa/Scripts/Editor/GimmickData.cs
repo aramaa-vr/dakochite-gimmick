@@ -1,15 +1,14 @@
 using System.Collections.Generic;
-using UnityEditor; // EditorWindow内で使用されるコンポーネント用
+using UnityEditor;
 using UnityEngine;
-using VRC.SDK3.Avatars.Components; // VRCAvatarDescriptor, VRCParentConstraintなど
-using VRC.SDK3.Dynamics.Constraint.Components;
+using VRC.SDK3.Avatars.Components;
 
 namespace Aramaa.DakochiteGimmick.Editor
 {
     /// <summary>
     /// みんなでつかめるだこちてギミックのEditorWindowが保持するセッション固有のデータ管理クラス。
     /// このクラスは、EditorWindowの生存期間中のみ有効な、ゲームオブジェクト参照、
-    /// 一時的な設定、状態などを保持し、ウィンドウの破棄とともに解放されます。
+    /// 一時的な設定、状態などを保持し、プレイモードやインポートが走るとリセットされるため手動で設定が必要です
     /// </summary>
     public class GimmickData // staticではない通常のクラス
     {
@@ -44,6 +43,8 @@ namespace Aramaa.DakochiteGimmick.Editor
         /// </summary>
         public bool ShowDeveloperInfo { get; set; } = false;
 
+        public List<GameObject> IgnoreGameObjects { get; set; } = null;
+
         // ====================================================================================================
         // コンストラクタ (初期化処理)
         // ====================================================================================================
@@ -72,6 +73,7 @@ namespace Aramaa.DakochiteGimmick.Editor
             AvatarRootObject = null;
             GimmickPrefabAssetCache = null;
             ShowDeveloperInfo = false;
+            IgnoreGameObjects = null;
 
             ClearCurrentCallbackContext();
 

@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditor.Animations;
 using VRC.SDK3.Dynamics.PhysBone.Components;
-using VRC.SDK3.Avatars.ScriptableObjects;
 using VRC.SDK3.Avatars.Components;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +19,7 @@ namespace Aramaa.DakochiteGimmick.Editor
         /// 指定されたアバターのPhysBoneに対して、ホールドギミックのアニメーションとAnimator Controllerを生成し、
         /// Modular Avatar Merge Animator に割り当て、VRCExpressionParameters を設定します。
         /// </summary>
-        public static bool GeneratePhysBoneHoldGimmickSetup(GameObject avatarRoot)
+        public static bool GeneratePhysBoneHoldGimmickSetup(GameObject avatarRoot, List<GameObject> additionalExcludeGameObjects)
         {
             if (avatarRoot == null)
             {
@@ -29,7 +28,7 @@ namespace Aramaa.DakochiteGimmick.Editor
             }
 
             // 除外パスを考慮してPhysBoneを検索
-            List<VRCPhysBone> targetPhysBones = FindEligiblePhysBones(avatarRoot);
+            List<VRCPhysBone> targetPhysBones = FindEligiblePhysBones(avatarRoot, additionalExcludeGameObjects);
 
             // phys boneの数が0の場合、エラー回避のためにhysBoneHoldGimickGeneratorを削除して完了
             if (!targetPhysBones.Any())
@@ -139,19 +138,37 @@ namespace Aramaa.DakochiteGimmick.Editor
         /// <summary>
         /// 指定されたGameObjectの子階層からすべてのVRCPhysBoneを検索し、除外パスを考慮します。
         /// </summary>
-        private static List<VRCPhysBone> FindEligiblePhysBones(GameObject root)
+        /// <param name="root">アバターのルートGameObject。</param>
+        /// <param name="additionalExcludeGameObjects">追加で除外するGameObjectのリスト。</param>
+        /// <returns>除外パスに該当しないPhysBoneのリスト。</returns>
+        private static List<VRCPhysBone> FindEligiblePhysBones(GameObject root, List<GameObject> additionalExcludeGameObjects)
         {
             List<VRCPhysBone> foundPhysBones = new List<VRCPhysBone>();
             VRCPhysBone[] allPhysBonesInRoot = root.GetComponentsInChildren<VRCPhysBone>(true);
 
             // 除外対象のGameObjectのリストを格納するためのもの
             List<GameObject> excludeTargetGameObjects = new List<GameObject>();
-            foreach (string pathSegment in GimmickConstants.PHYSBONE_EXCLUDE_PATH_SEGMENTS) // 複数形に変更
+
+            // GimmickConstants.PHYSBONE_EXCLUDE_PATH_SEGMENTS から除外対象を追加
+            foreach (string pathSegment in GimmickConstants.PHYSBONE_EXCLUDE_PATH_SEGMENTS)
             {
                 GameObject excludeObj = ModularAvatarLinkerUtility.FindChildGameObjectRecursive(root, pathSegment);
                 if (excludeObj != null)
                 {
                     excludeTargetGameObjects.Add(excludeObj);
+                }
+            }
+
+            // additionalExcludeGameObjects が指定されていれば追加
+            if (additionalExcludeGameObjects != null)
+            {
+                // additionalExcludeGameObjects 内の個々の要素が null でないことを保証しながら追加
+                foreach (GameObject obj in additionalExcludeGameObjects)
+                {
+                    if (obj != null)
+                    {
+                        excludeTargetGameObjects.Add(obj);
+                    }
                 }
             }
 
@@ -163,6 +180,8 @@ namespace Aramaa.DakochiteGimmick.Editor
                 // 検出された除外対象のGameObjectをすべてチェック
                 foreach (GameObject excludeTargetGameObject in excludeTargetGameObjects)
                 {
+                    if (excludeTargetGameObject == null) continue;
+
                     // PhysBoneが除外対象の子孫であるかチェック
                     Transform current = pb.transform;
                     while (current != null && current != root.transform)

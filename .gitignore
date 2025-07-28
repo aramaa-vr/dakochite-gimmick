@@ -61,5 +61,7 @@ crashlytics-build.properties
 [Aa]ssets/[Aa]ramaa/[Gg]eneratedAssets.meta
 [Aa]ssets/[Tt]ests/
 [Aa]ssets/[Tt]ests.meta
-[Aa]ssets/VRCQuestToolsOutput/
-[Aa]ssets/VRCQuestToolsOutput.meta
+[Aa]ssets/[Vv]RCQuestToolsOutput/
+[Aa]ssets/[Vv]RCQuestToolsOutput.meta
+[Aa]ssets/[Vv]RCHierarchyHighlighter/
+[Aa]ssets/[Vv]RCHierarchyHighlighter.meta
