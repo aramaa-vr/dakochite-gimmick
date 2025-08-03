@@ -108,18 +108,6 @@ MonoBehaviour:
     sourceMax: 0
     destMin: 0
     destMax: 0
-  - type: 0
-    name: HoldBone_IsGrabbed
-    source: 
-    value: 0
-    valueMin: 0
-    valueMax: 0
-    chance: 0
-    convertRange: 0
-    sourceMin: 0
-    sourceMax: 0
-    destMin: 0
-    destMax: 0
   localOnly: 1
   debugString: 
 --- !u!1101 &-5281652216868638929
@@ -206,7 +194,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: die_hold
-  m_Speed: 0.5
+  m_Speed: 0.33333334
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: -1706698146295010142}
@@ -642,7 +630,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: None
+  m_Name: WaitForActionOrAFK
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -656,7 +644,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: dc3e44ce46d299544a5d5b306b053acf, type: 2}
+  m_Motion: {fileID: 7400000, guid: 91e5518865a04934b82b8aba11398609, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
