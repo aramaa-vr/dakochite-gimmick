@@ -639,7 +639,7 @@ MonoBehaviour:
   relativePathRoot:
     referencePath: 
     targetObject: {fileID: 0}
-  layerPriority: 0
+  layerPriority: 1000
   mergeAnimatorMode: 0
 --- !u!114 &7381653453665290472
 MonoBehaviour:
