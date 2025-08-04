@@ -1000,7 +1000,7 @@ GameObject:
   - component: {fileID: 4180716573042719394}
   - component: {fileID: 2095585802204362987}
   m_Layer: 0
-  m_Name: Particle System
+  m_Name: GrabParticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
