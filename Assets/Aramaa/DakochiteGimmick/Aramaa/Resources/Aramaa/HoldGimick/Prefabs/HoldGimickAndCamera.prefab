@@ -11752,7 +11752,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4055031603171204982}
   m_Layer: 0
-  m_Name: Particle
+  m_Name: Particles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11772,6 +11772,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7926891455980384350}
+  - {fileID: 6769755356586200368}
   m_Father: {fileID: 3797069584807178002}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5630159244670600574
@@ -17227,7 +17228,6 @@ Transform:
   - {fileID: 1276125724893583953}
   - {fileID: 1305855000454257222}
   - {fileID: 7445649850571992745}
-  - {fileID: 6769755356586200368}
   - {fileID: 800430347101960867}
   m_Father: {fileID: 3797069584807178002}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -17696,5 +17696,5 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3535772033207613745}
-  m_Father: {fileID: 9047605058746994055}
+  m_Father: {fileID: 4055031603171204982}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
