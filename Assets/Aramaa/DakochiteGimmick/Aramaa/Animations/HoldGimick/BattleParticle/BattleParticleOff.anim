@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ParticleSystemOff
+  m_Name: BattleParticleOff
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -34,7 +34,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: Particle/Constraint/Particle System
+    path: Particles/BattleParticle/Constraint/Particle
     classID: 1
     script: {fileID: 0}
     flags: 0
@@ -47,7 +47,7 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 276431482
+      path: 3367117013
       attribute: 2086281974
       script: {fileID: 0}
       typeID: 1
@@ -94,7 +94,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_IsActive
-    path: Particle/Constraint/Particle System
+    path: Particles/BattleParticle/Constraint/Particle
     classID: 1
     script: {fileID: 0}
     flags: 0
