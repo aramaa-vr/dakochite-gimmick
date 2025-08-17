@@ -1377,55 +1377,61 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: HoldBone_IsGrabbed
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: HoldBone_IsPosed
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: IsCameraChange
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: IsEffect
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: IsDieRoll
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: CemeraNear
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: IsCemeraNear
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: isAlwaysFalse
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
+  - m_Name: IsDieRollLocomotion
+    m_Type: 4
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: HipsPhysBone
@@ -1555,6 +1561,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: HoldBone_IsGrabbed
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: IsDieRollLocomotion
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 5124731279607041132}
   m_Solo: 0
@@ -1585,6 +1594,9 @@ AnimatorStateTransition:
     m_EventTreshold: 0
   - m_ConditionMode: 1
     m_ConditionEvent: HoldBone_IsGrabbed
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: IsDieRollLocomotion
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -6714735826599237706}
@@ -1718,6 +1730,9 @@ AnimatorStateTransition:
     m_EventTreshold: 2
   - m_ConditionMode: 1
     m_ConditionEvent: HoldBone_IsGrabbed
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: IsDieRollLocomotion
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 4907774569437204825}
@@ -2034,7 +2049,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: IsDieRoll
+    m_ConditionEvent: IsDieRollLocomotion
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -4889121044675717332}
@@ -2062,7 +2077,7 @@ AnimatorStateTransition:
     m_ConditionEvent: HoldType
     m_EventTreshold: 3
   - m_ConditionMode: 2
-    m_ConditionEvent: IsDieRoll
+    m_ConditionEvent: IsDieRollLocomotion
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -809998515022935743}
@@ -2118,7 +2133,7 @@ AnimatorStateTransition:
     m_ConditionEvent: HoldType
     m_EventTreshold: 2
   - m_ConditionMode: 2
-    m_ConditionEvent: IsDieRoll
+    m_ConditionEvent: IsDieRollLocomotion
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -2374053892409683354}
@@ -2196,7 +2211,7 @@ AnimatorStateTransition:
     m_ConditionEvent: HoldType
     m_EventTreshold: 1
   - m_ConditionMode: 2
-    m_ConditionEvent: IsDieRoll
+    m_ConditionEvent: IsDieRollLocomotion
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -451263371041069736}
@@ -2275,7 +2290,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: IsDieRoll
+    m_ConditionEvent: IsDieRollLocomotion
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -4889121044675717332}
@@ -2332,6 +2347,9 @@ AnimatorStateTransition:
     m_EventTreshold: 1
   - m_ConditionMode: 1
     m_ConditionEvent: HoldBone_IsGrabbed
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: IsDieRollLocomotion
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -5795894474936217783}
@@ -2688,6 +2706,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 1
     m_ConditionEvent: HoldBone_IsGrabbed
     m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: IsDieRollLocomotion
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -6402215452051142689}
   m_Solo: 0
@@ -2711,7 +2732,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: IsDieRoll
+    m_ConditionEvent: IsDieRollLocomotion
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -4889121044675717332}
