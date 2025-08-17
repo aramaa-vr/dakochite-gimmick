@@ -230,6 +230,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 2
     m_ConditionEvent: IsCemeraNear
     m_EventTreshold: 0
+  - m_ConditionMode: 7
+    m_ConditionEvent: HoldType
+    m_EventTreshold: 2
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 5839197056717465688}
   m_Solo: 0
@@ -868,6 +871,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 2
     m_ConditionEvent: HoldBone_IsPosed
     m_EventTreshold: 0
+  - m_ConditionMode: 7
+    m_ConditionEvent: HoldType
+    m_EventTreshold: 2
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 2019933287485510311}
   m_Solo: 0
