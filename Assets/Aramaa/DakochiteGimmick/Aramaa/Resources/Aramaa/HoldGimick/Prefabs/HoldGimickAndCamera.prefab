@@ -6582,7 +6582,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   isAnimated: 0
-  resetWhenDisabled: 0
+  resetWhenDisabled: 1
   parameter: HoldBone
   showGizmos: 1
   boneOpacity: 0.5
