@@ -6728,9 +6728,9 @@ MonoBehaviour:
   AffectsPositionY: 1
   AffectsPositionZ: 1
   RotationAtRest: {x: -0, y: 0, z: 0}
-  AffectsRotationX: 1
-  AffectsRotationY: 1
-  AffectsRotationZ: 1
+  AffectsRotationX: 0
+  AffectsRotationY: 0
+  AffectsRotationZ: 0
 --- !u!1 &3772198840050786677
 GameObject:
   m_ObjectHideFlags: 0
