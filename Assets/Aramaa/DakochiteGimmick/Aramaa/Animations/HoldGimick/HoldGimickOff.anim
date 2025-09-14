@@ -76,9 +76,9 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: IsActive
-    path: Objects/Bone/Constraint/Bone/Bone.001/Bone.002/Bone.003/Bone.004/Bone.005/Bone.006/Bone.007/Bone.008/Bone.009/Bone.010/Bone.011/Bone.012/FixRotation/HoldGimickPosition
+    path: Positon/GrabHips/Constraint/HoldGimickPosition
     classID: 114
-    script: {fileID: 575728033, guid: 58e2f01a24261a14cb82e6d3399e8b16, type: 3}
+    script: {fileID: 1116338486, guid: 58e2f01a24261a14cb82e6d3399e8b16, type: 3}
     flags: 0
   m_PPtrCurves: []
   m_SampleRate: 60
@@ -107,9 +107,9 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 149610661
+      path: 2994932961
       attribute: 1929417870
-      script: {fileID: 575728033, guid: 58e2f01a24261a14cb82e6d3399e8b16, type: 3}
+      script: {fileID: 1116338486, guid: 58e2f01a24261a14cb82e6d3399e8b16, type: 3}
       typeID: 114
       customType: 0
       isPPtrCurve: 0
@@ -196,9 +196,9 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: IsActive
-    path: Objects/Bone/Constraint/Bone/Bone.001/Bone.002/Bone.003/Bone.004/Bone.005/Bone.006/Bone.007/Bone.008/Bone.009/Bone.010/Bone.011/Bone.012/FixRotation/HoldGimickPosition
+    path: Positon/GrabHips/Constraint/HoldGimickPosition
     classID: 114
-    script: {fileID: 575728033, guid: 58e2f01a24261a14cb82e6d3399e8b16, type: 3}
+    script: {fileID: 1116338486, guid: 58e2f01a24261a14cb82e6d3399e8b16, type: 3}
     flags: 0
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
