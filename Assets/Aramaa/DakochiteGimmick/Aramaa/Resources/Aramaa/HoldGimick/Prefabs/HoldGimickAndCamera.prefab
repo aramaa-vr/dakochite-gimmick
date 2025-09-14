@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 310993184344962384}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -20, z: 0}
+  m_LocalPosition: {x: 0, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -898,8 +898,8 @@ MonoBehaviour:
       ParentRotationOffset: {x: 0, y: 0, z: 0}
     totalLength: 1
     overflowList: []
-  cachedExecutionGroupIndex: 5
-  latestValidExecutionGroupIndex: 5
+  cachedExecutionGroupIndex: 4
+  latestValidExecutionGroupIndex: 4
   PositionAtRest: {x: 0, y: 0, z: 0}
   AffectsPositionX: 1
   AffectsPositionY: 1
@@ -1541,8 +1541,8 @@ MonoBehaviour:
       ParentRotationOffset: {x: 0, y: 0, z: 0}
     totalLength: 1
     overflowList: []
-  cachedExecutionGroupIndex: 4
-  latestValidExecutionGroupIndex: 4
+  cachedExecutionGroupIndex: 5
+  latestValidExecutionGroupIndex: 5
   PositionAtRest: {x: 0, y: 0, z: 0}
   AffectsPositionX: 1
   AffectsPositionY: 1
@@ -7045,8 +7045,8 @@ MonoBehaviour:
       ParentRotationOffset: {x: 0, y: 0, z: 0}
     totalLength: 1
     overflowList: []
-  cachedExecutionGroupIndex: 5
-  latestValidExecutionGroupIndex: 5
+  cachedExecutionGroupIndex: 4
+  latestValidExecutionGroupIndex: 4
   PositionAtRest: {x: 0, y: 0, z: 0}
   AffectsPositionX: 1
   AffectsPositionY: 1
@@ -7111,7 +7111,7 @@ Transform:
   m_GameObject: {fileID: 3772198840050786677}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 20, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7190,7 +7190,7 @@ Transform:
   m_GameObject: {fileID: 3918561461811832947}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 2}
+  m_LocalPosition: {x: 0, y: 0, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7222,7 +7222,7 @@ Transform:
   m_GameObject: {fileID: 3949887740459775879}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -2}
+  m_LocalPosition: {x: 0, y: 0, z: -20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7463,7 +7463,7 @@ Transform:
   m_GameObject: {fileID: 4383685072056206967}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -2, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -12353,7 +12353,7 @@ Transform:
   m_GameObject: {fileID: 4760071559776327288}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 20}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -12726,7 +12726,7 @@ Transform:
   m_GameObject: {fileID: 5797956438763213821}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -20}
+  m_LocalPosition: {x: 2, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -12758,7 +12758,7 @@ Transform:
   m_GameObject: {fileID: 5810244796659131443}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -20, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -20, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -13111,8 +13111,8 @@ MonoBehaviour:
       ParentRotationOffset: {x: 0, y: 0, z: 0}
     totalLength: 1
     overflowList: []
-  cachedExecutionGroupIndex: 4
-  latestValidExecutionGroupIndex: 4
+  cachedExecutionGroupIndex: 6
+  latestValidExecutionGroupIndex: 6
   PositionAtRest: {x: 0, y: 0, z: 0}
   AffectsPositionX: 1
   AffectsPositionY: 1
@@ -18372,8 +18372,8 @@ MonoBehaviour:
       ParentRotationOffset: {x: 0, y: 0, z: 0}
     totalLength: 1
     overflowList: []
-  cachedExecutionGroupIndex: 3
-  latestValidExecutionGroupIndex: 3
+  cachedExecutionGroupIndex: 2
+  latestValidExecutionGroupIndex: 2
   PositionAtRest: {x: 0, y: 0, z: 0}
   AffectsPositionX: 1
   AffectsPositionY: 1
@@ -18681,7 +18681,7 @@ Transform:
   m_GameObject: {fileID: 7839333608084166071}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 20}
+  m_LocalPosition: {x: 20, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -18713,7 +18713,7 @@ Transform:
   m_GameObject: {fileID: 7873222332046750315}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2, y: 0, z: 0}
+  m_LocalPosition: {x: -20, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -18825,7 +18825,7 @@ Transform:
   m_GameObject: {fileID: 8362648620940203375}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 2, y: 0, z: 0}
+  m_LocalPosition: {x: -2, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -18966,8 +18966,8 @@ MonoBehaviour:
       ParentRotationOffset: {x: 0, y: 0, z: 0}
     totalLength: 2
     overflowList: []
-  cachedExecutionGroupIndex: 6
-  latestValidExecutionGroupIndex: 6
+  cachedExecutionGroupIndex: 5
+  latestValidExecutionGroupIndex: 5
   PositionAtRest: {x: 0, y: 0.749413, z: 0}
   AffectsPositionX: 1
   AffectsPositionY: 1
