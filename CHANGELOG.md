@@ -4,7 +4,7 @@
 
 ## Version 1.0.6
 
-*  HoldGimickPositionの遅延処理を5フレームに変更し、HoldGimickOnにする際の条件を削除
+*  HoldGimickPositionの遅延処理を10から5フレームに変更し、HoldGimickOnにする際の条件を削除
 * 別のオブジェクトから座標追従することで、PhysBoneの回転の影響を受けないようにする
 * テクスチャのmipMapModeをTrue
 * アピールエフェクトのサイズをアバターのサイズに依存するように修正
