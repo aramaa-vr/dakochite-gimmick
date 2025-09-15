@@ -1,7 +1,7 @@
 {
     "name": "jp.aramaa.dakochite-gimmick",
-    "version": "1.0.5",
-    "url": "https://github.com/aramaa-vr/dakochite-gimmick/releases/download/1.0.5/jp.aramaa.dakochite-gimmick-1.0.5.zip?",
+    "version": "1.0.6",
+    "url": "https://github.com/aramaa-vr/dakochite-gimmick/releases/download/1.0.6/jp.aramaa.dakochite-gimmick-1.0.6.zip?",
     "displayName": "dakochite-gimmick - みんなでつかめるだこちてギミック",
     "description": "VRChatアバター向けの抱っこされることができるギミックです。",
     "unity": "2022.3",
