@@ -34,7 +34,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: grabFilter.allowSelf
-    path: Objects/Bone/Constraint/Bone
+    path: Objects/Bone/Constraint/SnapToHandStartOffset/Bone
     classID: 114
     script: {fileID: 1661641543, guid: 2a2c05204084d904aa4945ccff20d8e5, type: 3}
     flags: 0
@@ -55,7 +55,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: snapToHand
-    path: Objects/Bone/Constraint/Bone
+    path: Objects/Bone/Constraint/SnapToHandStartOffset/Bone
     classID: 114
     script: {fileID: 1661641543, guid: 2a2c05204084d904aa4945ccff20d8e5, type: 3}
     flags: 0
@@ -76,7 +76,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: allowGrabbing
-    path: Objects/Bone/Constraint/Bone
+    path: Objects/Bone/Constraint/SnapToHandStartOffset/Bone
     classID: 114
     script: {fileID: 1661641543, guid: 2a2c05204084d904aa4945ccff20d8e5, type: 3}
     flags: 1
@@ -97,7 +97,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: allowPosing
-    path: Objects/Bone/Constraint/Bone
+    path: Objects/Bone/Constraint/SnapToHandStartOffset/Bone
     classID: 114
     script: {fileID: 1661641543, guid: 2a2c05204084d904aa4945ccff20d8e5, type: 3}
     flags: 1
@@ -118,7 +118,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: grabFilter.allowOthers
-    path: Objects/Bone/Constraint/Bone
+    path: Objects/Bone/Constraint/SnapToHandStartOffset/Bone
     classID: 114
     script: {fileID: 1661641543, guid: 2a2c05204084d904aa4945ccff20d8e5, type: 3}
     flags: 0
@@ -131,7 +131,7 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 3808911572
+      path: 3361735352
       attribute: 2019892194
       script: {fileID: 1661641543, guid: 2a2c05204084d904aa4945ccff20d8e5, type: 3}
       typeID: 114
@@ -140,7 +140,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 3808911572
+      path: 3361735352
       attribute: 2954224645
       script: {fileID: 1661641543, guid: 2a2c05204084d904aa4945ccff20d8e5, type: 3}
       typeID: 114
@@ -149,7 +149,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 3808911572
+      path: 3361735352
       attribute: 3611384886
       script: {fileID: 1661641543, guid: 2a2c05204084d904aa4945ccff20d8e5, type: 3}
       typeID: 114
@@ -158,7 +158,7 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 3808911572
+      path: 3361735352
       attribute: 2581405215
       script: {fileID: 1661641543, guid: 2a2c05204084d904aa4945ccff20d8e5, type: 3}
       typeID: 114
@@ -167,7 +167,7 @@ AnimationClip:
       isIntCurve: 1
       isSerializeReferenceCurve: 0
     - serializedVersion: 2
-      path: 3808911572
+      path: 3361735352
       attribute: 2862454668
       script: {fileID: 1661641543, guid: 2a2c05204084d904aa4945ccff20d8e5, type: 3}
       typeID: 114
@@ -214,7 +214,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: grabFilter.allowSelf
-    path: Objects/Bone/Constraint/Bone
+    path: Objects/Bone/Constraint/SnapToHandStartOffset/Bone
     classID: 114
     script: {fileID: 1661641543, guid: 2a2c05204084d904aa4945ccff20d8e5, type: 3}
     flags: 0
@@ -235,7 +235,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: snapToHand
-    path: Objects/Bone/Constraint/Bone
+    path: Objects/Bone/Constraint/SnapToHandStartOffset/Bone
     classID: 114
     script: {fileID: 1661641543, guid: 2a2c05204084d904aa4945ccff20d8e5, type: 3}
     flags: 0
@@ -256,7 +256,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: allowGrabbing
-    path: Objects/Bone/Constraint/Bone
+    path: Objects/Bone/Constraint/SnapToHandStartOffset/Bone
     classID: 114
     script: {fileID: 1661641543, guid: 2a2c05204084d904aa4945ccff20d8e5, type: 3}
     flags: 1
@@ -277,7 +277,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: allowPosing
-    path: Objects/Bone/Constraint/Bone
+    path: Objects/Bone/Constraint/SnapToHandStartOffset/Bone
     classID: 114
     script: {fileID: 1661641543, guid: 2a2c05204084d904aa4945ccff20d8e5, type: 3}
     flags: 1
@@ -298,7 +298,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: grabFilter.allowOthers
-    path: Objects/Bone/Constraint/Bone
+    path: Objects/Bone/Constraint/SnapToHandStartOffset/Bone
     classID: 114
     script: {fileID: 1661641543, guid: 2a2c05204084d904aa4945ccff20d8e5, type: 3}
     flags: 0
