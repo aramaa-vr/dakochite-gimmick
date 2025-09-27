@@ -28,8 +28,11 @@
 
 ## 5. VPMリポジトリの更新 (開発用)
 
-* VPMリポジリの vpm-dev.json に新しいパッケージ情報を追加
+* 以下のファイルを作成し
+    * develop/redirect-ver-x.y.z-develop.html
+    * develop/vpm-ver-x.y.z-develop.json
 * プルリクエストを作成し、マージ
+* 限定公開して何人かのユーザーに見てもらう
 
 ## 6. VCCでの動作確認
 
@@ -37,7 +40,7 @@
 
 ## 7. VPMリポジトリの更新 (本番用)
 
-* vpm.json に vpm-dev.json と同じ内容を追加
+* vpm.json に新しいパッケージ情報を追加
 * プルリクエストを作成し、マージ
 
 ## 8. Masterブランチへのマージと告知
