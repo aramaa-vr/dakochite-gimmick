@@ -47,13 +47,6 @@ namespace Aramaa.DakochiteGimmick.Editor
                 return;
             }
 
-            // 疑似ビューポイントがずれるため、アバターのルートの座標が (0,0,0) からわずかでも離れている場合にエラーとする
-            if (Vector3.Distance(gimmickData.AvatarRootObject.transform.position, Vector3.zero) > GimmickConstants.AVATAR_ROOT_POSITION_TOLERANCE)
-            {
-                EditorErrorDialog.DisplayDialog(GimmickError.AvatarRootPositionIsNotZero);
-                return;
-            }
-
             // Hipsボーンの取得
             gimmickData.HipsBone = AvatarUtility.GetAnimatorHipsBone(gimmickData.AvatarRootObject);
             if (gimmickData.HipsBone == null)
@@ -250,8 +243,13 @@ namespace Aramaa.DakochiteGimmick.Editor
                 return false;
             }
 
-            // ViewPositionはアバターローカル座標なので、Constraintの親のローカル座標に変換して設定
-            Vector3 viewPositionInConstraintParentLocal = constraintParentTransform.InverseTransformPoint(gimmickData.AvatarDescriptor.ViewPosition);
+            // 1. ViewPosition（アバターのローカル座標）をワールド座標に変換する
+            Vector3 viewPositionInWorld = gimmickData.AvatarDescriptor.transform.TransformPoint(gimmickData.AvatarDescriptor.ViewPosition);
+
+            // 2. ワールド座標に変換したViewPositionを、Constraintの親のローカル座標に変換する
+            Vector3 viewPositionInConstraintParentLocal = constraintParentTransform.InverseTransformPoint(viewPositionInWorld);
+
+            // 3. 変換したローカル座標を設定する
             eyeOffsetTransform.localPosition = viewPositionInConstraintParentLocal;
 
             // Headボーンの回転の逆をEyeOffsetのローカル回転に設定（Headの回転を打ち消すことで視線に合わせる）
