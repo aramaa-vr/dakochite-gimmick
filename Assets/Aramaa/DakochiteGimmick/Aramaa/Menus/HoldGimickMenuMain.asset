@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Parameters: {fileID: 0}
   controls:
-  - name: "\u3060\u3053\u3061\u3066\nver 1.0.6"
+  - name: "\u3060\u3053\u3061\u3066\nver 1.0.5"
     icon: {fileID: 2800000, guid: 670a2379dbed2e6418d831fa027db76c, type: 3}
     type: 103
     parameter:
