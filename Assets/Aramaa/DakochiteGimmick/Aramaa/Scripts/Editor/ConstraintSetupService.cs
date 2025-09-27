@@ -48,11 +48,11 @@ namespace Aramaa.DakochiteGimmick.Editor
             }
 
             // 疑似ビューポイントがずれるため、アバターのルートの座標が (0,0,0) からわずかでも離れている場合にエラーとする
-            if (Vector3.Distance(gimmickData.AvatarRootObject.transform.position, Vector3.zero) > GimmickConstants.AVATAR_ROOT_POSITION_TOLERANCE)
-            {
-                EditorErrorDialog.DisplayDialog(GimmickError.AvatarRootPositionIsNotZero);
-                return;
-            }
+            // if (Vector3.Distance(gimmickData.AvatarRootObject.transform.position, Vector3.zero) > GimmickConstants.AVATAR_ROOT_POSITION_TOLERANCE)
+            // {
+            // EditorErrorDialog.DisplayDialog(GimmickError.AvatarRootPositionIsNotZero);
+            // return;
+            // }
 
             // Hipsボーンの取得
             gimmickData.HipsBone = AvatarUtility.GetAnimatorHipsBone(gimmickData.AvatarRootObject);
@@ -242,16 +242,27 @@ namespace Aramaa.DakochiteGimmick.Editor
 
             // VRCParentConstraintが設定されたTransform（Constraintの親）
             Transform constraintParentTransform = eyeOffsetTransform.parent;
+            Transform avatarRoot = gimmickData.AvatarRootObject.transform; // アバタールートTransformを取得
 
             // Headの座標がVector3.zeroの場合、座標が更新されていないためエラー
-            if (constraintParentTransform == null || constraintParentTransform.position == Vector3.zero)
+            if (constraintParentTransform == null || constraintParentTransform.localPosition == Vector3.zero)
             {
                 EditorErrorDialog.DisplayDialog(GimmickError.ConstraintUpdateFailedOrTimedOut);
                 return false;
             }
 
-            // ViewPositionはアバターローカル座標なので、Constraintの親のローカル座標に変換して設定
-            Vector3 viewPositionInConstraintParentLocal = constraintParentTransform.InverseTransformPoint(gimmickData.AvatarDescriptor.ViewPosition);
+            // ver 1.0.7 アバターのルートオブジェクトの座標が(0, 0, 0)では無くてもビューポイントの自動生成ができるようにする対応
+
+            // 1. アバターのルートが原点にあると仮定した仮想のワールド座標でのViewPositionを取得
+            //    (ViewPositionからアバタールートのワールド座標を加算)
+            Vector3 virtualViewPositionWorld = gimmickData.AvatarDescriptor.ViewPosition + avatarRoot.position;
+
+            // 2. Constraintの親のワールド→ローカル変換行列を取得
+            Matrix4x4 constraintParentWorldToLocalMatrix = constraintParentTransform.worldToLocalMatrix;
+
+            // 3. 仮想のワールド座標を、行列を使ってConstraintの親のローカル座標に変換
+            Vector3 viewPositionInConstraintParentLocal = constraintParentWorldToLocalMatrix.MultiplyPoint(virtualViewPositionWorld);
+
             eyeOffsetTransform.localPosition = viewPositionInConstraintParentLocal;
 
             // Headボーンの回転の逆をEyeOffsetのローカル回転に設定（Headの回転を打ち消すことで視線に合わせる）
