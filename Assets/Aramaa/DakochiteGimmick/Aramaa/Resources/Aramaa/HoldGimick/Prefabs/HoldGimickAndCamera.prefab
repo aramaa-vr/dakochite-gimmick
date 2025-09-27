@@ -83,7 +83,7 @@ MonoBehaviour:
   SolveInLocalSpace: 0
   FreezeToWorld: 0
   RebakeOffsetsWhenUnfrozen: 0
-  Locked: 0
+  Locked: 1
   Sources:
     source0:
       SourceTransform: {fileID: 1305855000454257222}
@@ -170,7 +170,7 @@ MonoBehaviour:
   cachedExecutionGroupIndex: -1
   latestValidExecutionGroupIndex: -1
   RotationAtRest: {x: -0, y: 0, z: 0}
-  RotationOffset: {x: -0, y: 0, z: 0}
+  RotationOffset: {x: 0, y: 0, z: 0}
   AffectsRotationX: 1
   AffectsRotationY: 1
   AffectsRotationZ: 1
@@ -1314,7 +1314,7 @@ MonoBehaviour:
       SourceTransform: {fileID: 4689861409897021393}
       Weight: 1
       ParentPositionOffset: {x: 0, y: 0, z: 0}
-      ParentRotationOffset: {x: 0, y: 0, z: 0}
+      ParentRotationOffset: {x: -0, y: 0, z: 0}
     source1:
       SourceTransform: {fileID: 0}
       Weight: 0
@@ -1394,11 +1394,11 @@ MonoBehaviour:
     overflowList: []
   cachedExecutionGroupIndex: 0
   latestValidExecutionGroupIndex: 0
-  PositionAtRest: {x: -0.0000023841883, y: 0.10462719, z: 9.996193}
+  PositionAtRest: {x: 0, y: 0, z: 0}
   AffectsPositionX: 1
   AffectsPositionY: 1
   AffectsPositionZ: 1
-  RotationAtRest: {x: -0, y: -0, z: -0}
+  RotationAtRest: {x: -0, y: 0, z: 0}
   AffectsRotationX: 1
   AffectsRotationY: 1
   AffectsRotationZ: 1
@@ -12301,7 +12301,7 @@ MonoBehaviour:
       SourceTransform: {fileID: 515961428100919226}
       Weight: 1
       ParentPositionOffset: {x: 0, y: 0, z: 0}
-      ParentRotationOffset: {x: -0, y: 0, z: 0}
+      ParentRotationOffset: {x: 0, y: 0, z: 0}
     source1:
       SourceTransform: {fileID: 0}
       Weight: 0
@@ -12691,7 +12691,7 @@ MonoBehaviour:
     overflowList: []
   cachedExecutionGroupIndex: 0
   latestValidExecutionGroupIndex: 0
-  PositionAtRest: {x: -0.00011370045, y: 0.41833866, z: 0.010763676}
+  PositionAtRest: {x: 0, y: 0, z: 0}
   AffectsPositionX: 1
   AffectsPositionY: 1
   AffectsPositionZ: 1
@@ -12868,7 +12868,7 @@ MonoBehaviour:
     overflowList: []
   cachedExecutionGroupIndex: 0
   latestValidExecutionGroupIndex: 0
-  PositionAtRest: {x: -0.00011370045, y: 0.41833866, z: 0.010763676}
+  PositionAtRest: {x: 0, y: 0, z: 0}
   AffectsPositionX: 1
   AffectsPositionY: 1
   AffectsPositionZ: 1
@@ -17984,7 +17984,7 @@ MonoBehaviour:
     overflowList: []
   cachedExecutionGroupIndex: 0
   latestValidExecutionGroupIndex: 0
-  PositionAtRest: {x: -0.00011370045, y: 0.41833866, z: 0.010763676}
+  PositionAtRest: {x: 0, y: 0, z: 0}
   AffectsPositionX: 1
   AffectsPositionY: 1
   AffectsPositionZ: 1
@@ -18290,7 +18290,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8670819681732522416}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -18401,11 +18401,11 @@ MonoBehaviour:
     overflowList: []
   cachedExecutionGroupIndex: 1
   latestValidExecutionGroupIndex: 1
-  PositionAtRest: {x: 0, y: 0.749413, z: 0}
+  PositionAtRest: {x: 0, y: 0, z: 0}
   AffectsPositionX: 1
   AffectsPositionY: 1
   AffectsPositionZ: 1
-  RotationAtRest: {x: -0, y: -0, z: -0}
+  RotationAtRest: {x: -0, y: 0, z: 0}
   AffectsRotationX: 0
   AffectsRotationY: 0
   AffectsRotationZ: 0
