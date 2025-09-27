@@ -237,7 +237,7 @@ namespace Aramaa.DakochiteGimmick.Editor
             Transform constraintParentTransform = eyeOffsetTransform.parent;
 
             // Headの座標がVector3.zeroの場合、座標が更新されていないためエラー
-            if (constraintParentTransform == null || constraintParentTransform.position == Vector3.zero)
+            if (constraintParentTransform == null || constraintParentTransform.localPosition == Vector3.zero)
             {
                 EditorErrorDialog.DisplayDialog(GimmickError.ConstraintUpdateFailedOrTimedOut);
                 return false;
