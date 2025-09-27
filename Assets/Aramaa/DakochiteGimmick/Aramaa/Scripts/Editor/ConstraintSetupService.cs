@@ -244,7 +244,8 @@ namespace Aramaa.DakochiteGimmick.Editor
             }
 
             // 1. ViewPosition（アバターのローカル座標）をワールド座標に変換する
-            Vector3 viewPositionInWorld = gimmickData.AvatarDescriptor.transform.TransformPoint(gimmickData.AvatarDescriptor.ViewPosition);
+            // ViewPositionそのものはスケールの値に依存しない作りのため別途加算にする
+            Vector3 viewPositionInWorld = gimmickData.AvatarDescriptor.transform.position + gimmickData.AvatarDescriptor.ViewPosition;
 
             // 2. ワールド座標に変換したViewPositionを、Constraintの親のローカル座標に変換する
             Vector3 viewPositionInConstraintParentLocal = constraintParentTransform.InverseTransformPoint(viewPositionInWorld);
