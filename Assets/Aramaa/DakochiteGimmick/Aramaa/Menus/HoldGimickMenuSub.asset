@@ -47,7 +47,7 @@ MonoBehaviour:
     subParameters:
     - name: 
     labels: []
-  - name: "\u30A2\u30D4\u30FC\u30EB"
+  - name: "\u7D76\u5BFE\u3060\u3053\u3061\u3066\n\u30A2\u30D4\u30FC\u30EB\uFF01"
     icon: {fileID: 2800000, guid: d0fb37772aa467e4c8f49d4a6b773480, type: 3}
     type: 203
     parameter:
