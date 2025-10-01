@@ -19,7 +19,8 @@
     "vpmDependencies": {
         "com.vrchat.avatars": ">=3.8.2",
         "com.vrchat.base": ">=3.8.2",
-        "nadena.dev.modular-avatar": ">=1.12.5"
+        "nadena.dev.modular-avatar": ">=1.12.5",
+        "jp.lilxyzw.liltoon": ">=1.7.3"
     },
     "type": "avatar",
     "keywords": [
