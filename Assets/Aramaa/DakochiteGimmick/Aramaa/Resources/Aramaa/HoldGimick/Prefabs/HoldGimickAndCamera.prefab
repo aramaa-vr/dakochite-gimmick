@@ -1163,7 +1163,7 @@ Animator:
   m_GameObject: {fileID: 2306519996578395267}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: e0d5bb53dfd075a49b06564511cf58ed, type: 2}
+  m_Controller: {fileID: 9100000, guid: cc77743135e30ec40a60c257160290bc, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -7427,9 +7427,9 @@ ParticleSystem:
         m_RotationOrder: 4
     startSpeed:
       serializedVersion: 2
-      minMaxState: 0
-      scalar: 0.03
-      minScalar: 5
+      minMaxState: 3
+      scalar: 0.04
+      minScalar: 0.04
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -8010,7 +8010,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0.5
     randomPositionAmount: 0
     radius:
-      value: 0.25
+      value: 0.27
       mode: 0
       spread: 0
       speed:
@@ -19050,7 +19050,7 @@ ParticleSystem:
         m_RotationOrder: 4
     randomizeRotationDirection: 0
     gravitySource: 0
-    maxNumParticles: 1000
+    maxNumParticles: 200
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
