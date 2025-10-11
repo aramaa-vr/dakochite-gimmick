@@ -19,11 +19,13 @@ Material Symbols and Iconsは、Apache License 2.0の下で提供されていま
 
 **著作権情報:**
 Material Symbols and Iconsの著作権は、Google LLCに帰属します。
+**本プロジェクトには、Apache License 2.0の定めに基づき、ライセンス全文（LICENSEファイル）および著作権通知（NOTICEファイル）を同梱しています。**
+Assets\Aramaa\DakochiteGimmick\Google\Material_Symbols_and_Icons\LICENSE
 
 ---
 
 **改変について:**
-本プロジェクトで使用しているMaterial Symbols and Iconsの一部は、元のデザインに対して**改変**が加えられています。
+本プロジェクトで使用しているMaterial Symbols and Iconsは、元のデザインに対して**改変**が加えられています。
 
 ---
 
@@ -73,6 +75,24 @@ otologicのウェブサイトで、より詳細な情報や素材のダウンロ
 **著作権情報:**
 本プロジェクトでは「こども丸ゴシック」フォントを使用して文字を画像化し、さらに画像として改変したものを含みます。  
 フォントの著作権は fontopo に帰属し、利用にあたっては同サイトの利用規約を遵守しています。  
+フォントファイル自体は配布していません。
+
+---
+
+## 4. にくまるフォント（NikumaruFont）
+
+**提供元:** Copyright(c) 2014 M+ FONTS PROJECT
+
+**ライセンス:** SIL Open Font License (OFL) に準拠
+
+**ライセンス全文:**
+[http://www.fontna.com/blog/1651/](http://www.fontna.com/blog/1651/)
+
+---
+
+**著作権情報:**
+本プロジェクトでは「にくまるフォント」フォントを使用して文字を画像化し、さらに画像として改変したものを含みます。  
+フォントの著作権は、ベースとなった M+ FONTS PROJECT および にくまるフォントの作者に帰属します。
 フォントファイル自体は配布していません。
 
 ---
