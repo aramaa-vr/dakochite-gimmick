@@ -16,9 +16,6 @@
     "legacyFolders": {
         "Assets\\Aramaa\\HoldGimick": "68e9b3fe244621a4b9e799b1ff081200"
     },
-    "vpmDependencies": {
-        "nadena.dev.modular-avatar": ">=1.12.5"
-    },
     "type": "avatar",
     "keywords": [
         "VRChat",
