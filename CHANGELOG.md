@@ -1,9 +1,12 @@
 # 更新履歴 (CHANGELOG)
 
+## Version 1.1.2
+* VCC用のバージョン作成
 ---
 
 ## Version 1.1.1
 * Boothからdakochite-gimmick-x.x.x.zipのパッケージをダウンロードした場合、最新バージョンを取得できなかった不具合を修正
+* 不具合修正後確認した所、SDKが古い場合、パッケージ経由でmodular-avatarからSDKの更新処理が走った際Unityでエラーが出るため最新バージョンは取得しないように修正
 
 ---
 
