@@ -975,7 +975,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parameters:
-  - nameOrPrefix: HoldType
+  - nameOrPrefix: DakochiteGimmick/HoldType
     remapTo: 
     internalParameter: 0
     isPrefix: 0
@@ -985,7 +985,7 @@ MonoBehaviour:
     saved: 1
     hasExplicitDefaultValue: 1
     m_overrideAnimatorDefaults: 0
-  - nameOrPrefix: IsCameraChange
+  - nameOrPrefix: DakochiteGimmick/IsCameraChange
     remapTo: 
     internalParameter: 0
     isPrefix: 0
@@ -995,7 +995,7 @@ MonoBehaviour:
     saved: 1
     hasExplicitDefaultValue: 1
     m_overrideAnimatorDefaults: 0
-  - nameOrPrefix: IsEffect
+  - nameOrPrefix: DakochiteGimmick/IsEffect
     remapTo: 
     internalParameter: 0
     isPrefix: 0
@@ -1005,7 +1005,7 @@ MonoBehaviour:
     saved: 1
     hasExplicitDefaultValue: 1
     m_overrideAnimatorDefaults: 0
-  - nameOrPrefix: IsDieRoll
+  - nameOrPrefix: DakochiteGimmick/IsDieRoll
     remapTo: 
     internalParameter: 0
     isPrefix: 0
@@ -1015,7 +1015,7 @@ MonoBehaviour:
     saved: 0
     hasExplicitDefaultValue: 1
     m_overrideAnimatorDefaults: 0
-  - nameOrPrefix: CemeraNear
+  - nameOrPrefix: DakochiteGimmick/CemeraNear
     remapTo: 
     internalParameter: 0
     isPrefix: 0
@@ -1025,7 +1025,7 @@ MonoBehaviour:
     saved: 1
     hasExplicitDefaultValue: 1
     m_overrideAnimatorDefaults: 0
-  - nameOrPrefix: IsCemeraNear
+  - nameOrPrefix: DakochiteGimmick/IsCemeraNear
     remapTo: 
     internalParameter: 0
     isPrefix: 0
@@ -1035,7 +1035,7 @@ MonoBehaviour:
     saved: 0
     hasExplicitDefaultValue: 1
     m_overrideAnimatorDefaults: 0
-  - nameOrPrefix: HoldBone_IsGrabbed
+  - nameOrPrefix: DakochiteGimmick/HoldBone_IsGrabbed
     remapTo: 
     internalParameter: 0
     isPrefix: 0
@@ -1045,7 +1045,7 @@ MonoBehaviour:
     saved: 0
     hasExplicitDefaultValue: 1
     m_overrideAnimatorDefaults: 0
-  - nameOrPrefix: DakochiteTextEmission
+  - nameOrPrefix: DakochiteGimmick/DakochiteTextEmission
     remapTo: 
     internalParameter: 0
     isPrefix: 0
@@ -1055,7 +1055,7 @@ MonoBehaviour:
     saved: 1
     hasExplicitDefaultValue: 1
     m_overrideAnimatorDefaults: 0
-  - nameOrPrefix: IsManualShow
+  - nameOrPrefix: DakochiteGimmick/IsManualShow
     remapTo: 
     internalParameter: 0
     isPrefix: 0
@@ -6725,7 +6725,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   isAnimated: 0
   resetWhenDisabled: 0
-  parameter: HoldBone
+  parameter: DakochiteGimmick/HoldBone
   showGizmos: 1
   boneOpacity: 0.5
   limitOpacity: 0.5

@@ -9,7 +9,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: IsManualShow
+    m_ConditionEvent: DakochiteGimmick/IsManualShow
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 2591170167066148004}
@@ -34,7 +34,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: IsManualShow
+    m_ConditionEvent: DakochiteGimmick/IsManualShow
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 5239355307148320135}
@@ -85,7 +85,7 @@ AnimatorController:
   m_Name: ManualController
   serializedVersion: 5
   m_AnimatorParameters:
-  - m_Name: IsManualShow
+  - m_Name: DakochiteGimmick/IsManualShow
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -196,7 +196,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: IsManualShow
+    m_ConditionEvent: DakochiteGimmick/IsManualShow
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -2128436869859025562}

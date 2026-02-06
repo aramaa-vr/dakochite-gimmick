@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parameters:
   - type: 0
-    name: IsDieRoll
+    name: DakochiteGimmick/IsDieRoll
     source: 
     value: 1
     valueMin: 0
@@ -98,7 +98,7 @@ AnimatorStateTransition:
     m_ConditionEvent: IsLocal
     m_EventTreshold: 0
   - m_ConditionMode: 7
-    m_ConditionEvent: HoldType
+    m_ConditionEvent: DakochiteGimmick/HoldType
     m_EventTreshold: 3
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 6075316005714129756}
@@ -203,10 +203,10 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: HoldType
+    m_ConditionEvent: DakochiteGimmick/HoldType
     m_EventTreshold: 3
   - m_ConditionMode: 1
-    m_ConditionEvent: HoldBone_IsGrabbed
+    m_ConditionEvent: DakochiteGimmick/HoldBone_IsGrabbed
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 8895525770655439169}
@@ -335,48 +335,48 @@ AnimatorController:
   m_Name: HoldDie
   serializedVersion: 5
   m_AnimatorParameters:
-  - m_Name: HoldType
+  - m_Name: DakochiteGimmick/HoldType
     m_Type: 3
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: HoldBone_IsGrabbed
+    m_Controller: {fileID: 0}
+  - m_Name: DakochiteGimmick/HoldBone_IsGrabbed
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: isAlwaysFalse
+    m_Controller: {fileID: 0}
+  - m_Name: DakochiteGimmick/isAlwaysFalse
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: GestureLeft
     m_Type: 3
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: GestureRight
     m_Type: 3
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: IsDieRoll
+    m_Controller: {fileID: 0}
+  - m_Name: DakochiteGimmick/IsDieRoll
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: IsLocal
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: HoldDie
@@ -421,7 +421,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: isAlwaysFalse
+    m_ConditionEvent: DakochiteGimmick/isAlwaysFalse
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -2890693021306021691}
@@ -574,7 +574,7 @@ AnimatorStateTransition:
     m_ConditionEvent: IsLocal
     m_EventTreshold: 0
   - m_ConditionMode: 2
-    m_ConditionEvent: IsDieRoll
+    m_ConditionEvent: DakochiteGimmick/IsDieRoll
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 6075316005714129756}
@@ -708,7 +708,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parameters:
   - type: 0
-    name: IsDieRoll
+    name: DakochiteGimmick/IsDieRoll
     source: 
     value: 0
     valueMin: 0
@@ -730,10 +730,10 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: HoldType
+    m_ConditionEvent: DakochiteGimmick/HoldType
     m_EventTreshold: 3
   - m_ConditionMode: 1
-    m_ConditionEvent: IsDieRoll
+    m_ConditionEvent: DakochiteGimmick/IsDieRoll
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 8895525770655439169}

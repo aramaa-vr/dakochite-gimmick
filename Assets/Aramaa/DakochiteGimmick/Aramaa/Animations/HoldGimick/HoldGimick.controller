@@ -75,7 +75,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: HoldType
+    m_ConditionEvent: DakochiteGimmick/HoldType
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 2019933287485510311}
@@ -149,7 +149,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: HoldBone_IsGrabbed
+    m_ConditionEvent: DakochiteGimmick/HoldBone_IsGrabbed
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -1477384862566017136}
@@ -221,10 +221,10 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: HoldBone_IsGrabbed
+    m_ConditionEvent: DakochiteGimmick/HoldBone_IsGrabbed
     m_EventTreshold: 0
   - m_ConditionMode: 2
-    m_ConditionEvent: HoldBone_IsPosed
+    m_ConditionEvent: DakochiteGimmick/HoldBone_IsPosed
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 2019933287485510311}
@@ -249,16 +249,16 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: HoldBone_IsGrabbed
+    m_ConditionEvent: DakochiteGimmick/HoldBone_IsGrabbed
     m_EventTreshold: 0
   - m_ConditionMode: 2
-    m_ConditionEvent: HoldBone_IsPosed
+    m_ConditionEvent: DakochiteGimmick/HoldBone_IsPosed
     m_EventTreshold: 0
   - m_ConditionMode: 2
-    m_ConditionEvent: IsDieRoll
+    m_ConditionEvent: DakochiteGimmick/IsDieRoll
     m_EventTreshold: 0
   - m_ConditionMode: 2
-    m_ConditionEvent: IsCemeraNear
+    m_ConditionEvent: DakochiteGimmick/IsCemeraNear
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 5839197056717465688}
@@ -283,10 +283,10 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 7
-    m_ConditionEvent: HoldType
+    m_ConditionEvent: DakochiteGimmick/HoldType
     m_EventTreshold: 0
   - m_ConditionMode: 2
-    m_ConditionEvent: IsDieRoll
+    m_ConditionEvent: DakochiteGimmick/IsDieRoll
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 2684862257110143520}
@@ -340,7 +340,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: HoldType
+    m_ConditionEvent: DakochiteGimmick/HoldType
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -8195669180281921256}
@@ -365,7 +365,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: IsEffect
+    m_ConditionEvent: DakochiteGimmick/IsEffect
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -8195669180281921256}
@@ -417,7 +417,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: isAlwaysFalse
+    m_ConditionEvent: DakochiteGimmick/isAlwaysFalse
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -1886849895570333065}
@@ -442,13 +442,13 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 7
-    m_ConditionEvent: HoldType
+    m_ConditionEvent: DakochiteGimmick/HoldType
     m_EventTreshold: 0
   - m_ConditionMode: 1
-    m_ConditionEvent: HoldBone_IsGrabbed
+    m_ConditionEvent: DakochiteGimmick/HoldBone_IsGrabbed
     m_EventTreshold: 0
   - m_ConditionMode: 1
-    m_ConditionEvent: IsEffect
+    m_ConditionEvent: DakochiteGimmick/IsEffect
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -2764525535713046460}
@@ -544,7 +544,7 @@ AnimatorState:
   m_SpeedParameter: 
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
-  m_TimeParameter: CemeraNear
+  m_TimeParameter: DakochiteGimmick/CemeraNear
 --- !u!1101 &-3694395763755784407
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -554,7 +554,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: IsCemeraNear
+    m_ConditionEvent: DakochiteGimmick/IsCemeraNear
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -6402215452051142689}
@@ -579,7 +579,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 7
-    m_ConditionEvent: HoldType
+    m_ConditionEvent: DakochiteGimmick/HoldType
     m_EventTreshold: 3
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 861314961600363942}
@@ -604,10 +604,10 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: IsCameraChange
+    m_ConditionEvent: DakochiteGimmick/IsCameraChange
     m_EventTreshold: 0
   - m_ConditionMode: 2
-    m_ConditionEvent: IsCemeraNear
+    m_ConditionEvent: DakochiteGimmick/IsCemeraNear
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 5839197056717465688}
@@ -686,7 +686,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: IsEffect
+    m_ConditionEvent: DakochiteGimmick/IsEffect
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 2248725646045463160}
@@ -711,7 +711,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: isAlwaysFalse
+    m_ConditionEvent: DakochiteGimmick/isAlwaysFalse
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 5702337356648652431}
@@ -789,7 +789,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: HoldBone_IsGrabbed
+    m_ConditionEvent: DakochiteGimmick/HoldBone_IsGrabbed
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -4974487356825588312}
@@ -840,7 +840,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: HoldType
+    m_ConditionEvent: DakochiteGimmick/HoldType
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 2248725646045463160}
@@ -893,7 +893,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: HoldBone_IsGrabbed
+    m_ConditionEvent: DakochiteGimmick/HoldBone_IsGrabbed
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 2248725646045463160}
@@ -918,7 +918,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: HoldType
+    m_ConditionEvent: DakochiteGimmick/HoldType
     m_EventTreshold: 2
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -1620082892273408262}
@@ -943,7 +943,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: HoldType
+    m_ConditionEvent: DakochiteGimmick/HoldType
     m_EventTreshold: 3
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 2846683464542568309}
@@ -968,7 +968,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: HoldType
+    m_ConditionEvent: DakochiteGimmick/HoldType
     m_EventTreshold: 2
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 2275699237009978590}
@@ -993,7 +993,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: HoldType
+    m_ConditionEvent: DakochiteGimmick/HoldType
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -1960877522176021164}
@@ -1018,60 +1018,60 @@ AnimatorController:
   m_Name: HoldGimick
   serializedVersion: 5
   m_AnimatorParameters:
-  - m_Name: HoldType
+  - m_Name: DakochiteGimmick/HoldType
     m_Type: 3
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: HoldBone_IsGrabbed
+    m_Controller: {fileID: 0}
+  - m_Name: DakochiteGimmick/HoldBone_IsGrabbed
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: HoldBone_IsPosed
+    m_Controller: {fileID: 0}
+  - m_Name: DakochiteGimmick/HoldBone_IsPosed
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: IsCameraChange
+    m_Controller: {fileID: 0}
+  - m_Name: DakochiteGimmick/IsCameraChange
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: IsEffect
+    m_Controller: {fileID: 0}
+  - m_Name: DakochiteGimmick/IsEffect
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: IsDieRoll
+    m_Controller: {fileID: 0}
+  - m_Name: DakochiteGimmick/IsDieRoll
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: CemeraNear
+    m_Controller: {fileID: 0}
+  - m_Name: DakochiteGimmick/CemeraNear
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: IsCemeraNear
+    m_Controller: {fileID: 0}
+  - m_Name: DakochiteGimmick/IsCemeraNear
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
-  - m_Name: isAlwaysFalse
+    m_Controller: {fileID: 0}
+  - m_Name: DakochiteGimmick/isAlwaysFalse
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Mode
@@ -1178,7 +1178,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: HoldType
+    m_ConditionEvent: DakochiteGimmick/HoldType
     m_EventTreshold: 3
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 4537841942251762224}
@@ -1310,7 +1310,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: IsDieRoll
+    m_ConditionEvent: DakochiteGimmick/IsDieRoll
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -4889121044675717332}
@@ -1472,7 +1472,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: HoldType
+    m_ConditionEvent: DakochiteGimmick/HoldType
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -4889121044675717332}
@@ -1576,7 +1576,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: HoldBone_IsGrabbed
+    m_ConditionEvent: DakochiteGimmick/HoldBone_IsGrabbed
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 2248725646045463160}
@@ -1601,7 +1601,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: HoldType
+    m_ConditionEvent: DakochiteGimmick/HoldType
     m_EventTreshold: 3
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -2773756260371124374}
@@ -1626,10 +1626,10 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: HoldType
+    m_ConditionEvent: DakochiteGimmick/HoldType
     m_EventTreshold: 0
   - m_ConditionMode: 2
-    m_ConditionEvent: IsCemeraNear
+    m_ConditionEvent: DakochiteGimmick/IsCemeraNear
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 5839197056717465688}
@@ -1707,13 +1707,13 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 7
-    m_ConditionEvent: HoldType
+    m_ConditionEvent: DakochiteGimmick/HoldType
     m_EventTreshold: 0
   - m_ConditionMode: 7
-    m_ConditionEvent: HoldType
+    m_ConditionEvent: DakochiteGimmick/HoldType
     m_EventTreshold: 3
   - m_ConditionMode: 1
-    m_ConditionEvent: HoldBone_IsGrabbed
+    m_ConditionEvent: DakochiteGimmick/HoldBone_IsGrabbed
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -5795894474936217783}
@@ -1738,7 +1738,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: HoldType
+    m_ConditionEvent: DakochiteGimmick/HoldType
     m_EventTreshold: 1
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 2275699237009978590}
@@ -1900,13 +1900,13 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 7
-    m_ConditionEvent: HoldType
+    m_ConditionEvent: DakochiteGimmick/HoldType
     m_EventTreshold: 0
   - m_ConditionMode: 1
-    m_ConditionEvent: HoldBone_IsGrabbed
+    m_ConditionEvent: DakochiteGimmick/HoldBone_IsGrabbed
     m_EventTreshold: 0
   - m_ConditionMode: 1
-    m_ConditionEvent: IsEffect
+    m_ConditionEvent: DakochiteGimmick/IsEffect
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 2938894707149618014}
@@ -1931,7 +1931,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 6
-    m_ConditionEvent: HoldType
+    m_ConditionEvent: DakochiteGimmick/HoldType
     m_EventTreshold: 1
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 6235497644076039767}
@@ -1956,13 +1956,13 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 7
-    m_ConditionEvent: HoldType
+    m_ConditionEvent: DakochiteGimmick/HoldType
     m_EventTreshold: 0
   - m_ConditionMode: 1
-    m_ConditionEvent: IsCameraChange
+    m_ConditionEvent: DakochiteGimmick/IsCameraChange
     m_EventTreshold: 0
   - m_ConditionMode: 1
-    m_ConditionEvent: HoldBone_IsGrabbed
+    m_ConditionEvent: DakochiteGimmick/HoldBone_IsGrabbed
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -6402215452051142689}
@@ -2012,7 +2012,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: HoldBone_IsGrabbed
+    m_ConditionEvent: DakochiteGimmick/HoldBone_IsGrabbed
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -8195669180281921256}
