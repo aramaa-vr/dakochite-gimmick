@@ -13,7 +13,27 @@
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [],
-    "versionDefines": [],
+    "defineConstraints": [
+        "VALID_VRCSDK_BASE",
+        "VALID_VRCSDK3_AVATARS",
+        "VALID_MODULAR_AVATAR"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.vrchat.base",
+            "expression": "3.8.2",
+            "define": "VALID_VRCSDK_BASE"
+        },
+        {
+            "name": "com.vrchat.avatars",
+            "expression": "3.8.2",
+            "define": "VALID_VRCSDK3_AVATARS"
+        },
+        {
+            "name": "nadena.dev.modular-avatar",
+            "expression": "1.12.5",
+            "define": "VALID_MODULAR_AVATAR"
+        }
+    ],
     "noEngineReferences": false
 }
