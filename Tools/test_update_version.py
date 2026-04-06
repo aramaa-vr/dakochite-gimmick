@@ -1,6 +1,6 @@
 import unittest
 
-import update_version
+from Tools import update_version
 
 
 class UpdateVersionTests(unittest.TestCase):
