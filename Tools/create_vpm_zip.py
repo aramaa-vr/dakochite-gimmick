@@ -112,7 +112,22 @@ def create_zip_from_temp(temp_dir: Path, zip_file_path: Path) -> None:
                 zip_file.write(file_path, arcname)
 
 
+def configure_console_encoding() -> None:
+    """Windows 環境での文字化けを抑えるため標準出力/標準エラーを UTF-8 に寄せる。"""
+    if os.name != "nt":
+        return
+
+    for stream_name in ("stdout", "stderr"):
+        stream = getattr(sys, stream_name, None)
+        if stream is None:
+            continue
+        reconfigure = getattr(stream, "reconfigure", None)
+        if callable(reconfigure):
+            reconfigure(encoding="utf-8", errors="replace")
+
+
 def main() -> int:
+    configure_console_encoding()
     args = parse_args()
 
     try:
