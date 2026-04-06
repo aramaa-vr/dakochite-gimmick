@@ -106,9 +106,6 @@ def create_zip_from_temp(temp_dir: Path, zip_file_path: Path) -> None:
             files.sort()
             root_path = Path(root)
             relative_root = root_path.relative_to(temp_dir)
-            if not files and not dirs and relative_root != Path("."):
-                zip_file.writestr(relative_root.as_posix().rstrip("/") + "/", "")
-                continue
             for file_name in files:
                 file_path = root_path / file_name
                 arcname = (relative_root / file_name).as_posix()
