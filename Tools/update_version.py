@@ -54,12 +54,21 @@ def parse_version(version: str) -> str:
     return version
 
 
+def to_system_version(version: str) -> str:
+    """System.Version が受け付ける形式 (major.minor.patch[.revision]) に寄せる。"""
+    core = version.split("-", 1)[0].split("+", 1)[0]
+    if not re.fullmatch(r"\d+\.\d+\.\d+(?:\.\d+)?", core):
+        raise ValueError(f"Unsupported System.Version format: {version}")
+    return core
+
+
 def update_package_updater(version: str, dry_run: bool) -> None:
     ensure_file_exists(PACKAGE_UPDATER_CS)
     content = read_text(PACKAGE_UPDATER_CS)
+    system_version = to_system_version(version)
     new_content, count = re.subn(
         r'(public const string LOCAL_INSTALLED_VERSION = ")([^"]+)(";)',
-        rf"\g<1>{version}\g<3>",
+        rf"\g<1>{system_version}\g<3>",
         content,
     )
     if count != 1:
@@ -150,6 +159,13 @@ def main() -> int:
         help="Validate and report changes without writing files.",
     )
     args = parser.parse_args()
+    system_version = to_system_version(args.version)
+    if system_version != args.version:
+        print(
+            "[info] PackageUpdater.cs uses System.Version, "
+            f"so LOCAL_INSTALLED_VERSION will be set to {system_version}.",
+            file=sys.stderr,
+        )
 
     try:
         # 先に全ファイルを検証して、途中失敗による部分更新を防ぐ。
