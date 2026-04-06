@@ -25,7 +25,7 @@ def find_repo_root(start: Path) -> Path:
     raise FileNotFoundError("スクリプト配置場所からリポジトリルートを特定できませんでした。")
 
 
-ROOT = find_repo_root(Path(__file__).resolve())
+ROOT = find_repo_root(Path(__file__).resolve().parent)
 PACKAGE_JSON = ROOT / "Assets/Aramaa/DakochiteGimmick/package.json"
 PACKAGE_UPDATER_CS = ROOT / "Assets/Aramaa/DakochiteGimmick/Aramaa/Scripts/Editor/PackageUpdater.cs"
 HOLD_MENU_ASSET = ROOT / "Assets/Aramaa/DakochiteGimmick/Aramaa/Menus/HoldGimickMenuMain.asset"
