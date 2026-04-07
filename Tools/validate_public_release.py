@@ -236,6 +236,34 @@ def check_secrets(root: Path, result: CheckResult) -> None:
         result.error("機密情報の疑いがある文字列を検出しました: " + ", ".join(findings[:20]))
 
 
+def build_zip_tree_lines(names: list[str]) -> list[str]:
+    root: dict[str, dict] = {}
+    for raw_name in sorted(names):
+        normalized = raw_name.rstrip("/")
+        if not normalized:
+            continue
+        parts = [part for part in normalized.split("/") if part]
+        cursor = root
+        for part in parts:
+            cursor = cursor.setdefault(part, {})
+
+    lines: list[str] = []
+
+    def append_lines(tree: dict[str, dict], prefix: str = "") -> None:
+        keys = sorted(tree.keys())
+        for idx, key in enumerate(keys):
+            is_last = idx == len(keys) - 1
+            connector = "└─ " if is_last else "├─ "
+            child = tree[key]
+            suffix = "/" if child else ""
+            lines.append(f"{prefix}{connector}{key}{suffix}")
+            next_prefix = f"{prefix}{'   ' if is_last else '│  '}"
+            append_lines(child, next_prefix)
+
+    append_lines(root)
+    return lines
+
+
 def check_build_zip_contents(root: Path, package: dict[str, object], result: CheckResult) -> None:
     version = package.get("version")
     if not isinstance(version, str) or not version:
@@ -254,6 +282,14 @@ def check_build_zip_contents(root: Path, package: dict[str, object], result: Che
     except zipfile.BadZipFile:
         result.error(f"Build ZIP の読み込みに失敗しました: {zip_rel.as_posix()}")
         return
+
+    if not names:
+        result.warn(f"Build ZIP が空です: {zip_rel.as_posix()}")
+        return
+
+    log_info(f"Build ZIP エントリ数: {len(names)}")
+    for line in build_zip_tree_lines(names):
+        log_info(f"[ZIP] {line}")
 
     findings = [
         name for name in names if name and not name.endswith("/") and is_purchase_required_asset(name)
