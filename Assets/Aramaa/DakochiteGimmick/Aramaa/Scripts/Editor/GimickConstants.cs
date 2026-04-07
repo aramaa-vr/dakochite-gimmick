@@ -9,10 +9,19 @@ namespace Aramaa.DakochiteGimmick.Editor
         public const string DOCUMENTATION_URL = "https://docs.google.com/document/d/141h1qxOo8ZeFPDXLFmx2fjn6jsYxf7dL6XJkSFxztec/edit?usp=sharing";
         public const string CHANGELOG_URL = "https://aramaa-vr.github.io/dakochite-gimmick/CHANGELOG.md";
 
+        // Version Check
+        public const int LATEST_JSON_SCHEMA_VERSION = 1;
+        public const string TARGET_PACKAGE_ID = "jp.aramaa.dakochite-gimmick";
+        public const string LATEST_VERSION_URL = "https://aramaa-vr.github.io/vpm-repos/latest.json";
+        public const string CURRENT_VERSION = "1.1.3-beta.1";
+        public const string VERSION_ERROR_MISSING_URL = "最新版URLが設定されていません。";
+        public const string VERSION_ERROR_INVALID_URL = "URLが不正です。";
+        public const string VERSION_EXTRACT_FAILED = "最新版情報の抽出に失敗しました。";
+
         // ====================================================================================================
         // UI / メニュー
         // ====================================================================================================
-        public static readonly string WINDOW_TITLE = $"{PackageUpdater.LOCAL_INSTALLED_VERSION} dakochite gimmick みんなでつかめるだこちてギミック";
+        public static readonly string WINDOW_TITLE = $"{GimmickConstants.CURRENT_VERSION} dakochite gimmick みんなでつかめるだこちてギミック";
         public const string MENU_PATH = "Aramaa/dakochite gimmick みんなでつかめるだこちてギミック";
         public const string BUTTON_GENERATE_OR_REGENERATE_TEXT = "ギミックを生成 / 削除";
         public const string BUTTON_GENERATE_OR_REGENERATE_TOOLTIP = "選択したアバターにギミックを生成します。既にギミックがある場合は削除されます。";

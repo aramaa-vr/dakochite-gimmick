@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 
@@ -42,7 +41,7 @@ namespace Aramaa.DakochiteGimmick.Editor
         /// </summary>
         private const string LOGO_RESOURCES_PATH = "Aramaa/HoldGimick/Images/dako_gimmick_icon";
 
-        private PackageUpdater.PackageUpdateState _currentUpdateState = PackageUpdater.PackageUpdateState.Unknown;
+        private DGVersionStatus _currentUpdateState = DGVersionStatus.Unknown;
         private string _updateMessage = "バージョン情報を確認中...";
 
         // ====================================================================================================
@@ -94,7 +93,7 @@ namespace Aramaa.DakochiteGimmick.Editor
         /// <summary>
         /// ウィンドウが有効になったときに呼び出される関数。ロゴ画像をロードします。
         /// </summary>
-        private async void OnEnable()
+        private void OnEnable()
         {
             _serializedObject = new SerializedObject(this);
             _listProperty = _serializedObject.FindProperty("_ignoreGameObjects");
@@ -106,7 +105,7 @@ namespace Aramaa.DakochiteGimmick.Editor
             _logoTexture = Resources.Load<Texture2D>(LOGO_RESOURCES_PATH);
 
             // 非同期で更新チェックを実行
-            await CheckPackageUpdateStatus();
+            CheckPackageUpdateStatus();
         }
 
         private void InitGimmick()
@@ -122,19 +121,20 @@ namespace Aramaa.DakochiteGimmick.Editor
         }
 
         /// <summary>
-        /// PackageUpdaterを使用してパッケージの更新状態を確認し、結果をフィールドに格納します。
+        /// DGVersionUtilityを使用してパッケージの更新状態を確認し、結果をフィールドに格納します。
         /// </summary>
-        private async Task CheckPackageUpdateStatus()
+        private void CheckPackageUpdateStatus()
         {
-            _currentUpdateState = PackageUpdater.PackageUpdateState.Unknown;
+            _currentUpdateState = DGVersionStatus.Unknown;
             _updateMessage = "バージョン情報を確認中...";
             Repaint(); // UIを即座に更新して「確認中...」を表示
 
-            var (state, message) = await PackageUpdater.CheckForUpdateAsync();
-
-            _currentUpdateState = state;
-            _updateMessage = message;
-            Repaint(); // UIを更新して最新の状態を表示
+            DGVersionUtility.CheckForUpdateAsync((state, message) =>
+            {
+                _currentUpdateState = state;
+                _updateMessage = message;
+                Repaint(); // UIを更新して最新の状態を表示
+            });
         }
 
         private void OnGUI()
@@ -310,24 +310,19 @@ namespace Aramaa.DakochiteGimmick.Editor
             // 明るい色を定義
             Color lightGreen = new Color(0.6f, 1.0f, 0.6f);  // 明るい緑
             Color lightOrange = new Color(1.0f, 0.8f, 0.4f); // 明るいオレンジ
-            Color lightRed = new Color(1.0f, 0.6f, 0.6f);    // 明るい赤
             Color lightGray = new Color(0.8f, 0.8f, 0.8f);   // 明るい灰色
 
             switch (_currentUpdateState)
             {
-                case PackageUpdater.PackageUpdateState.UpToDate:
+                case DGVersionStatus.UpToDate:
                     GUI.contentColor = lightGreen;
                     displayMessage = _updateMessage;
                     break;
-                case PackageUpdater.PackageUpdateState.UpdateAvailable:
+                case DGVersionStatus.UpdateAvailable:
                     GUI.contentColor = lightOrange;
                     displayMessage = _updateMessage;
                     break;
-                case PackageUpdater.PackageUpdateState.Error:
-                    GUI.contentColor = lightRed;
-                    displayMessage = $"更新チェック中にエラーが発生しました: {_updateMessage}";
-                    break;
-                case PackageUpdater.PackageUpdateState.Unknown:
+                case DGVersionStatus.Unknown:
                 default:
                     GUI.contentColor = lightGray;
                     displayMessage = _updateMessage; // 「バージョン情報を確認中...」など
