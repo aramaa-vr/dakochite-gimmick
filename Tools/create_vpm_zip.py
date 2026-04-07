@@ -35,6 +35,7 @@ ROOT_DIR = find_repo_root(Path(__file__).resolve().parent)
 SOURCE_DIR = ROOT_DIR / "Assets/Aramaa/DakochiteGimmick"
 PACKAGE_JSON = ROOT_DIR / "Assets/Aramaa/DakochiteGimmick/package.json"
 BUILD_DIR = ROOT_DIR / "Build"
+GIMMICK_CONSTANTS = ROOT_DIR / "Assets/Aramaa/DakochiteGimmick/Aramaa/Scripts/Editor/GimickConstants.cs"
 
 
 def parse_args() -> argparse.Namespace:
@@ -79,6 +80,19 @@ def read_package_metadata(package_json_path: Path) -> tuple[str, str]:
 
     return package_name, version
 
+
+
+
+def read_current_version_from_gimmick_constants(path: Path) -> str:
+    if not path.is_file():
+        raise FileNotFoundError(f"GimickConstants.csが見つかりません: {path.as_posix()}")
+
+    content = path.read_text(encoding="utf-8")
+    match = re.search(r'public const string CURRENT_VERSION = "([^"]+)";', content)
+    if not match:
+        raise ValueError(f"CURRENT_VERSIONを取得できません: {path.as_posix()}")
+
+    return match.group(1)
 
 def validate_version(version: str) -> None:
     if not SEMVER_PATTERN.fullmatch(version):
@@ -132,6 +146,13 @@ def main() -> int:
 
     try:
         package_name, package_version = read_package_metadata(PACKAGE_JSON)
+        gimmick_constants_version = read_current_version_from_gimmick_constants(GIMMICK_CONSTANTS)
+        if package_version != gimmick_constants_version:
+            raise ValueError(
+                "package.json の version と GimickConstants.CURRENT_VERSION が一致していません: "
+                f"{package_version} != {gimmick_constants_version}"
+            )
+
         if package_name != ZIP_NAME_PREFIX:
             print(
                 f"[WARN] package.jsonのnameが想定と異なります: {package_name} "
