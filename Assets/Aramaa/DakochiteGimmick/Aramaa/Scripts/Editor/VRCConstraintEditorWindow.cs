@@ -315,6 +315,7 @@ namespace Aramaa.DakochiteGimmick.Editor
             switch (_currentUpdateState)
             {
                 case DGVersionStatus.UpToDate:
+                case DGVersionStatus.Ahead:
                     GUI.contentColor = lightGreen;
                     displayMessage = _updateMessage;
                     break;
