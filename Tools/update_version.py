@@ -27,7 +27,7 @@ def find_repo_root(start: Path) -> Path:
 
 ROOT = find_repo_root(Path(__file__).resolve().parent)
 PACKAGE_JSON = ROOT / "Assets/Aramaa/DakochiteGimmick/package.json"
-PACKAGE_UPDATER_CS = ROOT / "Assets/Aramaa/DakochiteGimmick/Aramaa/Scripts/Editor/PackageUpdater.cs"
+GIMMICK_CONSTANTS_CS = ROOT / "Assets/Aramaa/DakochiteGimmick/Aramaa/Scripts/Editor/GimickConstants.cs"
 HOLD_MENU_ASSET = ROOT / "Assets/Aramaa/DakochiteGimmick/Aramaa/Menus/HoldGimickMenuMain.asset"
 
 
@@ -54,20 +54,20 @@ def parse_version(version: str) -> str:
     return version
 
 
-def update_package_updater(version: str, dry_run: bool) -> None:
-    ensure_file_exists(PACKAGE_UPDATER_CS)
-    content = read_text(PACKAGE_UPDATER_CS)
+def update_gimmick_constants(version: str, dry_run: bool) -> None:
+    ensure_file_exists(GIMMICK_CONSTANTS_CS)
+    content = read_text(GIMMICK_CONSTANTS_CS)
     new_content, count = re.subn(
-        r'(public const string LOCAL_INSTALLED_VERSION = ")([^"]+)(";)',
+        r'(public const string CURRENT_VERSION = ")([^"]+)(";)',
         rf"\g<1>{version}\g<3>",
         content,
     )
     if count != 1:
         raise ValueError(
-            f"LOCAL_INSTALLED_VERSION not updated (matches: {count}) in {PACKAGE_UPDATER_CS.as_posix()}"
+            f"CURRENT_VERSION not updated (matches: {count}) in {GIMMICK_CONSTANTS_CS.as_posix()}"
         )
     if not dry_run:
-        write_text(PACKAGE_UPDATER_CS, new_content)
+        write_text(GIMMICK_CONSTANTS_CS, new_content)
 
 
 def update_package_json(version: str, dry_run: bool) -> None:
@@ -154,12 +154,12 @@ def main() -> int:
     try:
         # 先に全ファイルを検証して、途中失敗による部分更新を防ぐ。
         update_hold_menu_asset(args.version, dry_run=True)
-        update_package_updater(args.version, dry_run=True)
+        update_gimmick_constants(args.version, dry_run=True)
         update_package_json(args.version, dry_run=True)
 
         if not args.dry_run:
             update_hold_menu_asset(args.version, dry_run=False)
-            update_package_updater(args.version, dry_run=False)
+            update_gimmick_constants(args.version, dry_run=False)
             update_package_json(args.version, dry_run=False)
     except (FileNotFoundError, ValueError) as exc:
         print(str(exc), file=sys.stderr)
