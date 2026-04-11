@@ -990,7 +990,7 @@ MonoBehaviour:
     internalParameter: 0
     isPrefix: 0
     syncType: 3
-    localOnly: 0
+    localOnly: 1
     defaultValue: 1
     saved: 1
     hasExplicitDefaultValue: 1
@@ -1020,7 +1020,7 @@ MonoBehaviour:
     internalParameter: 0
     isPrefix: 0
     syncType: 2
-    localOnly: 0
+    localOnly: 1
     defaultValue: 0.36
     saved: 1
     hasExplicitDefaultValue: 1
@@ -1030,7 +1030,7 @@ MonoBehaviour:
     internalParameter: 0
     isPrefix: 0
     syncType: 3
-    localOnly: 0
+    localOnly: 1
     defaultValue: 0
     saved: 0
     hasExplicitDefaultValue: 1
@@ -1040,7 +1040,7 @@ MonoBehaviour:
     internalParameter: 0
     isPrefix: 0
     syncType: 3
-    localOnly: 0
+    localOnly: 1
     defaultValue: 0
     saved: 0
     hasExplicitDefaultValue: 1
@@ -6632,6 +6632,7 @@ MonoBehaviour:
   collisionFilter:
     allowSelf: 1
     allowOthers: 1
+    contentTypes: -1
   radius: 0.3
   radiusCurve:
     serializedVersion: 2
@@ -6696,10 +6697,12 @@ MonoBehaviour:
   grabFilter:
     allowSelf: 0
     allowOthers: 1
+    contentTypes: -1
   allowPosing: 1
   poseFilter:
     allowSelf: 1
     allowOthers: 1
+    contentTypes: -1
   snapToHand: 0
   grabMovement: 1
   maxStretch: 0
