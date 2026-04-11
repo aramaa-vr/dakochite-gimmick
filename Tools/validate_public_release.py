@@ -273,7 +273,12 @@ def check_build_zip_contents(root: Path, package: dict[str, object], result: Che
     zip_rel = Path(f"Build/{ZIP_NAME_PREFIX}-{version}.zip")
     zip_path = root / zip_rel
     if not zip_path.exists():
-        result.warn(f"Build ZIP が見つかりません: {zip_rel.as_posix()}")
+        # このリポジトリでは配布 ZIP を Git 管理しない運用のため、
+        # Build ZIP 不在は公開前チェックの失敗条件にはしない。
+        result.warn(
+            "Build ZIP が見つかりません（リポジトリに ZIP を含めない運用のため許容）: "
+            f"{zip_rel.as_posix()}"
+        )
         return
 
     try:

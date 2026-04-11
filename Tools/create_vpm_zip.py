@@ -40,7 +40,6 @@ GIMMICK_CONSTANTS = ROOT_DIR / "Assets/Aramaa/DakochiteGimmick/Aramaa/Scripts/Ed
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="VPM ZIPを作成します。")
-    parser.add_argument("version", nargs="?", help="バージョン (例: 1.1.2)")
     return parser.parse_args()
 
 
@@ -142,7 +141,7 @@ def configure_console_encoding() -> None:
 
 def main() -> int:
     configure_console_encoding()
-    args = parse_args()
+    parse_args()
 
     try:
         package_name, package_version = read_package_metadata(PACKAGE_JSON)
@@ -159,7 +158,7 @@ def main() -> int:
                 f"(期待値: {ZIP_NAME_PREFIX})",
                 file=sys.stderr,
             )
-        version = args.version or package_version
+        version = package_version
         validate_version(version)
         zip_file_name = f"{ZIP_NAME_PREFIX}-{version}.zip"
         zip_file_path = BUILD_DIR / zip_file_name
