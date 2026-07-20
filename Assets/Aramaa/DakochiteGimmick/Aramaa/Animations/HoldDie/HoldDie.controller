@@ -20,6 +20,7 @@ MonoBehaviour:
     valueMin: 0
     valueMax: 0
     chance: 0
+    preventRepeats: 0
     convertRange: 0
     sourceMin: 0
     sourceMax: 0
@@ -714,6 +715,7 @@ MonoBehaviour:
     valueMin: 0
     valueMax: 0
     chance: 0
+    preventRepeats: 0
     convertRange: 0
     sourceMin: 0
     sourceMax: 0
