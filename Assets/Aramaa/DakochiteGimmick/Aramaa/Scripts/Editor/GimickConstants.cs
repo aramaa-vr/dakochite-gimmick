@@ -13,7 +13,7 @@ namespace Aramaa.DakochiteGimmick.Editor
         public const int LATEST_JSON_SCHEMA_VERSION = 1;
         public const string TARGET_PACKAGE_ID = "jp.aramaa.dakochite-gimmick";
         public const string LATEST_VERSION_URL = "https://aramaa-vr.github.io/vpm-repos/latest.json";
-        public const string CURRENT_VERSION = "1.1.4-beta.1";
+        public const string CURRENT_VERSION = "1.1.4-beta.2";
         public const string VERSION_ERROR_MISSING_URL = "最新版URLが設定されていません。";
         public const string VERSION_ERROR_INVALID_URL = "URLが不正です。";
         public const string VERSION_EXTRACT_FAILED = "最新版情報の抽出に失敗しました。";
