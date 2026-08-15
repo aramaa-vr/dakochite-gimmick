@@ -1,5 +1,10 @@
 # 更新履歴 (CHANGELOG)
 
+## Version 1.1.4
+* 全てのMA Merge Animatorの「アバターのWrite Defaults設定に合わせる」をOnに変更
+
+---
+
 ## Version 1.1.4-beta.1
 * 全てのMA Merge Animatorの「アバターのWrite Defaults設定に合わせる」をOnに変更
 * 1.1.4 向けのベータ版として、パッケージバージョンと配布URLを更新
